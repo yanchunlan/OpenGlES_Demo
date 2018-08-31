@@ -1,7 +1,8 @@
-package com.example.gl.opengles_demo.day01
+package com.example.gl.opengles_demo.day01.triangle
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.example.gl.opengles_demo.day01.MyGlSurfaceView
 
 /**
  * author: ycl

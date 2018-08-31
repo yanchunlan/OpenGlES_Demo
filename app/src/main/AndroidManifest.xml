@@ -16,8 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".day01.RendererActivity"/>
-        <activity android:name=".day01.PointActivity"/>
+        <activity android:name=".day01.triangle.RendererActivity"/>
+        <activity android:name=".day01.point.PointActivity"/>
+        <activity android:name=".day01.point.PointSizeActivity"/>
+        <activity android:name=".day01.line.LineActivity"/>
+        <activity android:name=".day01.line.LineStripActivity"/>
+        <activity android:name=".day01.triangle.TriangleActivity"/>
     </application>
 
 </manifest>

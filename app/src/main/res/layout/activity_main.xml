@@ -12,8 +12,7 @@
         android:padding="10dp"
         app:flexDirection="row"
         app:flexWrap="wrap"
-        app:showDividerHorizontal="end"
-       >
+        app:showDividerHorizontal="end">
 
 
         <TextView
@@ -34,7 +33,35 @@
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="点(绘制螺旋线)"
+            android:text="点(螺旋线)"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点(螺旋线,及pointSize)"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="线"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="线带(螺旋线)"
+            android:textAllCaps="false" />
+
+ <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="三角形带(正方形)"
             android:textAllCaps="false" />
 
 

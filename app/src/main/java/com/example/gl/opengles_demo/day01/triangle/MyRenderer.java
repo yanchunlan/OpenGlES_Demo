@@ -1,4 +1,4 @@
-package com.example.gl.opengles_demo.day01;
+package com.example.gl.opengles_demo.day01.triangle;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
