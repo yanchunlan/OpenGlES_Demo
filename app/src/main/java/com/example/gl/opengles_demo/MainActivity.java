@@ -11,8 +11,10 @@ import com.example.gl.opengles_demo.day01.line.LineActivity;
 import com.example.gl.opengles_demo.day01.line.LineStripActivity;
 import com.example.gl.opengles_demo.day01.point.PointActivity;
 import com.example.gl.opengles_demo.day01.point.PointSizeActivity;
+import com.example.gl.opengles_demo.day01.scissor.ScissorActivity;
 import com.example.gl.opengles_demo.day01.triangle.RendererActivity;
 import com.example.gl.opengles_demo.day01.triangle.TriangleActivity;
+import com.example.gl.opengles_demo.day01.triangle.TriangleConeActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton3;
     private Button mButton4;
     private Button mButton5;
+    private Button mButton6;
+    private Button mButton7;
 
     public native String stringFromJNI();
 
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton3 = (Button) findViewById(R.id.button3);
         mButton4 = (Button) findViewById(R.id.button4);
         mButton5 = (Button) findViewById(R.id.button5);
+        mButton6 = (Button) findViewById(R.id.button6);
+        mButton7 = (Button) findViewById(R.id.button7);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -53,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton3.setOnClickListener(this);
         mButton4.setOnClickListener(this);
         mButton5.setOnClickListener(this);
+        mButton6.setOnClickListener(this);
+        mButton7.setOnClickListener(this);
     }
 
     @Override
@@ -76,7 +84,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button5:// 三角形带,正方形
                 startActivity(new Intent(this, TriangleActivity.class));
                 break;
-
+            case R.id.button6: // 棱锥
+                startActivity(new Intent(this, TriangleConeActivity.class));
+                break;
+            case R.id.button7: // 剪裁
+                startActivity(new Intent(this, ScissorActivity.class));
+                break;
         }
     }
 }

@@ -22,6 +22,8 @@
         <activity android:name=".day01.line.LineActivity"/>
         <activity android:name=".day01.line.LineStripActivity"/>
         <activity android:name=".day01.triangle.TriangleActivity"/>
+        <activity android:name=".day01.triangle.TriangleConeActivity"/>
+        <activity android:name=".day01.scissor.ScissorActivity" />
     </application>
 
 </manifest>
