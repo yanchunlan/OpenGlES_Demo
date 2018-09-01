@@ -5,7 +5,7 @@ import android.opengl.GLU;
 import com.example.gl.opengles_demo.day01.AbstractMyRenderer;
 import com.example.gl.opengles_demo.day01.util.BufferUtils;
 
-import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class MyTriangleConeRenderer extends AbstractMyRenderer {
         super.onDrawFrame(gl);
 
         //清除颜色缓冲区和深度缓冲区
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT|GL10.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         //设置绘图颜色
         gl.glColor4f(1f, 0f, 0f, 1f);
 
@@ -92,7 +92,8 @@ public class MyTriangleConeRenderer extends AbstractMyRenderer {
 
         boolean flag = false;
 
-        for (float alpha = 0f; alpha < Math.PI * 6; alpha = (float) (alpha + Math.PI / 8)) {
+        // 由于是三角形,最后一个是没有填满的，所以需要设置+0.125目的是填满
+        for (float alpha = 0f; alpha < Math.PI * (2 + 0.125); alpha = (float) (alpha + Math.PI / 8)) {
             x = (float) (r * Math.cos(alpha));
             y = (float) (r * Math.sin(alpha));
             coordsList.add(x);
@@ -121,14 +122,13 @@ public class MyTriangleConeRenderer extends AbstractMyRenderer {
         }
 
         //点颜色值
-        if(flag = !flag){
+        if (flag = !flag) {
             //黄色
             colorList.add(1f);
             colorList.add(1f);
             colorList.add(0f);
             colorList.add(1f);
-        }
-        else{
+        } else {
             //红色
             colorList.add(1f);
             colorList.add(0f);
@@ -137,7 +137,8 @@ public class MyTriangleConeRenderer extends AbstractMyRenderer {
         }
 
         //颜色缓冲区
-        ByteBuffer colorBuffer = BufferUtils.list2ByteBuffer(colorList);
+//        ByteBuffer colorBuffer = BufferUtils.list2ByteBuffer(colorList);
+        FloatBuffer colorBuffer = BufferUtils.list2FloatBuffer(colorList);
         //绘制锥面
         gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, BufferUtils.list2ByteBuffer(coordsList));
@@ -147,8 +148,9 @@ public class MyTriangleConeRenderer extends AbstractMyRenderer {
         //剔除正面
         gl.glCullFace(GL10.GL_FRONT); // 针对底剔除正面
         //绘制锥底
-        colorBuffer.position(4); // 为了颜色相间，锥底需要移动4个字节
-        gl.glColorPointer(4, GL10.GL_FLOAT, 0,colorBuffer);
+//        colorBuffer.position(16); // 为了颜色相间，锥底需要移动ByteBuffer 4* float 4 =16 个字节
+        colorBuffer.position(4); // 为了颜色相间，锥底需要移动FloatBuffer 1* float 4 =16 个字节
+        gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, BufferUtils.list2ByteBuffer(coordBottomsList));
         gl.glDrawArrays(GL10.GL_TRIANGLE_FAN, 0, coordBottomsList.size() / 3);
     }

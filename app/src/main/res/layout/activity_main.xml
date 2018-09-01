@@ -22,6 +22,12 @@
             android:text="练习openGLES_demo"
             app:layout_order="1" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="day01"
+            app:layout_order="1" />
+
         <Button
             android:id="@+id/button0"
             android:layout_width="wrap_content"
@@ -71,11 +77,64 @@
             android:text="棱锥"
             android:textAllCaps="false" />
 
-  <Button
+        <Button
             android:id="@+id/button7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="剪裁"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="day02"
+            app:layout_order="1" />
+
+        <Button
+            android:id="@+id/button8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="模板"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/button9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="球"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/button10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="圆环"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/button11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="模板"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/button12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="模板"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:id="@+id/button13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="模板"
             android:textAllCaps="false" />
 
 

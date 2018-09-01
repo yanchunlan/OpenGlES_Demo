@@ -13,22 +13,24 @@ import kotlin.properties.Delegates
  */
 abstract class AbstractMyActivity : AppCompatActivity() {
 
-    private var render: AbstractMyRenderer by Delegates.notNull<AbstractMyRenderer>()
-    private var surfaceView: MyGlSurfaceView by Delegates.notNull<MyGlSurfaceView>()
+    protected var render: AbstractMyRenderer by Delegates.notNull<AbstractMyRenderer>()
+    protected var surfaceView: MyGlSurfaceView by Delegates.notNull<MyGlSurfaceView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        surfaceView = MyGlSurfaceView(this)
-        render = getAbstractMyRenderer()
+        if (abstractInit()) {
+            surfaceView = MyGlSurfaceView(this)
+            render = getAbstractMyRenderer()
 
-        surfaceView.setRenderer(render)
+            surfaceView.setRenderer(render)
 
-        //GLSurfaceView.RENDERMODE_CONTINUOUSLY:持续渲染(默认)
-        //GLSurfaceView.RENDERMODE_WHEN_DIRTY:脏渲染,命令渲染
-        surfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY// 只渲染一次
+            //GLSurfaceView.RENDERMODE_CONTINUOUSLY:持续渲染(默认)
+            //GLSurfaceView.RENDERMODE_WHEN_DIRTY:脏渲染,命令渲染
+            surfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY// 只渲染一次
 
-        setContentView(surfaceView)
+            setContentView(surfaceView)
+        }
     }
 
     // 设置按键控制旋转渲染的角度
@@ -46,4 +48,7 @@ abstract class AbstractMyActivity : AppCompatActivity() {
     }
 
     protected abstract fun getAbstractMyRenderer(): AbstractMyRenderer
+
+    open fun abstractInit(): Boolean = true
+
 }

@@ -24,6 +24,10 @@
         <activity android:name=".day01.triangle.TriangleActivity"/>
         <activity android:name=".day01.triangle.TriangleConeActivity"/>
         <activity android:name=".day01.scissor.ScissorActivity" />
+
+        <activity android:name=".day02.StencilActivity" />
+        <activity android:name=".day02.shere.SphereActivity" />
+        <activity android:name=".day02.ring.RingActivity" />
     </application>
 
 </manifest>

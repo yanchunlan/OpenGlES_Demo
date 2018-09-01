@@ -15,6 +15,9 @@ import com.example.gl.opengles_demo.day01.scissor.ScissorActivity;
 import com.example.gl.opengles_demo.day01.triangle.RendererActivity;
 import com.example.gl.opengles_demo.day01.triangle.TriangleActivity;
 import com.example.gl.opengles_demo.day01.triangle.TriangleConeActivity;
+import com.example.gl.opengles_demo.day02.StencilActivity;
+import com.example.gl.opengles_demo.day02.ring.RingActivity;
+import com.example.gl.opengles_demo.day02.shere.SphereActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton5;
     private Button mButton6;
     private Button mButton7;
+    private Button mButton8;
+    private Button mButton9;
+    private Button mButton10;
+    private Button mButton11;
+    private Button mButton12;
+    private Button mButton13;
 
     public native String stringFromJNI();
 
@@ -52,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton5 = (Button) findViewById(R.id.button5);
         mButton6 = (Button) findViewById(R.id.button6);
         mButton7 = (Button) findViewById(R.id.button7);
+        mButton8 = (Button) findViewById(R.id.button8);
+        mButton9 = (Button) findViewById(R.id.button9);
+        mButton10 = (Button) findViewById(R.id.button10);
+        mButton11 = (Button) findViewById(R.id.button11);
+        mButton12 = (Button) findViewById(R.id.button12);
+        mButton13 = (Button) findViewById(R.id.button13);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -61,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton5.setOnClickListener(this);
         mButton6.setOnClickListener(this);
         mButton7.setOnClickListener(this);
+        mButton8.setOnClickListener(this);
+        mButton9.setOnClickListener(this);
+        mButton10.setOnClickListener(this);
+        mButton11.setOnClickListener(this);
+        mButton12.setOnClickListener(this);
+        mButton13.setOnClickListener(this);
     }
 
     @Override
@@ -89,6 +110,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button7: // 剪裁
                 startActivity(new Intent(this, ScissorActivity.class));
+                break;
+            case R.id.button8: // 模板
+                startActivity(new Intent(this, StencilActivity.class));
+                break;
+            case R.id.button9:// 球
+                startActivity(new Intent(this, SphereActivity.class));
+                break;
+            case R.id.button10: // 圆环
+                startActivity(new Intent(this, RingActivity.class));
+                break;
+            case R.id.button11:
+                startActivity(new Intent(this, StencilActivity.class));
+                break;
+            case R.id.button12:
+                startActivity(new Intent(this, StencilActivity.class));
+                break;
+            case R.id.button13:
+                startActivity(new Intent(this, StencilActivity.class));
                 break;
         }
     }
