@@ -118,7 +118,7 @@
             android:id="@+id/button11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="模板"
+            android:text="立方体"
             android:textAllCaps="false" />
 
 
@@ -126,7 +126,7 @@
             android:id="@+id/button12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="模板"
+            android:text="颜色立方体"
             android:textAllCaps="false" />
 
 
@@ -134,7 +134,7 @@
             android:id="@+id/button13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="模板"
+            android:text="-"
             android:textAllCaps="false" />
 
 

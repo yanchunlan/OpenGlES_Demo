@@ -26,8 +26,10 @@
         <activity android:name=".day01.scissor.ScissorActivity" />
 
         <activity android:name=".day02.StencilActivity" />
-        <activity android:name=".day02.shere.SphereActivity" />
+        <activity android:name=".day02.sphere.SphereActivity" />
         <activity android:name=".day02.ring.RingActivity" />
+        <activity android:name=".day02.cube.CubeActivity" />
+        <activity android:name=".day02.cube.ColorCubeActivity" />
     </application>
 
 </manifest>

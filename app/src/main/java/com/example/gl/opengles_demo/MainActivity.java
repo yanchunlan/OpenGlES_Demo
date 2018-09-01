@@ -16,8 +16,10 @@ import com.example.gl.opengles_demo.day01.triangle.RendererActivity;
 import com.example.gl.opengles_demo.day01.triangle.TriangleActivity;
 import com.example.gl.opengles_demo.day01.triangle.TriangleConeActivity;
 import com.example.gl.opengles_demo.day02.StencilActivity;
+import com.example.gl.opengles_demo.day02.cube.ColorCubeActivity;
+import com.example.gl.opengles_demo.day02.cube.CubeActivity;
 import com.example.gl.opengles_demo.day02.ring.RingActivity;
-import com.example.gl.opengles_demo.day02.shere.SphereActivity;
+import com.example.gl.opengles_demo.day02.sphere.SphereActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -120,11 +122,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button10: // 圆环
                 startActivity(new Intent(this, RingActivity.class));
                 break;
-            case R.id.button11:
-                startActivity(new Intent(this, StencilActivity.class));
+            case R.id.button11: // 立方体
+                startActivity(new Intent(this, CubeActivity.class));
                 break;
-            case R.id.button12:
-                startActivity(new Intent(this, StencilActivity.class));
+            case R.id.button12: // 颜色立方体
+                startActivity(new Intent(this, ColorCubeActivity.class));
                 break;
             case R.id.button13:
                 startActivity(new Intent(this, StencilActivity.class));

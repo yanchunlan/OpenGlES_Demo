@@ -22,6 +22,16 @@ public class BufferUtils {
         fbb.position(0);
         return ibb;
     }
+    /**
+     * 将byte数组转换成字节缓冲区
+     */
+    public static ByteBuffer arr2ByteBuffer(byte[] arr) {
+        ByteBuffer ibb = ByteBuffer.allocateDirect(arr.length );
+        ibb.order(ByteOrder.nativeOrder());
+        ibb.put(arr);
+        ibb.position(0);
+        return ibb;
+    }
 
     /**
      * 将list转换成字节缓冲区
