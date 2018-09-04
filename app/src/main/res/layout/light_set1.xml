@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingRight="5dip"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:id="@+id/cbEnableLighting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启用光照" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全局环境光" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_glbal_ambient_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_glbal_ambient_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_glbal_ambient_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="材料的反射率" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="------环境光和散射光的反射率-----" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_material_ambient_and_diffuse_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_material_ambient_and_diffuse_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_material_ambient_and_diffuse_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="----------------镜面光反射率-------------" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_material_specular_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_material_specular_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_material_specular_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/cbColorMaterrial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启用颜色追踪" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置颜色" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_color_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_color_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_color_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/cbRescaleNormals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启用重算法线规范化" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="光源0--------------------------------------" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="------------------环境光------------------" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_ambient_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_ambient_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_ambient_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="------------------散射光------------------" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_diffuse_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_diffuse_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_diffuse_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="------------------镜面光------------------" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_specular_r"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_specular_g"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_specular_b"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="100" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="------------------位置------------------" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="x" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_pos_x"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="y" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_pos_y"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="20" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="z" />
+
+            <SeekBar
+                android:id="@+id/bar_light0_pos_z"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:max="20" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

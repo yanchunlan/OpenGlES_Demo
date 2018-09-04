@@ -16,13 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".day01.triangle.RendererActivity"/>
-        <activity android:name=".day01.point.PointActivity"/>
-        <activity android:name=".day01.point.PointSizeActivity"/>
-        <activity android:name=".day01.line.LineActivity"/>
-        <activity android:name=".day01.line.LineStripActivity"/>
-        <activity android:name=".day01.triangle.TriangleActivity"/>
-        <activity android:name=".day01.triangle.TriangleConeActivity"/>
+        <activity android:name=".day01.triangle.RendererActivity" />
+        <activity android:name=".day01.point.PointActivity" />
+        <activity android:name=".day01.point.PointSizeActivity" />
+        <activity android:name=".day01.line.LineActivity" />
+        <activity android:name=".day01.line.LineStripActivity" />
+        <activity android:name=".day01.triangle.TriangleActivity" />
+        <activity android:name=".day01.triangle.TriangleConeActivity" />
         <activity android:name=".day01.scissor.ScissorActivity" />
 
         <activity android:name=".day02.StencilActivity" />
@@ -30,6 +30,16 @@
         <activity android:name=".day02.ring.RingActivity" />
         <activity android:name=".day02.cube.CubeActivity" />
         <activity android:name=".day02.cube.ColorCubeActivity" />
+        <activity
+            android:name=".day02.light.LightActivity"
+            android:theme="@style/AppTheme.Fullscreen" />
+
+        <activity
+            android:name=".day03.light.LightReviewActivity"
+            android:theme="@style/AppTheme.Fullscreen" />
+
+        <activity android:name=".day03.blend.BlendActivity" />
+        <activity android:name=".day03.antalias.AntliaActivity" />
     </application>
 
 </manifest>

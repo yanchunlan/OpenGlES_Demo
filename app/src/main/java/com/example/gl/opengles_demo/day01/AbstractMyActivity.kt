@@ -33,6 +33,16 @@ abstract class AbstractMyActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        surfaceView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        surfaceView.onPause()
+    }
     // 设置按键控制旋转渲染的角度
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         val step = 5f

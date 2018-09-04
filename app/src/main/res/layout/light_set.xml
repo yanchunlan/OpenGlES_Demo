@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/cb_enableLighting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启用光照" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="全局环境光---------------------------------" />
+
+        <include
+            android:id="@+id/bar_global$ambient$r"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_global$ambient$g"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_global$ambient$b"
+            layout="@layout/bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="材料散射光和环境光的反射率(相同的值)---------------" />
+
+        <include
+            android:id="@+id/bar_material$ambientanddiffuse$r"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_material$ambientanddiffuse$g"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_material$ambientanddiffuse$b"
+            layout="@layout/bar" />
+
+        <CheckBox
+            android:id="@+id/cb_enableColorMatrial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="颜色追踪(设置材料反射率)" />
+
+        <include
+            android:id="@+id/bar_color$r"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_color$g"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_color$b"
+            layout="@layout/bar" />
+
+        <CheckBox
+            android:id="@+id/cb_enableLight0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="光源0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="光源0--环境光" />
+
+        <include
+            android:id="@+id/bar_light0$ambient$r"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_light0$ambient$g"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_light0$ambient$b"
+            layout="@layout/bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="光源0--散射光" />
+
+        <include
+            android:id="@+id/bar_light0$diffuse$r"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_light0$diffuse$g"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_light0$diffuse$b"
+            layout="@layout/bar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="光源0--位置" />
+
+        <include
+            android:id="@+id/bar_light0$pos$x"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_light0$pos$y"
+            layout="@layout/bar" />
+
+        <include
+            android:id="@+id/bar_light0$pos$z"
+            layout="@layout/bar" />
+    </LinearLayout>
+</ScrollView>

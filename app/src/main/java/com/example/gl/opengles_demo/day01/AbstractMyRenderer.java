@@ -76,5 +76,4 @@ public abstract class AbstractMyRenderer implements GLSurfaceView.Renderer {
 
     public abstract void onDrawChildFrame(GL10 gl);
 
-
 }

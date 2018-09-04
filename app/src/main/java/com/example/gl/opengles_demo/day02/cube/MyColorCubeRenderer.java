@@ -19,7 +19,7 @@ public class MyColorCubeRenderer extends AbstractMyRenderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         super.onSurfaceCreated(gl, config);
         gl.glEnableClientState(GL10.GL_COLOR_ARRAY);    //颜色缓冲区
-        gl.glEnableClientState(GL10.GL_DEPTH_TEST);     //启用深度测试
+//        gl.glEnableClientState(GL10.GL_DEPTH_TEST);     //启用深度测试
     }
 
     @Override
@@ -27,7 +27,9 @@ public class MyColorCubeRenderer extends AbstractMyRenderer {
 
         /*****************  init  start **********************/
         //清除颜色缓冲区
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT
+//                | GL10.GL_DEPTH_BUFFER_BIT
+        );
         //设置绘图颜色
         gl.glColor4f(1f, 0f, 0f, 1f);
 

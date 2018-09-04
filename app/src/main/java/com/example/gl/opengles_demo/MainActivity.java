@@ -18,8 +18,12 @@ import com.example.gl.opengles_demo.day01.triangle.TriangleConeActivity;
 import com.example.gl.opengles_demo.day02.StencilActivity;
 import com.example.gl.opengles_demo.day02.cube.ColorCubeActivity;
 import com.example.gl.opengles_demo.day02.cube.CubeActivity;
+import com.example.gl.opengles_demo.day02.light.LightActivity;
 import com.example.gl.opengles_demo.day02.ring.RingActivity;
 import com.example.gl.opengles_demo.day02.sphere.SphereActivity;
+import com.example.gl.opengles_demo.day03.antalias.AntliaActivity;
+import com.example.gl.opengles_demo.day03.blend.BlendActivity;
+import com.example.gl.opengles_demo.day03.light.LightReviewActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +46,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton11;
     private Button mButton12;
     private Button mButton13;
+    private Button mButton14;
+    private Button mButton15;
+    private Button mButton16;
+    private Button mButton17;
 
     public native String stringFromJNI();
 
@@ -69,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton11 = (Button) findViewById(R.id.button11);
         mButton12 = (Button) findViewById(R.id.button12);
         mButton13 = (Button) findViewById(R.id.button13);
+        mButton14 = (Button) findViewById(R.id.button14);
+        mButton15 = (Button) findViewById(R.id.button15);
+        mButton16 = (Button) findViewById(R.id.button16);
+        mButton17 = (Button) findViewById(R.id.button17);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -84,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton11.setOnClickListener(this);
         mButton12.setOnClickListener(this);
         mButton13.setOnClickListener(this);
+        mButton14.setOnClickListener(this);
+        mButton15.setOnClickListener(this);
+        mButton16.setOnClickListener(this);
+        mButton17.setOnClickListener(this);
     }
 
     @Override
@@ -128,8 +144,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button12: // 颜色立方体
                 startActivity(new Intent(this, ColorCubeActivity.class));
                 break;
-            case R.id.button13:
-                startActivity(new Intent(this, StencilActivity.class));
+            case R.id.button13: // 光照
+                startActivity(new Intent(this, LightActivity.class));
+                break;
+            case R.id.button14: // 光照(复习)
+                startActivity(new Intent(this, LightReviewActivity.class));
+                break;
+            case R.id.button15: // 混合
+                startActivity(new Intent(this, BlendActivity.class));
+                break;
+            case R.id.button16: // 抗锯齿
+                startActivity(new Intent(this, AntliaActivity.class));
+                break;
+            case R.id.button17:
+                startActivity(new Intent(this, LightActivity.class));
                 break;
         }
     }
