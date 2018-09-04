@@ -7,6 +7,6 @@ JNICALL
 Java_com_example_gl_opengles_1demo_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
-    std::string hello = "openGlES_Demo";
+    std::string hello = "openGlES_Demo: learn OpenGlES 1.x";
     return env->NewStringUTF(hello.c_str());
 }

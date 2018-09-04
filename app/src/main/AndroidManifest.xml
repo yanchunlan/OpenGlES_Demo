@@ -40,6 +40,9 @@
 
         <activity android:name=".day03.blend.BlendActivity" />
         <activity android:name=".day03.antalias.AntliaActivity" />
+        <activity android:name=".day03.antalias.AntliaActivity2" />
+        <activity android:name=".day03.fog.FogActivity" />
+        <activity android:name=".day03.tex.TexActivity" />
     </application>
 
 </manifest>

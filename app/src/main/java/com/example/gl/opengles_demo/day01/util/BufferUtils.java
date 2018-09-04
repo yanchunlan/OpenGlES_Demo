@@ -102,6 +102,24 @@ public class BufferUtils {
         gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, coords.length / 3);
     }
 
+    /**
+     * 绘制园
+     */
+    public static void drawCircle(GL10 gl, float r) {
+        List<Float> coords = new ArrayList<>();
+        float x = 0, y = 0, z = 0;
+        for (float angle = 0; angle < Math.PI * 2; angle = (float) (angle + Math.PI / 16)) {
+            x = (float) (r * Math.cos(angle));
+            y = (float) (r * Math.sin(angle));
+            coords.add(x);
+            coords.add(y);
+            coords.add(z);
+        }
+
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, list2FloatBuffer(coords));
+        gl.glDrawArrays(GL10.GL_LINES, 0, coords.size() / 3);
+    }
+
 
     /**
      * 绘制球体

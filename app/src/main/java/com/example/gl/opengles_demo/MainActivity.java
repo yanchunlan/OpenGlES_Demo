@@ -22,8 +22,11 @@ import com.example.gl.opengles_demo.day02.light.LightActivity;
 import com.example.gl.opengles_demo.day02.ring.RingActivity;
 import com.example.gl.opengles_demo.day02.sphere.SphereActivity;
 import com.example.gl.opengles_demo.day03.antalias.AntliaActivity;
+import com.example.gl.opengles_demo.day03.antalias.AntliaActivity2;
 import com.example.gl.opengles_demo.day03.blend.BlendActivity;
+import com.example.gl.opengles_demo.day03.fog.FogActivity;
 import com.example.gl.opengles_demo.day03.light.LightReviewActivity;
+import com.example.gl.opengles_demo.day03.tex.TexActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton15;
     private Button mButton16;
     private Button mButton17;
+    private Button mButton18;
+    private Button button19;
 
     public native String stringFromJNI();
 
@@ -81,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton15 = (Button) findViewById(R.id.button15);
         mButton16 = (Button) findViewById(R.id.button16);
         mButton17 = (Button) findViewById(R.id.button17);
+        mButton18 = (Button) findViewById(R.id.button18);
+        button19 = (Button) findViewById(R.id.button19);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -100,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton15.setOnClickListener(this);
         mButton16.setOnClickListener(this);
         mButton17.setOnClickListener(this);
+        mButton18.setOnClickListener(this);
+        button19.setOnClickListener(this);
     }
 
     @Override
@@ -156,8 +165,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button16: // 抗锯齿
                 startActivity(new Intent(this, AntliaActivity.class));
                 break;
-            case R.id.button17:
-                startActivity(new Intent(this, LightActivity.class));
+            case R.id.button17:// 抗锯齿2
+                startActivity(new Intent(this, AntliaActivity2.class));
+                break;
+            case R.id.button18://雾
+                startActivity(new Intent(this, FogActivity.class));
+                break;
+            case R.id.button19:// 纹理
+                startActivity(new Intent(this, TexActivity.class));
                 break;
         }
     }

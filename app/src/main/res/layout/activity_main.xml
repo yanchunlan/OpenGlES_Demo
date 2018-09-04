@@ -138,14 +138,12 @@
             android:textAllCaps="false" />
 
 
-
         <Button
             android:id="@+id/button14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="光照(复习)"
             android:textAllCaps="false" />
-
 
 
         <Button
@@ -156,7 +154,6 @@
             android:textAllCaps="false" />
 
 
-
         <Button
             android:id="@+id/button16"
             android:layout_width="wrap_content"
@@ -165,12 +162,25 @@
             android:textAllCaps="false" />
 
 
-
         <Button
             android:id="@+id/button17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-"
+            android:text="抗锯齿2"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/button18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="雾"
+            android:textAllCaps="false" />
+
+     <Button
+            android:id="@+id/button19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="纹理"
             android:textAllCaps="false" />
 
 
