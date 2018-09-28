@@ -27,6 +27,7 @@ import com.example.gl.opengles_demo.day03.blend.BlendActivity;
 import com.example.gl.opengles_demo.day03.fog.FogActivity;
 import com.example.gl.opengles_demo.day03.light.LightReviewActivity;
 import com.example.gl.opengles_demo.day03.tex.TexActivity;
+import com.example.gl.opengles_demo.gles_2p0.GLES2p0Activity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -54,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton16;
     private Button mButton17;
     private Button mButton18;
-    private Button button19;
+    private Button mButton19;
+    private Button mButton20;
 
     public native String stringFromJNI();
 
@@ -87,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton16 = (Button) findViewById(R.id.button16);
         mButton17 = (Button) findViewById(R.id.button17);
         mButton18 = (Button) findViewById(R.id.button18);
-        button19 = (Button) findViewById(R.id.button19);
+        mButton19 = (Button) findViewById(R.id.button19);
+        mButton20 = (Button) findViewById(R.id.button20);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -108,7 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton16.setOnClickListener(this);
         mButton17.setOnClickListener(this);
         mButton18.setOnClickListener(this);
-        button19.setOnClickListener(this);
+        mButton19.setOnClickListener(this);
+        mButton20.setOnClickListener(this);
     }
 
     @Override
@@ -173,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button19:// 纹理
                 startActivity(new Intent(this, TexActivity.class));
+                break;
+            case R.id.button20: // es 2.0
+                startActivity(new Intent(this, GLES2p0Activity.class));
                 break;
         }
     }

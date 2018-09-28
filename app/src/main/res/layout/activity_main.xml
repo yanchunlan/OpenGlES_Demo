@@ -137,6 +137,11 @@
             android:text="光照"
             android:textAllCaps="false" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="day03"
+            app:layout_order="1" />
 
         <Button
             android:id="@+id/button14"
@@ -176,13 +181,24 @@
             android:text="雾"
             android:textAllCaps="false" />
 
-     <Button
+        <Button
             android:id="@+id/button19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="纹理"
             android:textAllCaps="false" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="learn OpenGlES 2.0"
+            app:layout_order="1" />
 
+        <Button
+            android:id="@+id/button20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GLES2.0"
+            android:textAllCaps="false" />
     </com.google.android.flexbox.FlexboxLayout>
 </ScrollView>

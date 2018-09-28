@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gl.opengles_demo">
 
+    <!-- ES 2.0 API request -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+    <!-- ES 2.0 . 如果需要纹理压缩 -->
+    <supports-gl-texture android:name="GL_OES_compressed_ETC1_RGB8_texture" />
+    <supports-gl-texture android:name="GL_OES_compressed_paletted_texture" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- #################  ES 1.0  start  ################### -->
         <activity android:name=".day01.triangle.RendererActivity" />
         <activity android:name=".day01.point.PointActivity" />
         <activity android:name=".day01.point.PointSizeActivity" />
@@ -24,7 +33,6 @@
         <activity android:name=".day01.triangle.TriangleActivity" />
         <activity android:name=".day01.triangle.TriangleConeActivity" />
         <activity android:name=".day01.scissor.ScissorActivity" />
-
         <activity android:name=".day02.StencilActivity" />
         <activity android:name=".day02.sphere.SphereActivity" />
         <activity android:name=".day02.ring.RingActivity" />
@@ -33,16 +41,22 @@
         <activity
             android:name=".day02.light.LightActivity"
             android:theme="@style/AppTheme.Fullscreen" />
-
         <activity
             android:name=".day03.light.LightReviewActivity"
             android:theme="@style/AppTheme.Fullscreen" />
-
         <activity android:name=".day03.blend.BlendActivity" />
         <activity android:name=".day03.antalias.AntliaActivity" />
         <activity android:name=".day03.antalias.AntliaActivity2" />
         <activity android:name=".day03.fog.FogActivity" />
         <activity android:name=".day03.tex.TexActivity" />
+        <!-- #################  ES 1.0  end  ################### -->
+
+
+        <!-- #################  ES 2.0  start  ################### -->
+
+
+        <!-- #################  ES 2.0  end  ################### -->
+        <activity android:name=".gles_2p0.GLES2p0Activity"></activity>
     </application>
 
 </manifest>
