@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton18;
     private Button mButton19;
     private Button mButton20;
+    private Button mButton21;
 
     public native String stringFromJNI();
 
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton18 = (Button) findViewById(R.id.button18);
         mButton19 = (Button) findViewById(R.id.button19);
         mButton20 = (Button) findViewById(R.id.button20);
+        mButton21 = (Button) findViewById(R.id.button21);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton18.setOnClickListener(this);
         mButton19.setOnClickListener(this);
         mButton20.setOnClickListener(this);
+        mButton21.setOnClickListener(this);
     }
 
     @Override
@@ -178,7 +181,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button19:// 纹理
                 startActivity(new Intent(this, TexActivity.class));
                 break;
-            case R.id.button20: // es 2.0
+            case R.id.button20: // es 2.0 huGuangWuWang
+//                startActivity(new Intent(this, ES2_0MainActivity.class));
+                break;
+            case R.id.button21:// es 2.0
                 startActivity(new Intent(this, GLES2p0Activity.class));
                 break;
         }

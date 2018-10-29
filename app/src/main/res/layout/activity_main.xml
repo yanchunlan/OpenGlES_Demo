@@ -191,7 +191,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="learn OpenGlES 2.0"
+            android:text="learn OpenGlES 2.0 huGuangWuWang"
             app:layout_order="1" />
 
         <Button
@@ -200,5 +200,19 @@
             android:layout_height="wrap_content"
             android:text="GLES2.0"
             android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="learn OpenGlES 2.0"
+            app:layout_order="1" />
+
+        <Button
+            android:id="@+id/button21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GLES2.0"
+            android:textAllCaps="false" />
+
     </com.google.android.flexbox.FlexboxLayout>
 </ScrollView>

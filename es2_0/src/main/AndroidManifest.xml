@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.opengles.book.es2_0">
+
+    <!-- requires OpenGL ES 2.0. -->
+    <!-- 3.0  ->  0x00030000，  3.0 -> 0x00030001 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application>
+        <activity
+            android:name=".ES2_0MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".render.FGLViewActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".render.ChooseActivity"></activity>
+    </application>
+
+</manifest>
