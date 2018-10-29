@@ -28,6 +28,7 @@ import com.example.gl.opengles_demo.day03.fog.FogActivity;
 import com.example.gl.opengles_demo.day03.light.LightReviewActivity;
 import com.example.gl.opengles_demo.day03.tex.TexActivity;
 import com.example.gl.opengles_demo.gles_2p0.GLES2p0Activity;
+import com.opengles.book.es2_0.ES2_0MainActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, TexActivity.class));
                 break;
             case R.id.button20: // es 2.0 huGuangWuWang
-//                startActivity(new Intent(this, ES2_0MainActivity.class));
+                startActivity(new Intent(this, ES2_0MainActivity.class));
                 break;
             case R.id.button21:// es 2.0
                 startActivity(new Intent(this, GLES2p0Activity.class));

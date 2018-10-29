@@ -53,18 +53,11 @@
 
 
         <!-- #################  ES 2.0  start  ################### -->
-        <!--<activity android:name="com.opengles.book.es2_0.ES2_0MainActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.patientIf"/>-->
-                <!--<category android:name="android.intent.category.DEFAULT"/>-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-
 
 
 
         <!-- #################  ES 2.0  end  ################### -->
-        <activity android:name=".gles_2p0.GLES2p0Activity"></activity>
+        <activity android:name=".gles_2p0.GLES2p0Activity"/>
     </application>
 
 </manifest>

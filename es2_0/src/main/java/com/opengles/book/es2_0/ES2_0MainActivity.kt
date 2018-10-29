@@ -9,6 +9,7 @@ import com.opengles.book.es2_0.main.MenuAdapter
 import com.opengles.book.es2_0.main.MenuBean
 import com.opengles.book.es2_0.render.FGLViewActivity
 
+
 class ES2_0MainActivity : AppCompatActivity() {
 
     private var data: java.util.ArrayList<MenuBean>? = null
