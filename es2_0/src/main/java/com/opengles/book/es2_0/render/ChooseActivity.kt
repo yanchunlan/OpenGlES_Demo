@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView
 import com.opengles.book.es2_0.base.MyRenderer
 import com.opengles.book.es2_0.main.MenuAdapter
 import com.opengles.book.es2_0.main.MenuBean
-import com.opengles.book.es2_0.render.render.Triangle
+import com.opengles.book.es2_0.render.render.*
 
 class ChooseActivity : AppCompatActivity() {
     private var data: java.util.ArrayList<MenuBean>? = null
@@ -38,10 +38,15 @@ class ChooseActivity : AppCompatActivity() {
     private fun setData() {
         data?.apply {
             add(MenuBean("三角形", Triangle::class.java))
-            add(MenuBean("三角形", Triangle::class.java))
-            add(MenuBean("三角形", Triangle::class.java))
-            add(MenuBean("三角形", Triangle::class.java))
-            add(MenuBean("三角形", Triangle::class.java))
+            add(MenuBean("正三角形", TriangleWithCamera::class.java))
+            add(MenuBean("彩色三角形", TriangleColorFull::class.java))
+            add(MenuBean("正方形", Square::class.java))
+            add(MenuBean("圆形", Oval::class.java))
+            add(MenuBean("正方体", Cube::class.java))
+            add(MenuBean("圆锥", Cone::class.java))
+            add(MenuBean("圆柱", Triangle::class.java))
+            add(MenuBean("球体", Triangle::class.java))
+            add(MenuBean("带光源的球体", Triangle::class.java))
         }
     }
 }
