@@ -30,7 +30,7 @@ class MyGlSurfaceView : GLSurfaceView {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        requestRender()
+//        requestRender()
     }
 
 }

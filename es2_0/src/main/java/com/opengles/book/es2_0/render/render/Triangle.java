@@ -32,14 +32,14 @@ public class Triangle extends BaseRenderer {
             "precision mediump float;" +
                     "uniform vec4 vColor;" +
                     "void main(){" +
-                    "gl_fragColor=vColor;" +
+                    "gl_FragColor=vColor;" +
                     "}";
 
     private FloatBuffer vertexBuffer;
     private float triangleCoords[] = {
             0.5f, 0.5f, 0f,
-            0.5f, -0.5f, 0f,
-            -0.5f, -0.5f, 0f
+            -0.5f, -0.5f, 0f,
+            0.5f, -0.5f, 0f
     };
     private float color[] = {1f, 1f, 1f, 1f};
 

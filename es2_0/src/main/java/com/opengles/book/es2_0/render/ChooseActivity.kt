@@ -26,7 +26,7 @@ class ChooseActivity : AppCompatActivity() {
                     LinearLayoutManager.VERTICAL,
                     false)
             adapter = MenuAdapter(data, MenuAdapter.ItemClickListener { bean ->
-                context.startActivity(Intent(context, bean.clazz))
+//                context.startActivity(Intent(context, bean.clazz))
                 val intent = Intent()
                 intent.putExtra(MyRenderer.PARAMS, bean.clazz)
                 setResult(Activity.RESULT_OK, intent)
