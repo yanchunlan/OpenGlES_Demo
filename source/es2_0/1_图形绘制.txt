@@ -1,0 +1,95 @@
+一，图形绘制
+	1.认知：
+		ES1.0  ->  GL1.3
+		ES1.1  ->  GL1.5
+		ES2.0  ->  Android 2.2(API 8),由固定管线到可编程渲染管线
+		ES3.0  ->  Android 4.3(API 18)，向下兼容
+		ES4.0  ->  Android 5.0(API 21)，向下兼容
+		
+		顶点着色器：把虚拟坐标变为三维坐标（带深度），位置，颜色，纹理坐标
+		片元着色器：计算像素颜色
+		
+		语言：GLSL
+		坐标系：右手坐标，笛卡尔坐标
+		图形绘制：点，线，三角形，3DMAX
+		投影：正交，透视
+		光照：环境光，散射光，镜面光
+		纹理：将2D纹理映射到3D物体上
+		其他：3D模型加载、贴图、阴影、粒子、混合与雾、标志板、天空盒和与天空穹
+		
+		ES2.0执行过程：读取顶点数据->执行顶点着射器->组装图元->光栅化图元
+		->执行片元着色器->写入帧缓冲区->显示到屏幕上
+	2.绘制图形
+		loadShader(){
+			 //根据type创建顶点着色器或者片元着色器
+			val shader = GLES20.glCreateShader(type)
+			//将资源加入到着色器中，并编译
+			GLES20.glShaderSource(shader, shaderCode)
+			GLES20.glCompileShader(shader)
+			return shader
+		}
+	
+		init(){
+			  // 申请底层空间
+			vertexBuffer = BufferUtils.arr2FloatBuffer(triangleCoords);
+
+			int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+			int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+
+			// 创建一个空的OpenGLES程序
+			mProgram = GLES20.glCreateProgram();
+			// 将顶点着色器加入程序
+			GLES20.glAttachShader(mProgram, vertexShader);
+			// 将片元着色器加入程序
+			GLES20.glAttachShader(mProgram, fragmentShader);
+			// 连接到着色器程序
+			GLES20.glLinkProgram(mProgram);
+		}
+
+		onSurfaceChanged(){
+			   //计算宽高比
+			float ratio=(float)width/height;
+			//设置透视投影
+			Matrix.frustumM(mProjectMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+			//设置相机位置
+			Matrix.setLookAtM(mViewMatrix, 0, 0, 0, 7.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
+			//计算变换矩阵
+			Matrix.multiplyMM(mMVPMatrix,0,mProjectMatrix,0,mViewMatrix,0);
+		}
+
+		onDrawFrame(){
+		  // 将程序加入到OpenGlES2.0环境
+			GLES20.glUseProgram(mProgram);
+
+			  //获取变换矩阵vMatrix成员句柄
+			mMatrixHandler= GLES20.glGetUniformLocation(mProgram,"vMatrix");
+			//指定vMatrix的值
+			GLES20.glUniformMatrix4fv(mMatrixHandler,1,false,mMVPMatrix,0);
+				
+			
+			// 获取顶点着色器的vPosition句柄
+			mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+			// 启用三角形顶点的句柄
+			GLES20.glEnableVertexAttribArray(mPositionHandle);
+			// 准备三角形的坐标数据
+			GLES20.glVertexAttribPointer(mPositionHandle,// 句柄
+					COORDS_PER_VERTEX, // 几个顶点
+					GLES20.GL_FLOAT, // 单位
+					false, // 是否标准化
+					vertexStride, // 顶点偏移量 3*4
+					vertexBuffer // 顶点数据
+					);
+
+
+			// 获取片元着色器vColor句柄
+			mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+			// 设置三角形颜色
+			GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+
+
+			// 绘制三角形
+			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);  // coords/3
+			// 禁止顶点数组的句柄(用完之后禁止掉)
+			GLES20.glDisableVertexAttribArray(mPositionHandle);
+		}
+		
