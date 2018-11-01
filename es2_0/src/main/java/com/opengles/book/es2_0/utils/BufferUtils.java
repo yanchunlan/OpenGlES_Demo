@@ -3,6 +3,7 @@ package com.opengles.book.es2_0.utils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.List;
 
 /**
@@ -69,6 +70,18 @@ public class BufferUtils {
         ByteBuffer ibb = ByteBuffer.allocateDirect(arr.length * 4);
         ibb.order(ByteOrder.nativeOrder());
         FloatBuffer fbb = ibb.asFloatBuffer();
+        fbb.put(arr);
+        fbb.position(0);
+        return fbb;
+    }
+
+   /**
+     * 将short转换成short缓冲区
+     */
+    public static ShortBuffer arr2ShortBuffer(short[] arr) {
+        ByteBuffer ibb = ByteBuffer.allocateDirect(arr.length * 4);
+        ibb.order(ByteOrder.nativeOrder());
+        ShortBuffer fbb = ibb.asShortBuffer();
         fbb.put(arr);
         fbb.position(0);
         return fbb;

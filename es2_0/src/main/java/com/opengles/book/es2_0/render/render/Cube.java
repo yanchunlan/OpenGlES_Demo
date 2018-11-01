@@ -12,9 +12,11 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * author: ycl
  * date: 2018-10-31 0:35
- * desc: 正方体
+ * desc: 正方体  使用索引法构建立方体
  */
 public class Cube extends BaseRenderer {
+
+
     public Cube(@NotNull View view) {
         super(view);
     }

@@ -117,7 +117,7 @@ public class TriangleColorFull extends BaseRenderer {
         // 简单绘制使用这种方式
 //        GLES20.glUniform4fv(mColorhandler, 1, colorBuffer);
 
-        // 绘制多种需要设置到point中
+        // 绘制多种需要设置到point中,只要使用到顶点缓冲区都需要开启缓冲区
         GLES20.glEnableVertexAttribArray(mColorhandler);
         GLES20.glVertexAttribPointer(mColorhandler, 4,
                 GLES20.GL_FLOAT, false,
