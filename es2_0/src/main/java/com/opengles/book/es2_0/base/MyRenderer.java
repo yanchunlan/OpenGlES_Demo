@@ -4,7 +4,7 @@ import android.opengl.GLES20;
 import android.util.Log;
 import android.view.View;
 
-import com.opengles.book.es2_0.render.render.CubeRenderer;
+import com.opengles.book.es2_0.render.render.Cube;
 
 import java.lang.reflect.Constructor;
 
@@ -20,7 +20,7 @@ public class MyRenderer extends BaseRenderer {
     private static final String TAG = "MyRenderer";
     public static final String PARAMS = "params";
 
-    private Class<? extends BaseRenderer> rendererClass = CubeRenderer.class;
+    private Class<? extends BaseRenderer> rendererClass = Cube.class;
     private BaseRenderer baseRenderer;
 
     public MyRenderer(View view) {
@@ -42,7 +42,7 @@ public class MyRenderer extends BaseRenderer {
             baseRenderer = (BaseRenderer) constructor.newInstance(getView());
         } catch (Exception e) {
             e.printStackTrace();
-            baseRenderer = new CubeRenderer(getView());
+            baseRenderer = new Cube(getView());
         }
 
         baseRenderer.onSurfaceCreated(gl, config);

@@ -36,6 +36,8 @@ public class Oval extends BaseRenderer {
                     "}";
 
     private float vertexCoords[];
+    private float height = 0;
+
     private float color[] = {1, 0, 0, 1f};
 
     private FloatBuffer vertexBuffer;
@@ -49,6 +51,11 @@ public class Oval extends BaseRenderer {
     private float[] projectMatrix = new float[16];
     private float[] viewMatrix = new float[16];
     private float[] mvpMatrix = new float[16];
+
+    public Oval(@NotNull View view, float height) {
+        this(view);
+        this.height = height;
+    }
 
     public Oval(@NotNull View view) {
         super(view);
@@ -73,27 +80,26 @@ public class Oval extends BaseRenderer {
         // 中心点
         data.add(0f);
         data.add(0f);
-        data.add(0f);
-        float angDegSpan = 360f / n;
+        data.add(height);
+     /*   float angDegSpan = 360f / n;
         for (int i = 0; i < 360 + angDegSpan; i += angDegSpan) {
             data.add((float) (r * Math.cos(i * 2 * Math.PI / 360f)));
             data.add((float) (r * Math.sin(i * 2 * Math.PI / 360f)));
             data.add(0f);
+        }*/
+
+        float step = (float) (Math.PI * 2 / 36f);
+        for (float i = 0; i < Math.PI * 2+step; i += step) {
+            data.add((float) (r * Math.cos(i)));
+            data.add((float) (r * Math.sin(i)));
+            data.add(height);
         }
 
-       /* double step = Math.PI * 2 / n;
-       *//* for (int i = 0; i < Math.PI * 2+step; i += step) {
+      /*  for (float i = 0; i <= Math.PI * 2; i += step) {
             data.add((float) (r * Math.cos(i)));
             data.add((float) (r * Math.sin(i)));
             data.add(0f);
-        }*//*
-
-        for (int i = 0; i <= Math.PI * 2; i += step) {
-            data.add((float) (r * Math.cos(i)));
-            data.add((float) (r * Math.sin(i)));
-            data.add(0f);
-        }
-*/
+        }*/
 
         float[] f = new float[data.size()];
         for (int i = 0; i < data.size(); i++) {
@@ -148,5 +154,9 @@ public class Oval extends BaseRenderer {
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertexCoords.length / 3);
         GLES20.glDisableVertexAttribArray(positionHandler);
+    }
+
+    public void setMatrix(float[] matrix){
+        this.mvpMatrix=matrix;
     }
 }

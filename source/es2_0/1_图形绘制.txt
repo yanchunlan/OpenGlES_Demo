@@ -73,10 +73,10 @@
 			GLES20.glEnableVertexAttribArray(mPositionHandle);
 			// 准备三角形的坐标数据
 			GLES20.glVertexAttribPointer(mPositionHandle,// 句柄
-					COORDS_PER_VERTEX, // 几个顶点
+					COORDS_PER_VERTEX, // 几维
 					GLES20.GL_FLOAT, // 单位
 					false, // 是否标准化
-					vertexStride, // 顶点偏移量 3*4
+					vertexStride, //  跨度，一般情况下写0系统会自动识别。识别方式为size*sizeof(数组定义时报类型)
 					vertexBuffer // 顶点数据
 					);
 
@@ -92,4 +92,24 @@
 			// 禁止顶点数组的句柄(用完之后禁止掉)
 			GLES20.glDisableVertexAttribArray(mPositionHandle);
 		}
+		
+	3.绘制类型与方法
+		int GL_POINTS       //将传入的顶点坐标作为单独的点绘制
+		int GL_LINES        //将传入的坐标作为单独线条绘制，ABCDEFG六个顶点，绘制AB、CD、EF三条线
+		int GL_LINE_STRIP   //将传入的顶点作为折线绘制，ABCD四个顶点，绘制AB、BC、CD三条线
+		int GL_LINE_LOOP    //将传入的顶点作为闭合折线绘制，ABCD四个顶点，绘制AB、BC、CD、DA四条线。
+		int GL_TRIANGLES    //将传入的顶点作为单独的三角形绘制，ABCDEF绘制ABC,DEF两个三角形
+		int GL_TRIANGLE_FAN    //将传入的顶点作为扇面绘制，ABCDEF绘制ABC、ACD、ADE、AEF四个三角形
+		int GL_TRIANGLE_STRIP   //将传入的顶点作为三角条带绘制，ABCDEF绘制ABC,BCD,CDE,DEF四个三角
+	顶点方法 glDrawArrays，索引法 glDrawElements
+	4.深度测试
+		启用：glEnable(GL_DEPTH_TEST); 
+		glDepthFunc(func)来对这种默认测试方式进行修改。 
+		其中参数func的值可以为GL_NEVER（没有处理）、GL_ALWAYS（处理所有）、GL_LESS（小于）
+		、GL_LEQUAL（小于等于）、GL_EQUAL（等于）、GL_GEQUAL（大于等于）、
+		GL_GREATER（大于）或GL_NOTEQUAL（不等于），其中默认值是GL_LESS。 
+		
+		其他复杂图形，正方体，圆锥，圆柱，球体等都是顶点的计算，其余的都是一样的
+
+		
 		

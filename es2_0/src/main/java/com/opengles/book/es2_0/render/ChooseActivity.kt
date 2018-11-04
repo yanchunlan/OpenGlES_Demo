@@ -44,9 +44,9 @@ class ChooseActivity : AppCompatActivity() {
             add(MenuBean("圆形", Oval::class.java))
             add(MenuBean("正方体", Cube::class.java))
             add(MenuBean("圆锥", Cone::class.java))
-            add(MenuBean("圆柱", Triangle::class.java))
-            add(MenuBean("球体", Triangle::class.java))
-            add(MenuBean("带光源的球体", Triangle::class.java))
+            add(MenuBean("圆柱", Cylinder::class.java))
+            add(MenuBean("球体", Ball::class.java))
+            add(MenuBean("带光源的球体", BallWithLight::class.java))
         }
     }
 }
