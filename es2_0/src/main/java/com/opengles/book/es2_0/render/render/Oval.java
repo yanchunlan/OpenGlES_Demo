@@ -32,7 +32,7 @@ public class Oval extends BaseRenderer {
             "precision mediump float;" +
                     "uniform vec4 vColor;" +
                     "void main(){" +
-                    "gl_FragColor=vColor" +
+                    "gl_FragColor=vColor;" +
                     "}";
 
     private float vertexCoords[];
@@ -56,7 +56,7 @@ public class Oval extends BaseRenderer {
         vertexBuffer = BufferUtils.arr2FloatBuffer(vertexCoords);
 
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCodes);
-        int fragmentShader = loadShader(GLES20.GL_VERTEX_SHADER, fragmentShaderCodes);
+        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCodes);
 
         program = GLES20.glCreateProgram();
         GLES20.glAttachShader(program, vertexShader);
@@ -74,26 +74,26 @@ public class Oval extends BaseRenderer {
         data.add(0f);
         data.add(0f);
         data.add(0f);
-        /*float angDegSpan = 360f / n;
+        float angDegSpan = 360f / n;
         for (int i = 0; i < 360 + angDegSpan; i += angDegSpan) {
             data.add((float) (r * Math.cos(i * 2 * Math.PI / 360f)));
             data.add((float) (r * Math.sin(i * 2 * Math.PI / 360f)));
             data.add(0f);
-        }*/
+        }
 
-        double step = Math.PI * 2 / n;
-       /* for (int i = 0; i < Math.PI * 2+step; i += step) {
+       /* double step = Math.PI * 2 / n;
+       *//* for (int i = 0; i < Math.PI * 2+step; i += step) {
             data.add((float) (r * Math.cos(i)));
             data.add((float) (r * Math.sin(i)));
             data.add(0f);
-        }*/
+        }*//*
 
         for (int i = 0; i <= Math.PI * 2; i += step) {
             data.add((float) (r * Math.cos(i)));
             data.add((float) (r * Math.sin(i)));
             data.add(0f);
         }
-
+*/
 
         float[] f = new float[data.size()];
         for (int i = 0; i < data.size(); i++) {
@@ -134,7 +134,7 @@ public class Oval extends BaseRenderer {
         GLES20.glUseProgram(program);
 
         matrixHandler = GLES20.glGetUniformLocation(program, "vMatrix");
-        GLES20.glUniformMatrix4fv(program, 1, false, mvpMatrix, 0);
+        GLES20.glUniformMatrix4fv(matrixHandler, 1, false, mvpMatrix, 0);
 
         positionHandler = GLES20.glGetAttribLocation(program, "vPosition");
         GLES20.glEnableVertexAttribArray(positionHandler);

@@ -23,7 +23,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class Square extends BaseRenderer {
 
     private String vertexShaderCodes =
-            "attribute vec4 vPosition" +
+            "attribute vec4 vPosition;" +
                     "uniform mat4 vMatrix;" +
                     "void main(){" +
                     "gl_Position=vMatrix*vPosition;" +
@@ -44,7 +44,7 @@ public class Square extends BaseRenderer {
     };
     private final short[] index = {0,1,2,0,2,3};// 逆时针顶点
 
-    private final float[] color = {1f, 0f, 0f, 1f};
+    private final float[] color = {1f, 1f, 0f, 1f};
 
     private FloatBuffer vertexBuffer;
     private ShortBuffer shortBuffer;
@@ -67,7 +67,7 @@ public class Square extends BaseRenderer {
         shortBuffer = BufferUtils.arr2ShortBuffer(index);
 
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCodes);
-        int fragmentShader = loadShader(GLES20.GL_VERTEX_SHADER, fragmentShaderCodes);
+        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCodes);
 
 
         mProgram = GLES20.glCreateProgram();

@@ -104,7 +104,7 @@ public class Triangle extends BaseRenderer {
                 COORDS_PER_VERTEX, // 几个顶点
                 GLES20.GL_FLOAT, // 单位
                 false, // 是否标准化
-                vertexStride, // 顶点偏移量
+                vertexStride, //  跨度，一般情况下写0系统会自动识别。识别方式为size*sizeof(数组定义时报类型)
                 vertexBuffer // 顶点数据
                 );
 

@@ -34,11 +34,11 @@ public class TriangleColorFull extends BaseRenderer {
                     "varying vec4 vColor;" +
                     "attribute vec4 aColor;" +
                     "void main(){" +
-                    "gl_Position=vMatrix*vPosition" +
+                    "gl_Position=vMatrix*vPosition;" +
                     "vColor=aColor;" +
                     "}";
     private final String fragmentShaderCode =
-            "precision mediump float" +
+            "precision mediump float;" +
                     "varying vec4 vColor;" +
                     "void main(){" +
                     "gl_FragColor=vColor;" +
@@ -46,7 +46,7 @@ public class TriangleColorFull extends BaseRenderer {
     private FloatBuffer vertexBuffer, colorBuffer;
     private int mProgram;
     final float triangleCoords[] = {
-            0.5f, 0.5f, 0f
+            0.5f, 0.5f, 0f,
             - 0.5f, -0.5f, 0f,
             0.5f, -0.5f, 0f
     };
@@ -57,9 +57,10 @@ public class TriangleColorFull extends BaseRenderer {
     };
 
 
+    // 4维 * 4单位就是16
     private float[] mProjectMatrix = new float[16];
     private float[] mViewMatrix = new float[16];
-    private float[] mVMVPMatrix = new float[16];
+    private float[] mMVPMatrix = new float[16];
 
     private int mPositionhandler;
     private int mColorhandler;
@@ -72,7 +73,7 @@ public class TriangleColorFull extends BaseRenderer {
         colorBuffer = BufferUtils.arr2FloatBuffer(color);
 
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = loadShader(GLES20.GL_VERTEX_SHADER, fragmentShaderCode);
+        int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
         mProgram = GLES20.glCreateProgram();
         GLES20.glAttachShader(mProgram, vertexShader);
@@ -96,7 +97,7 @@ public class TriangleColorFull extends BaseRenderer {
                 0, 0, 0,
                 0, 1, 0
         );
-        Matrix.multiplyMM(mVMVPMatrix, 0,
+        Matrix.multiplyMM(mMVPMatrix, 0,
                 mProjectMatrix, 0,
                 mViewMatrix, 0);
     }
@@ -105,7 +106,7 @@ public class TriangleColorFull extends BaseRenderer {
     public void onDrawFrame(GL10 gl) {
         GLES20.glUseProgram(mProgram);
         mMatrixhandler = GLES20.glGetUniformLocation(mProgram, "vMatrix");
-        GLES20.glUniformMatrix4fv(mMatrixhandler, 1, false, mVMVPMatrix, 0);
+        GLES20.glUniformMatrix4fv(mMatrixhandler, 1, false, mMVPMatrix, 0);
 
         mPositionhandler = GLES20.glGetAttribLocation(mProgram, "vPosition");
         GLES20.glEnableVertexAttribArray(mPositionhandler);
@@ -121,9 +122,10 @@ public class TriangleColorFull extends BaseRenderer {
         GLES20.glEnableVertexAttribArray(mColorhandler);
         GLES20.glVertexAttribPointer(mColorhandler, 4,
                 GLES20.GL_FLOAT, false,
-                0, vertexBuffer); // 颜色是没有偏移量的
+                0, colorBuffer); // 颜色是没有偏移量的
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, triangleCoords.length / 3);
         GLES20.glDisableVertexAttribArray(mPositionhandler);
+        GLES20.glDisableVertexAttribArray(mColorhandler);
     }
 }
