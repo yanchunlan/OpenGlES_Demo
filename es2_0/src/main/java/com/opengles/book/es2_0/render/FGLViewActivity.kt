@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.opengles.book.es2_0.R
-import com.opengles.book.es2_0.base.BaseRenderer
-import com.opengles.book.es2_0.base.MyRenderer
+import com.opengles.book.es2_0.render.base.BaseRenderer
+import com.opengles.book.es2_0.render.base.MyRenderer
 import kotlinx.android.synthetic.main.activity_fglview.*
 
 class FGLViewActivity : AppCompatActivity() {

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import com.opengles.book.es2_0.base.MyRenderer
+import com.opengles.book.es2_0.render.base.MyRenderer
 import com.opengles.book.es2_0.main.MenuAdapter
 import com.opengles.book.es2_0.main.MenuBean
 import com.opengles.book.es2_0.render.render.*

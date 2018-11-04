@@ -1,4 +1,4 @@
-package com.opengles.book.es2_0.base;
+package com.opengles.book.es2_0.render.base;
 
 import android.opengl.GLES20;
 import android.util.Log;

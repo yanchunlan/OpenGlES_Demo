@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="切换" />
 
-    <com.opengles.book.es2_0.base.MyGlSurfaceView
+    <com.opengles.book.es2_0.render.base.MyGlSurfaceView
         android:id="@+id/mGLView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

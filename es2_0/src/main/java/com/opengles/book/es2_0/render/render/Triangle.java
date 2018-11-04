@@ -3,7 +3,7 @@ package com.opengles.book.es2_0.render.render;
 import android.opengl.GLES20;
 import android.view.View;
 
-import com.opengles.book.es2_0.base.BaseRenderer;
+import com.opengles.book.es2_0.render.base.BaseRenderer;
 import com.opengles.book.es2_0.utils.BufferUtils;
 
 import org.jetbrains.annotations.NotNull;

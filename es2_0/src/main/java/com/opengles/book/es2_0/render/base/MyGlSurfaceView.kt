@@ -1,4 +1,4 @@
-package com.opengles.book.es2_0.base
+package com.opengles.book.es2_0.render.base
 
 import android.content.Context
 import android.opengl.GLSurfaceView
@@ -27,6 +27,7 @@ class MyGlSurfaceView : GLSurfaceView {
     fun setRendererClass(rendererClass: Class<out BaseRenderer>) {
         try {
             mMyRenderer?.setRendererClass(rendererClass)
+            // 因为回到这个页面，需要重建页面，所以会执行三个方法，就不需要requestRenderer
         } catch (e: Exception) {
             e.printStackTrace()
         }

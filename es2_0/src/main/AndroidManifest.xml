@@ -15,7 +15,8 @@
         <activity
             android:name=".render.FGLViewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".render.ChooseActivity"></activity>
+        <activity android:name=".render.ChooseActivity" />
+        <activity android:name=".image.SGLViewActivity"/>
     </application>
 
 </manifest>
