@@ -23,7 +23,7 @@ class SGLView : GLSurfaceView {
 
     private fun init() {
         setEGLContextClientVersion(2)
-        sglRender = SGLRender(this)
+        sglRender = SGLRender(this.context)
         setRenderer(sglRender)
         renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
 

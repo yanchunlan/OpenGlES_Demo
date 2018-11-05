@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import com.opengles.book.es2_0.utils.BufferUtils;
 import com.opengles.book.es2_0.utils.ShaderUtils;
@@ -20,6 +22,7 @@ import javax.microedition.khronos.opengles.GL10;
  * desc:
  */
 public abstract class AFilter implements GLSurfaceView.Renderer {
+    private static final String TAG = "AFilter";
     private Context context;
     private String vertexShaderCodes;
     private String fragmentShaderCodes;
@@ -66,6 +69,7 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        Log.i(TAG, "onSurfaceCreated: ");
         GLES20.glClearColor(1, 1, 1, 1);
         GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
@@ -76,8 +80,8 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         glHMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
         glHTexture = GLES20.glGetUniformLocation(program, "vTexture");
 
-        hIsHalf = GLES20.glGetUniformLocation(program, "vIsHalf");
-        glHUxy = GLES20.glGetUniformLocation(program, "uXY");
+//        hIsHalf = GLES20.glGetUniformLocation(program, "vIsHalf");
+//        glHUxy = GLES20.glGetUniformLocation(program, "uXY");
         onDrawCreatedSet(program);
     }
 
@@ -87,6 +91,7 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        Log.i(TAG, "onSurfaceChanged: ");
         GLES20.glViewport(0, 0, width, height);
 
         int w = bitmap.getWidth();
@@ -95,15 +100,24 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         float sWH = w / (float) h;
         float sWidthHeight = width / (float) height;
 
+        // 此段代码未看懂
         if (width > height) {
-
-
+            if (sWH > sWidthHeight) {
+                Matrix.orthoM(projectMatrix,0,
+                        -sWH*sWidthHeight,sWH*sWidthHeight,-1,1,3,7);
+            } else {
+                Matrix.orthoM(projectMatrix,0,
+                        -sWidthHeight/sWH,sWidthHeight/sWH,-1,1,3,7);
+            }
         } else {
-
-
+            if(sWH>sWidthHeight){
+                Matrix.orthoM(projectMatrix, 0,
+                        -1, 1, -1/sWidthHeight*sWH, 1/sWidthHeight*sWH,3, 7);
+            }else{
+                Matrix.orthoM(projectMatrix, 0,
+                        -1, 1, -sWH/sWidthHeight, sWH/sWidthHeight,3, 7);
+            }
         }
-
-
         //设置相机位置
         Matrix.setLookAtM(viewMatrix, 0, 0, 0, 5.0f, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         //计算变换矩阵
@@ -112,10 +126,23 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        Log.i(TAG, "onDrawFrame: ");
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         GLES20.glUseProgram(program);
         onDrawSet();
 
+
+        GLES20.glUniformMatrix4fv(glHMatrix, 1, false, mvpMatrix, 0);
+        GLES20.glEnableVertexAttribArray(glHPosition);
+        GLES20.glEnableVertexAttribArray(glHCoordinate);
+        GLES20.glUniform1f(glHTexture, 0);
+        textureId = createTexture();
+
+        //传入顶点坐标
+        GLES20.glVertexAttribPointer(glHPosition, 2, GLES20.GL_FLOAT, false, 0, posBuffer);
+        //传入纹理坐标
+        GLES20.glVertexAttribPointer(glHCoordinate, 2, GLES20.GL_FLOAT, false, 0, coordsBuffer);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vPos.length / 2);
     }
 
 
@@ -128,8 +155,12 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
             //设置放大过滤为使用纹理中坐标最接近的若干个颜色，通过加权平均算法得到需要绘制的像素颜色
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-
+            //设置环绕方向S，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            //设置环绕方向T，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_CLAMP_TO_EDGE);
+            //根据以上指定的参数，生成一个2D纹理
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             return texture[0];
         }
         return 0;

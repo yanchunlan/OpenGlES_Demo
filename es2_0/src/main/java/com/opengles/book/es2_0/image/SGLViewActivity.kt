@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.opengles.book.es2_0.R
+import com.opengles.book.es2_0.image.filter.ContrastColorFilter
+import com.opengles.book.es2_0.image.filter.Filter
 import kotlin.properties.Delegates
 
 class SGLViewActivity : AppCompatActivity() {
@@ -35,9 +37,15 @@ class SGLViewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.itemId?.run {
             when (this) {
-                R.id.mDefault ->{}
+                R.id.mDefault -> mGLView.setFilter(ContrastColorFilter(
+                        this@SGLViewActivity, Filter.NONE))
+                R.id.mGray -> mGLView.setFilter(ContrastColorFilter(
+                        this@SGLViewActivity, Filter.GRAY))
+
+
             }
         }
+        mGLView.requestRender()
         return super.onOptionsItemSelected(item)
     }
 }
