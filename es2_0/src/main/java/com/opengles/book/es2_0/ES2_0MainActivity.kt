@@ -9,6 +9,7 @@ import com.opengles.book.es2_0.image.SGLViewActivity
 import com.opengles.book.es2_0.main.MenuAdapter
 import com.opengles.book.es2_0.main.MenuBean
 import com.opengles.book.es2_0.render.FGLViewActivity
+import com.opengles.book.es2_0.vary.VaryingActivity
 
 
 class ES2_0MainActivity : AppCompatActivity() {
@@ -27,14 +28,16 @@ class ES2_0MainActivity : AppCompatActivity() {
                     LinearLayoutManager.VERTICAL,
                     false)
             adapter = MenuAdapter(data, MenuAdapter.ItemClickListener { bean ->
-                        startActivity(Intent(context, bean.clazz)) })
+                startActivity(Intent(context, bean.clazz))
+            })
         }
     }
 
     private fun setData() {
         data?.apply {
-            add(MenuBean("绘制形体", FGLViewActivity::class.java))
-            add(MenuBean("图片处理", SGLViewActivity::class.java))
+            add(MenuBean("绘制形体(render)", FGLViewActivity::class.java))
+            add(MenuBean("图片处理(image)", SGLViewActivity::class.java))
+            add(MenuBean("图形变换(vary)", VaryingActivity::class.java))
 
         }
 

@@ -11,6 +11,7 @@ import kotlin.properties.Delegates
 
 class SGLViewActivity : AppCompatActivity() {
     private var mGLView: SGLView by Delegates.notNull<SGLView>()
+    private var isHalf = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +38,27 @@ class SGLViewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.itemId?.run {
             when (this) {
+                R.id.mDeal -> {
+                    /* isHalf = !isHalf
+                     if (isHalf) {
+                         item.setTitle("处理一半")
+                     } else {
+                         item.setTitle("全部处理")
+                     }
+                     mGLView.getRender().refresh()*/
+                }
                 R.id.mDefault -> mGLView.setFilter(ContrastColorFilter(
                         this@SGLViewActivity, Filter.NONE))
                 R.id.mGray -> mGLView.setFilter(ContrastColorFilter(
                         this@SGLViewActivity, Filter.GRAY))
-
-
+                R.id.mCool -> mGLView.setFilter(ContrastColorFilter(
+                        this@SGLViewActivity, Filter.COOL))
+                R.id.mWarm -> mGLView.setFilter(ContrastColorFilter(
+                        this@SGLViewActivity, Filter.WARM))
+                R.id.mBlur -> mGLView.setFilter(ContrastColorFilter(
+                        this@SGLViewActivity, Filter.BLUR))
+                R.id.mMagn -> mGLView.setFilter(ContrastColorFilter(
+                        this@SGLViewActivity, Filter.MAGN))
             }
         }
         mGLView.requestRender()

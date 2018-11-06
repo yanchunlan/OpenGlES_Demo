@@ -20,6 +20,7 @@ public enum Filter {
         return vChangeType;
     }
 
+    // 控制rgb ，其余的不管
     public float[] getData() {
         return data;
     }

@@ -1,4 +1,62 @@
-������
+纹理：
 
-	���������ø���������ʾ����Χһ���0.0��1.0
-	
+	真实图片 纹理坐标用浮点数来表示，范围一般从0.0到1.0
+
+	步奏：
+	    fragmentShaderCodes GLSL代码中 : gl_Color=texture2D(vTexture,aCoordinate);
+	    (vTexture需要单独创建，aCoordinate 代表真实图片坐标)
+
+	     1.  onSurfaceCreated中，启动 GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+	     2.  onSurfaceChanged中，根据真实图片比例与坐标比例对比，计算相机平截头体位置
+	             int w = bitmap.getWidth();
+                 int h = bitmap.getHeight();
+
+                 float sWH = w / (float) h;
+                 float sWidthHeight = width / (float) height;
+                 uXY=sWidthHeight;
+                 // 此段代码未看懂
+                 if (width > height) {
+                     if (sWH > sWidthHeight) {
+                         Matrix.orthoM(projectMatrix, 0,
+                                 -sWH * sWidthHeight, sWH * sWidthHeight, -1, 1, 3, 7);
+                     } else {
+                         Matrix.orthoM(projectMatrix, 0,
+                                 -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 7);
+                     }
+                 } else {
+                     if (sWH > sWidthHeight) {
+                         Matrix.orthoM(projectMatrix, 0,
+                                 -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 7);
+                     } else {
+                         Matrix.orthoM(projectMatrix, 0,
+                                 -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 7);
+                     }
+                 }
+        3.    onDrawFrame中，加入vTexture,在创建纹理设置bitmap进去，在加入顶点，图片坐标到缓存，并绘制
+                     1> glHTexture = GLES20.glGetUniformLocation(program, "vTexture");
+                        GLES20.glUniform1f(glHTexture, 0);
+
+	                 2> if (bitmap != null && !bitmap.isRecycled()) {
+                        int[] texture = new int[1];
+                        // 生成纹理
+                        GLES20.glGenTextures(1, texture, 0);
+                        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[0]);
+                        //设置缩小过滤为使用纹理中坐标最接近的一个像素的颜色作为需要绘制的像素颜色
+                        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+                        //设置放大过滤为使用纹理中坐标最接近的若干个颜色，通过加权平均算法得到需要绘制的像素颜色
+                        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+                        //设置环绕方向S，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
+                        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+                        //设置环绕方向T，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
+                        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+                        //根据以上指定的参数，生成一个2D纹理
+                        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+                        return texture[0];
+                    }
+
+                   3>   //传入顶点坐标
+                          GLES20.glVertexAttribPointer(glHPosition, 2, GLES20.GL_FLOAT, false, 0, posBuffer);
+                          //传入纹理坐标
+                          GLES20.glVertexAttribPointer(glHCoordinate, 2, GLES20.GL_FLOAT, false, 0, coordsBuffer);
+                          // 因为是2维的图形，所以需要顶点个数/2 即可
+                          GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vPos.length / 2);
