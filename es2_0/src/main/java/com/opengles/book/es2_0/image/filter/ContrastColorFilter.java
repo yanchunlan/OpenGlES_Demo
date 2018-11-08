@@ -13,7 +13,6 @@ public class ContrastColorFilter extends AFilter {
     private int vChangeColor;
     private int vChangeType;
 
-
     public ContrastColorFilter(Context context, Filter filter) {
         super(context,
                 "filter/half_color_vertex.sh",

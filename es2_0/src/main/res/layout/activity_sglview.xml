@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.opengles.book.es2_0.image.SGLView
+            android:id="@+id/sglview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="r"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/sb_r"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:maxHeight="4dp"
+                android:progress="50"
+                android:progressDrawable="@drawable/progress_seekbar" />
+
+            <TextView
+                android:id="@+id/tv_r"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:text="50"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="g"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/sb_g"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:maxHeight="4dp"
+                android:progress="50"
+                android:progressDrawable="@drawable/progress_seekbar" />
+
+            <TextView
+                android:id="@+id/tv_g"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:text="50"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="b"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/sb_b"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:max="100"
+                android:maxHeight="4dp"
+                android:progress="50"
+                android:progressDrawable="@drawable/progress_seekbar" />
+
+            <TextView
+                android:id="@+id/tv_b"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:text="50"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

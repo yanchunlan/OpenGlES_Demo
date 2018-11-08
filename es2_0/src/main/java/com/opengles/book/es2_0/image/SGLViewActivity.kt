@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SeekBar
 import com.opengles.book.es2_0.R
 import com.opengles.book.es2_0.image.filter.ContrastColorFilter
 import com.opengles.book.es2_0.image.filter.Filter
+import com.opengles.book.es2_0.image.filter.RGBColorFilter
+import kotlinx.android.synthetic.main.activity_sglview.*
 import kotlin.properties.Delegates
 
 class SGLViewActivity : AppCompatActivity() {
@@ -15,8 +18,53 @@ class SGLViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mGLView = SGLView(this)
-        setContentView(mGLView)
+        setContentView(R.layout.activity_sglview)
+        mGLView = findViewById<SGLView>(R.id.sglview)
+
+
+        val rgbColorFilter = RGBColorFilter(this)
+        sb_r.setOnSeekBarChangeListener(object : SimpleSeekBarChangeListener() {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                super.onProgressChanged(seekBar, progress, fromUser)
+                mGLView.sglRender.aFilter.let {
+                    if (it is RGBColorFilter) {
+                        it.setR(progress/100.0f)
+                    } else {
+                        mGLView.setFilter(rgbColorFilter.apply { setR(progress/100.0f) })
+                    }
+                }
+                tv_r.text = "$progress"
+                mGLView.requestRender()
+            }
+        })
+        sb_g.setOnSeekBarChangeListener(object : SimpleSeekBarChangeListener() {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                super.onProgressChanged(seekBar, progress, fromUser)
+                mGLView.sglRender.aFilter.let {
+                    if (it is RGBColorFilter) {
+                        it.setG(progress/100.0f)
+                    } else {
+                        mGLView.setFilter(rgbColorFilter.apply { setG(progress/100.0f) })
+                    }
+                }
+                tv_g.text = "$progress"
+                mGLView.requestRender()
+            }
+        })
+        sb_b.setOnSeekBarChangeListener(object : SimpleSeekBarChangeListener() {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                super.onProgressChanged(seekBar, progress, fromUser)
+                mGLView.sglRender.aFilter.let {
+                    if (it is RGBColorFilter) {
+                        it.setB(progress/100.0f)
+                    } else {
+                        mGLView.setFilter(rgbColorFilter.apply { setB(progress/100.0f) })
+                    }
+                }
+                tv_b.text = "$progress"
+                mGLView.requestRender()
+            }
+        })
     }
 
     override fun onResume() {
@@ -39,13 +87,13 @@ class SGLViewActivity : AppCompatActivity() {
         item?.itemId?.run {
             when (this) {
                 R.id.mDeal -> {
-                     isHalf = !isHalf
-                     if (isHalf) {
-                         item.setTitle("处理一半")
-                     } else {
-                         item.setTitle("全部处理")
-                     }
-                     mGLView.sglRender.refresh() // 开启更新，setFilter也会开启更新
+                    isHalf = !isHalf
+                    if (isHalf) {
+                        item.setTitle("处理一半")
+                    } else {
+                        item.setTitle("全部处理")
+                    }
+                    mGLView.sglRender.refresh() // 开启更新，setFilter也会开启更新
                 }
                 R.id.mDefault -> mGLView.setFilter(ContrastColorFilter(
                         this@SGLViewActivity, Filter.NONE))

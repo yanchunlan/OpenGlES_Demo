@@ -97,7 +97,7 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
    private String vertexShaderCodes;
     private String fragmentShaderCodes;
 
-    // #################
+    // ################# 为何使用坐标反了就不行了？？？？？ ############
     private final float[] vPos = {
 //            -1.0f, 1f,
 //            -1.0f, -1f,
@@ -182,22 +182,22 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         float sWH = w / (float) h;
         float sWidthHeight = width / (float) height;
         uXY=sWidthHeight;
-        // 此段代码未看懂
+        // #################  此段代码未看懂
         if (width > height) {
             if (sWH > sWidthHeight) {
                 Matrix.orthoM(projectMatrix, 0,
-                        -sWH * sWidthHeight, sWH * sWidthHeight, -1, 1, 3, 5);
+                        -sWH * sWidthHeight, sWH * sWidthHeight, -1, 1, 3, 7);
             } else {
                 Matrix.orthoM(projectMatrix, 0,
-                        -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 5);
+                        -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 7);
             }
         } else {
             if (sWH > sWidthHeight) {
                 Matrix.orthoM(projectMatrix, 0,
-                        -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 5);
+                        -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 7);
             } else {
                 Matrix.orthoM(projectMatrix, 0,
-                        -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
+                        -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 7);
             }
         }
         //设置相机位置
