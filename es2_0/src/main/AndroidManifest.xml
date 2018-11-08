@@ -8,6 +8,13 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application>
         <activity
             android:name=".ES2_0MainActivity"
@@ -17,7 +24,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".render.ChooseActivity" />
         <activity android:name=".image.SGLViewActivity" />
-        <activity android:name=".vary.VaryingActivity"></activity>
+        <activity android:name=".vary.VaryingActivity"/>
     </application>
 
 </manifest>

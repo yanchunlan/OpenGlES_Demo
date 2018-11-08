@@ -14,7 +14,7 @@ import kotlin.properties.Delegates
  */
 class SGLView : GLSurfaceView {
 
-    private var sglRender: SGLRender by Delegates.notNull<SGLRender>()
+    public var sglRender: SGLRender by Delegates.notNull<SGLRender>()
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {

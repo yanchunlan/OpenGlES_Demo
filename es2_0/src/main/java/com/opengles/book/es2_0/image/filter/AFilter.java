@@ -97,18 +97,29 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
    private String vertexShaderCodes;
     private String fragmentShaderCodes;
 
+    // #################
     private final float[] vPos = {
-            -1.0f, 1f,
-            -1.0f, -1f,
-            1.0f, -1f,
-            1.0f, 1f,
+//            -1.0f, 1f,
+//            -1.0f, -1f,
+//            1.0f, -1f,
+//            1.0f, 1f,
+
+            -1.0f,1.0f,
+            -1.0f,-1.0f,
+            1.0f,1.0f,
+            1.0f,-1.0f
     };
     // 0-1之间纹理间距
     private final float[] coords = {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 1.0f
+//            0.0f, 0.0f,
+//            1.0f, 0.0f,
+//            1.0f, 1.0f,
+//            0.0f, 1.0f
+
+            0.0f,0.0f,
+            0.0f,1.0f,
+            1.0f,0.0f,
+            1.0f,1.0f,
     };
 
     private FloatBuffer posBuffer, coordsBuffer;
@@ -175,18 +186,18 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         if (width > height) {
             if (sWH > sWidthHeight) {
                 Matrix.orthoM(projectMatrix, 0,
-                        -sWH * sWidthHeight, sWH * sWidthHeight, -1, 1, 3, 7);
+                        -sWH * sWidthHeight, sWH * sWidthHeight, -1, 1, 3, 5);
             } else {
                 Matrix.orthoM(projectMatrix, 0,
-                        -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 7);
+                        -sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 5);
             }
         } else {
             if (sWH > sWidthHeight) {
                 Matrix.orthoM(projectMatrix, 0,
-                        -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 7);
+                        -1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 5);
             } else {
                 Matrix.orthoM(projectMatrix, 0,
-                        -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 7);
+                        -1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 5);
             }
         }
         //设置相机位置

@@ -24,7 +24,9 @@ public class ContrastColorFilter extends AFilter {
     @Override
     protected void onDrawSet() {
         // type color是可变的
-        GLES20.glUniform1f(vChangeType, filter.getvChangeType());
+
+        // ###############  此处因为是int类型所有应该是i开头
+        GLES20.glUniform1i(vChangeType, filter.getvChangeType());
         GLES20.glUniform3fv(vChangeColor, 1, filter.getData(), 0);
     }
 

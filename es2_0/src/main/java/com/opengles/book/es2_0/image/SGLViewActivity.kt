@@ -39,13 +39,13 @@ class SGLViewActivity : AppCompatActivity() {
         item?.itemId?.run {
             when (this) {
                 R.id.mDeal -> {
-                    /* isHalf = !isHalf
+                     isHalf = !isHalf
                      if (isHalf) {
                          item.setTitle("处理一半")
                      } else {
                          item.setTitle("全部处理")
                      }
-                     mGLView.getRender().refresh()*/
+                     mGLView.sglRender.refresh() // 开启更新，setFilter也会开启更新
                 }
                 R.id.mDefault -> mGLView.setFilter(ContrastColorFilter(
                         this@SGLViewActivity, Filter.NONE))
@@ -61,6 +61,9 @@ class SGLViewActivity : AppCompatActivity() {
                         this@SGLViewActivity, Filter.MAGN))
             }
         }
+
+        mGLView.sglRender.aFilter?.setHalf(isHalf)
+        // 此处只调用一次requestRender不行，需要全部重新调用
         mGLView.requestRender()
         return super.onOptionsItemSelected(item)
     }
