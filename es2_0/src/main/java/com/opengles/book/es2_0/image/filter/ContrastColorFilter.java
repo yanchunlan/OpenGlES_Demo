@@ -34,4 +34,8 @@ public class ContrastColorFilter extends AFilter {
         vChangeType = GLES20.glGetUniformLocation(program, "vChangeType");
         vChangeColor = GLES20.glGetUniformLocation(program, "vChangeColor");
     }
+
+    public Filter getFilter() {
+        return filter;
+    }
 }

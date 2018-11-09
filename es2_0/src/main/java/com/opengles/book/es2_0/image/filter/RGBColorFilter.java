@@ -15,6 +15,7 @@ public class RGBColorFilter extends AFilter {
     private float r=0.5f;
     private float g=0.5f;
     private float b=0.5f;
+    private int type=2;
 
     public RGBColorFilter(Context context) {
         super(context, "filter/half_color_vertex.sh", "filter/half_color_fragment.sh");
@@ -22,7 +23,7 @@ public class RGBColorFilter extends AFilter {
 
     @Override
     protected void onDrawSet() {
-        GLES20.glUniform1i(vChangeType, 2);
+        GLES20.glUniform1i(vChangeType, type);
         GLES20.glUniform3fv(vChangeColor, 1, new float[]{r, g, b}, 0);
     }
 
@@ -44,4 +45,9 @@ public class RGBColorFilter extends AFilter {
     public void setB(float b) {
         this.b = b;
     }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }
+
