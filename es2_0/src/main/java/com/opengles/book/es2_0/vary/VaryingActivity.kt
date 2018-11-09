@@ -11,7 +11,7 @@ class VaryingActivity : AppCompatActivity() {
         setContentView(GLSurfaceView(this)
                 .apply {
                     setEGLContextClientVersion(2)
-                    setRenderer(VaryRenderer())
+                    setRenderer(VaryRenderer(resources))
                     renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
                 })
     }

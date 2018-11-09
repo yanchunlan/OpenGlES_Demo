@@ -1,0 +1,21 @@
+矩阵知识：
+	1.矩阵算法还有点模糊
+    2.矩阵变换：(抽成工具类 VaryTools )
+		1>
+		private float[] mMatrixCurrent = { // 原始矩阵
+				1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1
+		};
+		创建一个单位矩阵mMatrixCurrent，对单位矩阵进行Matrix的变换操作，
+		列如：平移：  Matrix.translateM(mMatrixCurrent, 0, x, y, z);
+			  旋转：  Matrix.rotateM(mMatrixCurrent, 0, angle, x, y, z);
+			  缩放：  Matrix.scaleM(mMatrixCurrent, 0, x, y, z);
+		2>
+			// 以前的逻辑是 = 拼接头提*相机
+		//    Matrix.multiplyMM(mvpMatrix, 0, mMatrixCamera, 0, mMatrixCurrent, 0);
+            // 现在的逻辑是  01 = 相机*变换 ， 01=凭借头提* 01
+            Matrix.multiplyMM(mvpMatrix, 0, mMatrixCamera, 0, mMatrixCurrent, 0);
+            Matrix.multiplyMM(mvpMatrix, 0, mMatrixProjection, 0, mvpMatrix, 0);
+
