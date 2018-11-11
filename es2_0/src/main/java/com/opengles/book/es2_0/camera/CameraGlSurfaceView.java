@@ -17,6 +17,14 @@ import javax.microedition.khronos.opengles.GL10;
  * author: ycl
  * date: 2018-11-10 15:34
  * desc:  代理了renderer
+ *         原理就是camera获取到得数据通过setPreviewTexture 设置给 surfaceTexture
+ *         -> surfaceTexture再不断setOnFrameAvailableListener监听，
+ *         调用requestRender，去更新openGl得方法并 surfaceTexture.updateTexImage()，
+ *         目的是预览作用：疑惑如下：
+ *         1.区别与原生得是什么？？？
+ *         2.相机矩阵变换怎么变得原理？
+ *         3.
+ *
  */
 public class CameraGlSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
     private KitkatCamera mCamera;
