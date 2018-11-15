@@ -182,7 +182,6 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         float sWH = w / (float) h;
         float sWidthHeight = width / (float) height;
         uXY=sWidthHeight;
-        // #################  此段代码未看懂
         if (width > height) {
             if (sWH > sWidthHeight) {
                 Matrix.orthoM(projectMatrix, 0,

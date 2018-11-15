@@ -75,4 +75,50 @@
             // 现在的逻辑是  01 = 相机*变换 ， 01=凭借头提* 01
             Matrix.multiplyMM(mvpMatrix, 0, mMatrixCamera, 0, mMatrixCurrent, 0);
             Matrix.multiplyMM(mvpMatrix, 0, mMatrixProjection, 0, mvpMatrix, 0);
+	3>	相机变换，根据款高比变换原理如下：
+		    int w = bitmap.getWidth();
+			int h = bitmap.getHeight();
 
+			float sWH = w / (float) h;
+			float sWidthHeight = width / (float) height;
+			uXY=sWidthHeight;
+			if (width > height) {
+				if (sWH > sWidthHeight) {
+					Matrix.orthoM(projectMatrix, 0,
+							-sWH * sWidthHeight, sWH * sWidthHeight, -1, 1, 3, 7);
+				} else {
+					Matrix.orthoM(projectMatrix, 0,
+							-sWidthHeight / sWH, sWidthHeight / sWH, -1, 1, 3, 7);
+				}
+			} else {
+				if (sWH > sWidthHeight) {
+					Matrix.orthoM(projectMatrix, 0,
+							-1, 1, -1 / sWidthHeight * sWH, 1 / sWidthHeight * sWH, 3, 7);
+				} else {
+					Matrix.orthoM(projectMatrix, 0,
+							-1, 1, -sWH / sWidthHeight, sWH / sWidthHeight, 3, 7);
+				}
+			}
+			
+			解析：
+				如果传入相机 -1,1，-1,1则满屏显示,想达到centerInside效果
+				1>如果控件是1920*1080，即width>height, 则sWidthHeight>1
+					假设图片宽高是1:1，则要让高1080为1，
+						则：1080/1=1920/left，求left，则left=1*1920/1080=1*width/height=1*sWidthHeight
+					1.1>假设图片宽高比大于控件宽高比，
+						图片2000*100，则让100高为1的话，
+						100/1=2000/left -> 则left=1*width/height*2000/100=1*sWidthHeight *w/h=sWidthHeight*sWH
+					1.2>假设图片宽高比小于控件宽高比，
+						图片100*2000，则让2000高为1的话，
+						2000/1=100/left -> 则left=1*width/height*100/2000=1*sWidthHeight *h/w=sWidthHeight/sWH
+				2>如果控件是1080*1920，即width<height, 则sWidthHeight<1
+					假设图片宽高是1:1，则要让宽度1080为1，
+						则：1920/top=1080/1，求left，则top=1*1920/1080=1/sWidthHeight
+					1.1>假设图片宽高比大于控件宽高比，
+						图片2000*100，则让2000宽为1的话
+						2000/1=100/top -> 则top=1/sWidthHeight*100/2000=1/sWidthHeight *h/w=1/sWidthHeight*sWH
+					1.2>假设图片宽高比小于控件宽高比，
+						图片100*2000，则让100宽为1的话
+						100/1=2000/top -> 则top=1/sWidthHeight*2000/100=1/sWidthHeight *w/h=sWH/sWidthHeight
+						
+				
