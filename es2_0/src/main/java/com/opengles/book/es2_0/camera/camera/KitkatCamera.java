@@ -36,21 +36,30 @@ public class KitkatCamera implements ICamera {
 
     @Override
     public boolean open(int cameraId) {
-        mCamera = Camera.open(cameraId);
+        try {
+            mCamera = Camera.open(cameraId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (mCamera != null) {
-            Camera.Parameters parameters = mCamera.getParameters();
-            picSize = getPropSize(parameters.getSupportedPictureSizes(), mConfig.rate,
+            Camera.Parameters param = mCamera.getParameters();
+            picSize = getPropSize(param.getSupportedPictureSizes(), mConfig.rate,
                     mConfig.minPictureWidth);
-            preSize = getPropSize(parameters.getSupportedPreviewSizes(), mConfig.rate,
+            preSize = getPropSize(param.getSupportedPreviewSizes(), mConfig.rate,
                     mConfig.minPreviewWidth);
-            parameters.setPictureSize(picSize.width, picSize.height);
-            parameters.setPreviewSize(preSize.width, preSize.height);
-            mCamera.setParameters(parameters);
-            Camera.Size pic = parameters.getPictureSize();
-            Camera.Size pre = parameters.getPreviewSize();
-            mPicSize = new Point(pic.width, pic.height);
-            mPreSize = new Point(pre.width, pre.height);
+            param.setPictureSize(picSize.width, picSize.height);
+            param.setPreviewSize(preSize.width, preSize.height);
+            mCamera.setParameters(param);
+
+            Camera.Size pic = param.getPictureSize();
+            Camera.Size pre = param.getPreviewSize();
+
+            // 此处宽高置位，出现一个异常
+//            mPicSize = new Point(pic.width, pic.height);
+//            mPreSize = new Point(pre.width, pre.height);
+            mPicSize = new Point(pic.height, pic.width);
+            mPreSize = new Point(pre.height, pre.width);
             return true;
         }
         return false;
@@ -129,6 +138,7 @@ public class KitkatCamera implements ICamera {
             mCamera.addCallbackBuffer(buffer);
         }
     }
+
     public void setOnPreviewFrameCallbackWithBuffer(final PreviewFrameCallback callback) {
         if (mCamera != null) {
             mCamera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
@@ -158,7 +168,7 @@ public class KitkatCamera implements ICamera {
     }
 
     private boolean equalRate(Camera.Size s, float rate) {
-        float r = s.width / (float) s.height;
+        float r = (float) s.width / (float) s.height;
         if (Math.abs(r - rate) <= 0.03) {
             return true;
         } else {

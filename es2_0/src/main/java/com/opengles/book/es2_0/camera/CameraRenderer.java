@@ -89,10 +89,11 @@ public class CameraRenderer implements GLSurfaceView.Renderer {
 
     private int createTextureId() {
         int[] texture = new int[1];
-        GLES20.glGenTextures(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture, 0);
+        // 获取texture是不需要设置类型的
+        GLES20.glGenTextures(1, texture, 0);
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture[0]);
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST); // GL_NEAREST
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
                 GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,

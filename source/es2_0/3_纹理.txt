@@ -60,3 +60,13 @@
                           GLES20.glVertexAttribPointer(glHCoordinate, 2, GLES20.GL_FLOAT, false, 0, coordsBuffer);
                           // 因为是2维的图形，所以需要顶点个数/2 即可
                           GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vPos.length / 2);
+		4.	1>	纹理过滤函数glTexParameteri()：
+				GL_TEXTURE_2D: 操作2D纹理.
+				GL_TEXTURE_WRAP_S: S方向上的贴图模式.
+				GL_CLAMP: 将纹理坐标限制在0.0,1.0的范围之内.如果超出了会如何呢.不会错误,只是会边缘拉伸填充.        
+				GL_TEXTURE_MAG_FILTER: 放大过滤
+				GL_LINEAR: 线性过滤, 使用距离当前渲染像素中心最近的4个纹素加权平均值.
+				GL_TEXTURE_MIN_FILTER: 缩小过滤
+				GL_LINEAR_MIPMAP_NEAREST: 使用GL_NEAREST对最接近当前多边形的解析度的两个层级贴图进行采样,然后用这两个值进行线性插值.
+				
+			2>	为纹理对象指定一个纹理 glTexImage2D

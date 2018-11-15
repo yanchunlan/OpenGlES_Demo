@@ -16,15 +16,21 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * author: ycl
  * date: 2018-11-10 15:34
- * desc:  代理了renderer
- *         原理就是camera获取到得数据通过setPreviewTexture 设置给 surfaceTexture
- *         -> surfaceTexture再不断setOnFrameAvailableListener监听，
- *         调用requestRender，去更新openGl得方法并 surfaceTexture.updateTexImage()，
- *         目的是预览作用：疑惑如下：
- *         1.区别与原生得是什么？？？
- *         2.相机矩阵变换怎么变得原理？
- *         3.
- *
+ * desc:  此类只是一个壳，代理了renderer，真是的renderer是CameraRenderer
+ * <p>
+ * 原理就是camera获取到得数据通过setPreviewTexture 设置给 surfaceTexture
+ * （surfaceTexture是专门针对openGlES的预览的类，其创建也是需要createTextureId 相关联）
+ * -> surfaceTexture再不断setOnFrameAvailableListener监听，
+ * 调用requestRender，去渲染openGl得方法并 surfaceTexture.updateTexImage()，
+ * （updateTexImage()方法会将ImageStream的图片数据更新到GL_OES_EGL_image_external类型的纹理中，
+ * 每当使用该类纹理对纹理对象进行绑定时，需使用GL_TEXTURE_EXTERNAL_OES）
+ *      glSurfaceView->camera->glTexture->texture
+ * <p>
+ * <p>
+ * 目的是预览作用：疑惑如下：
+ * 1.区别与原生得是什么？？？
+ * 2.相机矩阵变换怎么变得原理？
+ * 3.
  */
 public class CameraGlSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
     private KitkatCamera mCamera;
@@ -61,6 +67,7 @@ public class CameraGlSurfaceView extends GLSurfaceView implements GLSurfaceView.
         mRenderer.setCameraId(cameraId);
 
         Point point = mCamera.getPreviewSize();
+        // point.x = height , point.y = width
         mRenderer.setDataSize(point.x, point.y);
 
         mCamera.setPreviewTexture(mRenderer.getSurfaceTexture());
