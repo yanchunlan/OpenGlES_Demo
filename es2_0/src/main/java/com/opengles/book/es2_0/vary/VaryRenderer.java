@@ -3,7 +3,6 @@ package com.opengles.book.es2_0.vary;
 import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
 
 import com.opengles.book.es2_0.utils.VaryTools;
 
@@ -45,6 +44,11 @@ public class VaryRenderer implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         mCube.setMatrix(mVaryTools.getFinalMatrix());
         mCube.drawSelf();
+
+
+        // 此处待测试单位矩阵变换与直接对获取得矩阵进行变换有何区别
+        // 区别在于是对一个单位矩阵得变换，变了之后可以回复，如果是原矩阵变了就不能恢复了
+
 
         // y平移
         mVaryTools.pushMatrix();

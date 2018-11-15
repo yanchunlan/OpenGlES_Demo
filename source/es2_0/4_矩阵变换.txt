@@ -1,5 +1,62 @@
 矩阵知识：
-	1.矩阵算法还有点模糊
+	1.矩阵算法
+		https://blog.csdn.net/csxiaoshui/article/details/65446125
+		https://blog.csdn.net/github_34181815/article/details/70068202
+		
+		乘法：  矩阵结果 = 行 X 列
+		
+		1>平移：
+			x=x+xp 
+			y=y+yp
+			z=z+zp
+		则：1	0	0	xp
+			0	1	0	yp
+			0	0	1	zp
+			0	0	0	1
+		2>旋转：(右手定则)
+			1>x旋转
+				二维如下：
+				x=rcosϕ		y=rsinϕ
+				x′=rcos(θ+ϕ)	y′=rsin(θ+ϕ)
+				通过三角函数展开得到 
+				x′=rcosθcosϕ−rsinθsinϕ
+				y′=rsinθcosϕ+rcosθsinϕ
+				带入x和y表达式得到 
+				x′=xcosθ−ysinθ
+				y′=xsinθ+ycosθ
+				写成矩阵的形式是： 
+				[x'	=  [cosθ	-sinθ	*[x
+				 y']	sinθ	cosθ ]	  y]
+			  三维： -> yoz  (xyz)
+				x′=x
+				y′=ycosθ−zsinθ
+				z′=ysinθ+zcosθ
+				所以：
+					1	0		0		0
+					0	cosθ	-sinθ	0
+					0	sinθ	cosθ	0
+					0	0		0		1
+			2>绕y旋转 -> zox   (yzx)
+				x′=zsinθ+xcosθ
+				y′=y
+				z′=zcosθ−xsinθ
+				则：	cosθ	0	sinθ	0
+						0		1	0		0
+						-sinθ	0	cosθ	0
+						0	0		0		1
+			3>绕z旋转 -> xoy   (zxy)
+				则：	cosθ	-sinθ	0	0
+						sinθ	cosθ	0	0
+						0		0		1	0
+						0		0		0	1
+			4>缩放：
+					x'	0	0	0
+					0	y'	0	0
+					0	0	z'	0
+					0	0	0	1
+
+			
+	
     2.矩阵变换：(抽成工具类 VaryTools )
 		1>
 		private float[] mMatrixCurrent = { // 原始矩阵
