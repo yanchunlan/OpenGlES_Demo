@@ -28,9 +28,8 @@ import javax.microedition.khronos.opengles.GL10;
  * <p>
  * <p>
  * 目的是预览作用：疑惑如下：
- * 1.区别与原生得是什么？？？
- * 2.相机矩阵变换怎么变得原理？
- * 3.
+ * 1.区别与原生得是什么？？？ 都是显示拍摄界面
+ * 2.相机矩阵变换怎么变得原理？ 已知
  */
 public class CameraGlSurfaceView extends GLSurfaceView implements GLSurfaceView.Renderer {
     private KitkatCamera mCamera;
