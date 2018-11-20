@@ -36,7 +36,7 @@ public class ZipGlSurfaceView extends GLSurfaceView implements GLSurfaceView.Ren
 
         setRenderer(this);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        mZipRenderer = new ZipRenderer();
+        mZipRenderer = new ZipRenderer(this.getContext());
     }
 
     public void setScaleType(int type) {
