@@ -25,7 +25,9 @@
         <activity android:name=".image.SGLViewActivity" />
         <activity android:name=".vary.VaryingActivity" />
         <activity android:name=".camera.CameraActivity" />
-        <activity android:name=".etc.ZipActivity"></activity>
+        <activity android:name=".etc.ZipActivity" />
+        <activity android:name=".fbo.FBOActivity" />
+        <activity android:name=".egl.EGLActivity"/>
     </application>
 
 </manifest>
