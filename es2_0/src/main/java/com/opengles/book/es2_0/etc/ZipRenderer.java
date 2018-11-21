@@ -17,6 +17,7 @@ import com.opengles.book.es2_0.utils.ShaderUtils;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -60,7 +61,6 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     /*private float[] colors = {};   不需要color ,因为颜色是从 simple2D的texture2D生成*/
     private FloatBuffer vertexBuffer;
     private ShortBuffer coordBuffer;
-    private FloatBuffer colorBuffer;
 
     public static final int TYPE = 0x01;
     private StateChangeListener mChangeListener;
@@ -92,6 +92,9 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     private int width, height;
 
 
+    public static final float[] OM= MatrixUtils.getOriginalMatrix();
+    private float[] mvpMatrix = Arrays.copyOf(OM, 16);
+
     public ZipRenderer(Context context) {
         this.mContext = context;
         mPkmReader = new ZipPkmReader(context);
@@ -103,9 +106,9 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0, 0, 0, 0);
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+//        GLES20.glClearColor(0, 0, 0, 0);
+//        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+//        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
         program = ShaderUtils.createProgram(mContext.getResources(), "shader/pkm_mul.vert", "shader/pkm_mul.frag");
 //        program = createProgram(vertexShaderCodes, fragmentShaderCodes);
@@ -184,26 +187,26 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
 
     private void draw() {
         //图片需要每次绘制之前清空所有颜色
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         GLES20.glUseProgram(program);
 
-        GLES20.glUniformMatrix4fv(glMatrix,1,false,SM,0);
+        GLES20.glUniformMatrix4fv(glMatrix,1,false,mvpMatrix,0);
         bindTextureId();
 
         GLES20.glEnableVertexAttribArray(glPosition);
-        GLES20.glVertexAttribPointer(glPosition, vertexCoords.length / 2,
+        GLES20.glVertexAttribPointer(glPosition, 2,// 2维坐标
                 GLES20.GL_FLOAT, false,
                 0, vertexBuffer);
 
         GLES20.glEnableVertexAttribArray(glCoords);
-        GLES20.glVertexAttribPointer(glPosition, coords.length / 2,
+        GLES20.glVertexAttribPointer(glCoords, 2,// 2维坐标
                 GLES20.GL_FLOAT, false,
                 0, coordBuffer);
 
         // 绘制正方形，不是绘制纹理的坐标
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexCoords.length / 2);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         GLES20.glDisableVertexAttribArray(glPosition);
         GLES20.glDisableVertexAttribArray(glCoords);
     }
@@ -215,7 +218,9 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             // 此处因为图片转换为ETC1Texture 了，所有直接获取其宽高就代表bitmap的宽高了
             //根据不同的type设置不同的矩阵变换，显示不同的图片样式
             MatrixUtils.getMatrix(SM, type, t.getWidth(), t.getHeight(), width, height);
-            GLES20.glUniformMatrix4fv(glMatrix, 1, false, SM, 0);
+
+            mvpMatrix = SM;
+            GLES20.glUniformMatrix4fv(glMatrix, 1, false, mvpMatrix, 0);
 
             // bind  texture
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + getTextureType()); // 设置texture0通道
@@ -234,7 +239,8 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             GLES20.glUniform1i(glTextureAlpha, 1 + getTextureType());
         } else {
             // 如果是null，则不需要设置matrix，且赋值空对象的 ETC1Util.ETC1Texture
-            GLES20.glUniformMatrix4fv(glMatrix, 1, false, SM, 0);
+            mvpMatrix = OM;
+            GLES20.glUniformMatrix4fv(glMatrix, 1, false, mvpMatrix, 0);
 
             // bind  texture
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + getTextureType()); // 设置texture0通道
@@ -251,6 +257,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
                     GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width, height, emptyBuffer));
             GLES20.glUniform1i(glTextureAlpha, 1 + getTextureType());
+            isPlay = false;
         }
     }
 
