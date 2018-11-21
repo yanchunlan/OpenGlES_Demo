@@ -1,0 +1,89 @@
+原理：
+	mail_texture_tools工具压缩图片文件成为xxx.pkm,xxx_alpha.pkm文件，压缩成为zip包，
+在代码中通过assets读取zip文件，获取inputStream, 后面使用createTexture生成ETC1Util.ETC1Texture纹理
+	在renderer中，onSurfaceCreated 创建program, 并创建其相关的炳，并创建2个texture，包含AlphaTexture
+onSurfaceChanged中：
+		this.emptyBuffer = ByteBuffer.allocateDirect(ETC1.getEncodedDataSize(width, height));
+        this.width = width;
+        this.height = height;
+        // 开启混合
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+onDrawFrame中：
+	开启计时器，调用requestRender重绘，{program使用，matrix变换获取并设置，texture绑定，节点绑定}
+
+	##############################################################################
+
+	  private void bindTextureId() {
+        ETC1Util.ETC1Texture t = mPkmReader.getNextTexture();
+        ETC1Util.ETC1Texture tAlpha = mPkmReader.getNextTexture();
+        if (t != null && tAlpha != null) {
+            // 此处因为图片转换为ETC1Texture 了，所有直接获取其宽高就代表bitmap的宽高了
+            //根据不同的type设置不同的矩阵变换，显示不同的图片样式
+            MatrixUtils.getMatrix(SM, type, t.getWidth(), t.getHeight(), width, height);
+
+            mvpMatrix = SM;
+            GLES20.glUniformMatrix4fv(glMatrix, 1, false, mvpMatrix, 0);
+
+            // bind  texture
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + getTextureType()); // 设置texture0通道
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[0]);
+            // etc需要的load加载
+            ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
+                    GLES20.GL_UNSIGNED_SHORT_5_6_5, t);
+            GLES20.glUniform1i(glTexture, getTextureType());
+
+            // bind  textureAlpha
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE1 + getTextureType()); // 设置texture0通道
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[1]);
+            // etc需要的load加载
+            ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
+                    GLES20.GL_UNSIGNED_SHORT_5_6_5, tAlpha);
+            GLES20.glUniform1i(glTextureAlpha, 1 + getTextureType());
+        } else {
+            // 如果是null，则不需要设置matrix，且赋值空对象的 ETC1Util.ETC1Texture
+            mvpMatrix = OM;
+            GLES20.glUniformMatrix4fv(glMatrix, 1, false, mvpMatrix, 0);
+
+            // bind  texture
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + getTextureType()); // 设置texture0通道
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[0]);
+            // etc需要的load加载
+            ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
+                    GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width, height, emptyBuffer));
+            GLES20.glUniform1i(glTexture, getTextureType());
+
+            // bind  textureAlpha
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE1 + getTextureType()); // 设置texture0通道
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[1]);
+            // etc需要的load加载
+            ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
+                    GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width, height, emptyBuffer));
+            GLES20.glUniform1i(glTextureAlpha, 1 + getTextureType());
+            isPlay = false;
+        }
+    }
+
+		其中：
+			顶点着色器：
+				attribute vec4 vPosition;
+				attribute vec2 vCoord;
+				varying vec2 aCoord;
+				uniform mat4 vMatrix;
+
+				void main(){
+					aCoord = vCoord;
+					gl_Position = vMatrix*vPosition;
+				}
+			片元着色器：
+				precision mediump float;
+				varying vec2 aCoord;
+				uniform sampler2D vTexture;
+				uniform sampler2D vTextureAlpha;
+
+				void main() {
+					vec4 color=texture2D( vTexture, aCoord);
+					color.a=texture2D(vTextureAlpha,aCoord).r;
+					gl_FragColor = color;
+				}
+		

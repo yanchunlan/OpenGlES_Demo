@@ -26,6 +26,12 @@ import javax.microedition.khronos.opengles.GL10;
  * author: ycl
  * date: 2018-11-12 22:22
  * desc:
+ *       异常2个：
+ *          1> glGenTextures（n,） n代表的是纹理个数
+ *          2> float[] coords  纹理坐标是float类型
+ *          3> surface创建成功之后，才能创建着色器program
+ *          4> 判断glLinkProgram 成功与否状态是 使用 GL_LINK_STATUS 来判断
+ *
  */
 public class ZipRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "ZipRenderer";
@@ -52,7 +58,8 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             1f, 1f,
             1f, -1f
     };
-    private short[] coords = {
+    // ######  纹理需要的是float类型不是short类型 ######
+    private float[] coords = {
             0, 0,
             0, 1,
             1, 0,
@@ -60,7 +67,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     };
     /*private float[] colors = {};   不需要color ,因为颜色是从 simple2D的texture2D生成*/
     private FloatBuffer vertexBuffer;
-    private ShortBuffer coordBuffer;
+    private FloatBuffer coordBuffer;
 
     public static final int TYPE = 0x01;
     private StateChangeListener mChangeListener;
@@ -72,15 +79,9 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     private int glTexture;
     private int glTextureAlpha;
 
-    // 4维坐标，4x4=16
-   /* private float[] projectMatrix = new float[16];
-    private float[] viewMatrix = new float[16];
-    private float[] mvpMatrix = new float[16];*/
-
     // params
     private ZipPkmReader mPkmReader;
     private int[] texture;
-    private Context mContext;
 
     private boolean isPlay = false;
     private GLSurfaceView mView;
@@ -96,22 +97,20 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     private float[] mvpMatrix = Arrays.copyOf(OM, 16);
 
     public ZipRenderer(Context context) {
-        this.mContext = context;
         mPkmReader = new ZipPkmReader(context);
 
         vertexBuffer = BufferUtils.arr2FloatBuffer(vertexCoords);
-        coordBuffer = BufferUtils.arr2ShortBuffer(coords);
+        coordBuffer = BufferUtils.arr2FloatBuffer(coords);
     }
 
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-//        GLES20.glClearColor(0, 0, 0, 0);
-//        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-//        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+        GLES20.glClearColor(0, 0, 0, 0);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
-        program = ShaderUtils.createProgram(mContext.getResources(), "shader/pkm_mul.vert", "shader/pkm_mul.frag");
-//        program = createProgram(vertexShaderCodes, fragmentShaderCodes);
+        program = createProgram(vertexShaderCodes, fragmentShaderCodes);
 
         glPosition = GLES20.glGetAttribLocation(program, "vPosition");
         glCoords = GLES20.glGetAttribLocation(program, "vCoord");
@@ -177,6 +176,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                // 第一次创建的时候，请求重绘，再休眠时间到了之后就继续要求重绘
                 mView.requestRender();
             }
         } else {
@@ -192,7 +192,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
 
         GLES20.glUseProgram(program);
 
-        GLES20.glUniformMatrix4fv(glMatrix,1,false,mvpMatrix,0);
+//        GLES20.glUniformMatrix4fv(glMatrix,1,false,mvpMatrix,0);
         bindTextureId();
 
         GLES20.glEnableVertexAttribArray(glPosition);
@@ -265,6 +265,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
         return 0;
     }
 
+    // 此处创建2个，是因为一个是texture，一个是透明度的，总结就是2个
     private void createTextureId(int[] texture) {
         // 此处注意： n代表个数，target代表类型，一般是GLES20.GL_TEXTURE_2D 类型
         GLES20.glGenTextures(2, texture, 0);
@@ -286,32 +287,33 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
         int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCodes);
         if (vertexShader == 0) return 0;
         int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCodes);
-        if (vertexShader == 0) return 0;
-
+        if (fragmentShader == 0) return 0;
         int program = GLES20.glCreateProgram();
-        GLES20.glAttachShader(program, vertexShader);
-        GLES20.glAttachShader(program, fragmentShader);
-        GLES20.glLinkProgram(program);
-        // 成功之后获取状态判断是否ok
-        int[] linkStatus = new int[1];
-        GLES20.glGetProgramiv(program, GLES20.GL_COMPILE_STATUS, linkStatus, 0);
-        if (linkStatus[0] != GLES20.GL_TRUE) {
-            Log.e(TAG, "loadShader: " + GLES20.glGetProgramInfoLog(program));
-            GLES20.glDeleteProgram(program);
-            program = 0;
+        if(program!=0){
+            GLES20.glAttachShader(program, vertexShader);
+            GLES20.glAttachShader(program, fragmentShader);
+            GLES20.glLinkProgram(program);
+            // 成功之后获取状态判断是否ok
+            int[] linkStatus = new int[1];
+            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);  // 此处是 GL_LINK_STATUS
+            if (linkStatus[0] != GLES20.GL_TRUE) {
+                Log.e(TAG, "loadShader: " + GLES20.glGetProgramInfoLog(program));
+                GLES20.glDeleteProgram(program);
+                program = 0;
+            }
         }
         return program;
     }
 
-    private int loadShader(int type, String msg) {
+    private int loadShader(int type, String source) {
         int shader = GLES20.glCreateShader(type);
         if (0 != shader) {
-            GLES20.glShaderSource(shader, msg);
-            GLES20.glReleaseShaderCompiler();
+            GLES20.glShaderSource(shader, source);
+            GLES20.glCompileShader(shader);
             // 成功之后获取状态判断是否ok
             int[] compiled = new int[1];
             GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-            if (compiled[0] != GLES20.GL_TRUE) {
+            if(compiled[0]==0){
                 Log.e(TAG, "loadShader: " + type);
                 Log.e(TAG, "loadShader: " + GLES20.glGetShaderInfoLog(shader));
                 GLES20.glDeleteShader(shader);

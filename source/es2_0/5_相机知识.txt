@@ -1,4 +1,16 @@
-摄像头.
+原理：
+	camera获取到得数据通过setPreviewTexture(SurfaceTexture{获取textureId去创建SurfaceTexture})
+	通过SurfaceTexture 的setOnFrameAvailableListener 方法不断调用requestRender
+		-> 
+			public void onDrawFrame(GL10 gl) {
+				if (surfaceTexture != null) {
+					surfaceTexture.updateTexImage();
+				}
+				... // 绘制代码
+			}
+	updateTexImage方法会将ImageStream的图片数据更新到GL_OES_EGL_image_external类型的纹理中
+	#######################################################################
+	摄像头.
 	1.相机预览
 		相机预览：camera.setPreviewTexture(SurfaceTexture)
 		纹理创建： GLES11Ext.GL_TEXTURE_EXTERNAL_OES
@@ -12,6 +24,7 @@
 
 			void main(){
 				gl_Position = vMatrix*vPosition;
+				// 相机矩阵X4维坐标 的xy，取2维坐标
 				textureCoordinate = (vCoordMatrix*vec4(vCoord,0,1)).xy;
 			}
 		片元着色器：
