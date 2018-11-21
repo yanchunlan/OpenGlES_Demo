@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.opengles.book.es2_0.utils.BufferUtils;
 import com.opengles.book.es2_0.utils.MatrixUtils;
+import com.opengles.book.es2_0.utils.ShaderUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -35,14 +36,14 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             "gl_Position=vMatrix*vPosition;" +
             "aCoord=vCoord;" +
             "}";
-    private String fragmentShaderCodes = "precision medium float;" +
+    private String fragmentShaderCodes = "precision mediump float;" +
             "varying vec2 aCoord;" +
-            "uniform sample2D vTexture;" +
-            "uniform sample2D vTextureAlpha;" +
+            "uniform sampler2D vTexture;" +
+            "uniform sampler2D vTextureAlpha;" +
             "void main(){" +
             "vec4 color=texture2D(vTexture,aCoord);" +
             "color.a=texture2D(vTextureAlpha,aCoord).r;" + // 透明通道的r 赋值给color.a
-            "gl_Color=color;" +
+            "gl_FragColor=color;" +
             "}";
     private float[] vertexCoords = {
             -1f, 1f,
@@ -52,7 +53,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     };
     private short[] coords = {
             0, 0,
-            0, -1,
+            0, 1,
             1, 0,
             1, 1
     };
@@ -63,7 +64,6 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
 
     public static final int TYPE = 0x01;
     private StateChangeListener mChangeListener;
-    private Bitmap mBitmap;
 
     private int program;
     private int glPosition;
@@ -80,10 +80,12 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     // params
     private ZipPkmReader mPkmReader;
     private int[] texture;
+    private Context mContext;
 
     private boolean isPlay = false;
     private GLSurfaceView mView;
-    private int timeStep = 50;
+    private int timeStep = 50; // 延时
+    private long time = 0;
     private float[] SM = MatrixUtils.getOriginalMatrix(); // 单位矩阵
     private int type = MatrixUtils.TYPE_CENTERINSIDE;
     private ByteBuffer emptyBuffer;
@@ -91,20 +93,11 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
 
 
     public ZipRenderer(Context context) {
+        this.mContext = context;
         mPkmReader = new ZipPkmReader(context);
 
         vertexBuffer = BufferUtils.arr2FloatBuffer(vertexCoords);
         coordBuffer = BufferUtils.arr2ShortBuffer(coords);
-        program = createProgram(vertexShaderCodes, fragmentShaderCodes);
-
-        glPosition = GLES20.glGetAttribLocation(program, "vPosition");
-        glCoords = GLES20.glGetAttribLocation(program, "vCoords");
-        glMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
-        glTexture = GLES20.glGetUniformLocation(program, "vTexture");
-        glTextureAlpha = GLES20.glGetUniformLocation(program, "vTextureAlpha");
-
-        texture = new int[2];
-        createTextureId(texture);
     }
 
 
@@ -113,10 +106,23 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0, 0, 0, 0);
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+
+        program = ShaderUtils.createProgram(mContext.getResources(), "shader/pkm_mul.vert", "shader/pkm_mul.frag");
+//        program = createProgram(vertexShaderCodes, fragmentShaderCodes);
+
+        glPosition = GLES20.glGetAttribLocation(program, "vPosition");
+        glCoords = GLES20.glGetAttribLocation(program, "vCoord");
+        glMatrix = GLES20.glGetUniformLocation(program, "vMatrix");
+        glTexture = GLES20.glGetUniformLocation(program, "vTexture");
+        glTextureAlpha = GLES20.glGetUniformLocation(program, "vTextureAlpha");
+
+        texture = new int[2];
+        createTextureId(texture);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        // 因为不同的宽高，创建ETC1Texture 需要的buffer不同，所有在此处设置
         this.emptyBuffer = ByteBuffer.allocateDirect(ETC1.getEncodedDataSize(width, height));
         this.width = width;
         this.height = height;
@@ -151,10 +157,39 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        if (time != 0) {
+            // 2次执行的耗时
+            Log.e(TAG, "onDrawFrame: time-->" + (System.currentTimeMillis() - time));
+        }
+        time = System.currentTimeMillis();
+
+        long startTime = System.currentTimeMillis();
+        draw();
+        long end = System.currentTimeMillis() - startTime;
+        if (isPlay) {
+            // 执行时间间隔在计划的时间间隔，就开启计时器，目的是要求计时始终在 timeStep 间隔内
+            if (end < timeStep) {
+                try {
+                    Thread.sleep(timeStep - end);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mView.requestRender();
+            }
+        } else {
+            // 绘制结束了，更改状态
+            changeState(StateChangeListener.PLAYING, StateChangeListener.STOP);
+        }
+    }
+
+    private void draw() {
+        //图片需要每次绘制之前清空所有颜色
+        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         GLES20.glUseProgram(program);
 
+        GLES20.glUniformMatrix4fv(glMatrix,1,false,SM,0);
         bindTextureId();
 
         GLES20.glEnableVertexAttribArray(glPosition);
@@ -177,6 +212,8 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
         ETC1Util.ETC1Texture t = mPkmReader.getNextTexture();
         ETC1Util.ETC1Texture tAlpha = mPkmReader.getNextTexture();
         if (t != null && tAlpha != null) {
+            // 此处因为图片转换为ETC1Texture 了，所有直接获取其宽高就代表bitmap的宽高了
+            //根据不同的type设置不同的矩阵变换，显示不同的图片样式
             MatrixUtils.getMatrix(SM, type, t.getWidth(), t.getHeight(), width, height);
             GLES20.glUniformMatrix4fv(glMatrix, 1, false, SM, 0);
 
@@ -196,7 +233,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
                     GLES20.GL_UNSIGNED_SHORT_5_6_5, tAlpha);
             GLES20.glUniform1i(glTextureAlpha, 1 + getTextureType());
         } else {
-            // 如果是null，则赋值空对象的 ETC1Util.ETC1Texture
+            // 如果是null，则不需要设置matrix，且赋值空对象的 ETC1Util.ETC1Texture
             GLES20.glUniformMatrix4fv(glMatrix, 1, false, SM, 0);
 
             // bind  texture
@@ -204,7 +241,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[0]);
             // etc需要的load加载
             ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
-                    GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width,height,emptyBuffer));
+                    GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width, height, emptyBuffer));
             GLES20.glUniform1i(glTexture, getTextureType());
 
             // bind  textureAlpha
@@ -212,7 +249,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[1]);
             // etc需要的load加载
             ETC1Util.loadTexture(GLES20.GL_TEXTURE_2D, 0, 0, GLES20.GL_RGB,
-                    GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width,height,emptyBuffer));
+                    GLES20.GL_UNSIGNED_SHORT_5_6_5, new ETC1Util.ETC1Texture(width, height, emptyBuffer));
             GLES20.glUniform1i(glTextureAlpha, 1 + getTextureType());
         }
     }
@@ -222,7 +259,8 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     }
 
     private void createTextureId(int[] texture) {
-        GLES20.glGenTextures(GLES20.GL_TEXTURE_2D, texture, 0);
+        // 此处注意： n代表个数，target代表类型，一般是GLES20.GL_TEXTURE_2D 类型
+        GLES20.glGenTextures(2, texture, 0);
         for (int i = 0; i < texture.length; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
 
@@ -231,7 +269,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
-//            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mBitmap, 0);
+//            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, mBitmap, 0); // 2维图形就直接GLUtils.texImage2D 设置bitmap到 里面去
         }
     }
 
@@ -287,7 +325,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
     public void setAnimation(ZipGlSurfaceView zipGlSurfaceView, String path, int timeStep) {
         this.mView = zipGlSurfaceView;
         this.timeStep = timeStep;
-        mPkmReader.setPath(path);
+        this.mPkmReader.setPath(path);
     }
 
     public void start() {
@@ -299,7 +337,7 @@ public class ZipRenderer implements GLSurfaceView.Renderer {
             if (mPkmReader != null) {
                 mPkmReader.open();
             }
-            // 请求重绘
+            // 请求重绘 ,就会调用图形轮训处理的代码
             mView.requestRender();
         }
     }

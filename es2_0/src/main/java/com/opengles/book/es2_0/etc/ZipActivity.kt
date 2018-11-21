@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity
 class ZipActivity : AppCompatActivity() {
 
     lateinit var zipSurfaceView: ZipGlSurfaceView
-    private val path: String = "assets/etczip/bg.zip"
+    private val path: String = "assets/etczip/cc.zip"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

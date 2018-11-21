@@ -34,6 +34,9 @@ public class ZipPkmReader {
         mAssetManager = context.getAssets();
     }
 
+    public ZipPkmReader(AssetManager assetManager) {
+        mAssetManager = assetManager;
+    }
 
     public void setPath(String path) {
         mPath = path;
@@ -43,7 +46,8 @@ public class ZipPkmReader {
         if (mPath == null) return false;
         try {
             if (mPath.startsWith("assets/")) {
-                InputStream in = mAssetManager.open(mPath);
+                // "assets/etczip/cc.zip"  需要截取，取etczip/cc.zip
+                InputStream in = mAssetManager.open(mPath.substring(7));
                 mZipInputStream = new ZipInputStream(in);
             } else {
                 File file = new File(mPath);
