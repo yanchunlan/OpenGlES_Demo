@@ -14,7 +14,7 @@ import android.opengl.GLES20;
 import java.util.Arrays;
 
 /**
- * Description:
+ * Description: 相机预览 oes
  */
 public class OesFilter extends AFilter{
 

@@ -14,6 +14,7 @@ import android.util.SparseArray;
 
 import com.opengles.book.es2_0.utils.BufferUtils;
 import com.opengles.book.es2_0.utils.MatrixUtils;
+import com.opengles.book.es2_0.utils.ShaderUtils;
 
 import java.io.InputStream;
 import java.nio.FloatBuffer;
@@ -208,16 +209,12 @@ public abstract class AFilter {
     protected abstract void onCreate();
     protected abstract void onSizeChanged(int width,int height);
 
-    protected final void createProgram(String vertex, String fragment){
-        mProgram= uCreateGlProgram(vertex,fragment);
+    protected final void createProgramByAssetsFile(String vertex, String fragment){
+        mProgram= ShaderUtils.createProgram(mRes,vertex,fragment);
         mHPosition= GLES20.glGetAttribLocation(mProgram, "vPosition");
         mHCoord= GLES20.glGetAttribLocation(mProgram,"vCoord");
         mHMatrix= GLES20.glGetUniformLocation(mProgram,"vMatrix");
         mHTexture= GLES20.glGetUniformLocation(mProgram,"vTexture");
-    }
-
-    protected final void createProgramByAssetsFile(String vertex, String fragment){
-        createProgram(uRes(mRes,vertex),uRes(mRes,fragment));
     }
 
     /**
@@ -264,6 +261,7 @@ public abstract class AFilter {
      * 绑定默认纹理
      */
     protected void onBindTexture(){
+        // 激活GL_TEXTURE0 通道，绑定，并设置进去参数
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0+textureType);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,getTextureId());
         GLES20.glUniform1i(mHTexture,textureType);
@@ -274,62 +272,5 @@ public abstract class AFilter {
             Log.e(TAG,"glError:"+code+"---"+index);
         }
     }
-
-    //通过路径加载Assets中的文本内容
-    public static String uRes(Resources mRes, String path){
-        StringBuilder result=new StringBuilder();
-        try{
-            InputStream is=mRes.getAssets().open(path);
-            int ch;
-            byte[] buffer=new byte[1024];
-            while (-1!=(ch=is.read(buffer))){
-                result.append(new String(buffer,0,ch));
-            }
-        }catch (Exception e){
-            return null;
-        }
-        return result.toString().replaceAll("\\r\\n","\n");
-    }
-
-    //创建GL程序
-    public static int uCreateGlProgram(String vertexSource, String fragmentSource){
-        int vertex=uLoadShader(GLES20.GL_VERTEX_SHADER,vertexSource);
-        if(vertex==0)return 0;
-        int fragment=uLoadShader(GLES20.GL_FRAGMENT_SHADER,fragmentSource);
-        if(fragment==0)return 0;
-        int program= GLES20.glCreateProgram();
-        if(program!=0){
-            GLES20.glAttachShader(program,vertex);
-            GLES20.glAttachShader(program,fragment);
-            GLES20.glLinkProgram(program);
-            int[] linkStatus=new int[1];
-            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS,linkStatus,0);
-            if(linkStatus[0]!= GLES20.GL_TRUE){
-                glError(1,"Could not link program:"+ GLES20.glGetProgramInfoLog(program));
-                GLES20.glDeleteProgram(program);
-                program=0;
-            }
-        }
-        return program;
-    }
-
-    //加载shader
-    public static int uLoadShader(int shaderType,String source){
-        int shader= GLES20.glCreateShader(shaderType);
-        if(0!=shader){
-            GLES20.glShaderSource(shader,source);
-            GLES20.glCompileShader(shader);
-            int[] compiled=new int[1];
-            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS,compiled,0);
-            if(compiled[0]==0){
-                glError(1,"Could not compile shader:"+shaderType);
-                glError(1,"GLES20 Error:"+ GLES20.glGetShaderInfoLog(shader));
-                GLES20.glDeleteShader(shader);
-                shader=0;
-            }
-        }
-        return shader;
-    }
-
 
 }

@@ -67,6 +67,6 @@
 		mOesFilter.setMatrix(matrix);
 
 		//绑定相机
-		GLES20.glActiveTexture(GLES20.GL_TEXTURE0+getTextureType());
-        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,getTextureId());
-        GLES20.glUniform1i(mHTexture,getTextureType());
+		GLES20.glActiveTexture(GLES20.GL_TEXTURE0+getTextureType()); // 激活纹理单元0
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,getTextureId()); //绑定2D纹理
+        GLES20.glUniform1i(mHTexture,getTextureType()); //将纹理设置给Shader
