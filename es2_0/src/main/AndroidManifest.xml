@@ -27,7 +27,9 @@
         <activity android:name=".camera.CameraActivity" />
         <activity android:name=".etc.ZipActivity" />
         <activity android:name=".fbo.FBOActivity" />
-        <activity android:name=".egl.EGLActivity"/>
+        <activity android:name=".egl.EGLActivity" />
+        <activity android:name=".camera.camera2.Camera2Activity" />
+        <activity android:name=".camera.camera3.Camera3Activity"/>
     </application>
 
 </manifest>

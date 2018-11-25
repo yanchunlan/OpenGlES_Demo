@@ -31,7 +31,7 @@ public class ZipGlSurfaceView extends GLSurfaceView implements GLSurfaceView.Ren
         setZOrderOnTop(true);
         this.getHolder().setFormat(PixelFormat.TRANSLUCENT); // 系统选择支持半透明的格式（许多alpha位)
         setEGLConfigChooser(8, 8, 8, 8,
-                16, 0); //
+                16, 0); //设置GL的颜色，深度
 
 
         setRenderer(this);

@@ -25,6 +25,7 @@ public class FBORenderer implements GLSurfaceView.Renderer {
     private Bitmap mBitmap;
 
     private ByteBuffer mBuffer;
+    private CallBack mCallBack;
 
 
     private int[] fFrame = new int[1]; // 帧缓冲
@@ -74,9 +75,13 @@ public class FBORenderer implements GLSurfaceView.Renderer {
         GLES20.glViewport(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
         mAFilter.setTextureId(fTexture[0]);
         mAFilter.draw();
+
         // 获取到buffer
-        GLES20.glReadPixels(0,0,mBitmap.getWidth(),mBitmap.getHeight(),
-                GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,mBuffer);
+        GLES20.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(),
+                GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, mBuffer);
+        if (mCallBack != null) {
+            mCallBack.call(mBuffer);
+        }
 
         // 解绑 FrameBuffer
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
@@ -129,4 +134,19 @@ public class FBORenderer implements GLSurfaceView.Renderer {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         }
     }
+
+
+    public void setCallBack(CallBack callBack) {
+        mCallBack = callBack;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        mBitmap = bitmap;
+    }
+
+    interface CallBack {
+        void call(ByteBuffer buffer);
+    }
+
+
 }

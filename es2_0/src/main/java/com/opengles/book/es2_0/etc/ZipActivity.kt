@@ -34,6 +34,15 @@ class ZipActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        zipSurfaceView?.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        zipSurfaceView?.onPause()
     }
 }

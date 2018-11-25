@@ -1,0 +1,29 @@
+GLSurfaceView内部封装了EGL环境的操作，所以GLSurfaceView可以当做一个EGL使用的示例来看
+EGL使用步骤：
+	1.取得EGL实例
+	2.选择Display
+	3.选择Config
+	4.创建Context
+	5.创建Surface
+	6.指定当前的环境为绘制环境
+	7.创建GL
+	其中GLSurfaceView源码中，context创建成功，就调用onSurfaceCreated(gl, mEglConfig);
+		上面7步全部创建ok,就释放阻塞，调用onSurfaceChanged(gl, w, h);并且只调用一次，
+		但是内部onDrawFrame(gl) 是不断在调用，因为是while()死循环
+		readyToDraw 方法里面有如果mRenderMode == RENDERMODE_CONTINUOUSLY，才会不断调用创建EGL环境，
+		否则就是requestRender一次，创建一次环境
+	
+	使用：
+		1>初始化方法：
+			搭建EGL环境: new EGLHelper(mWidth, mHeight);
+			创建顶点，片元着色器，获取重要点句柄（类似于调用了onSurfaceCreated）
+			传入宽高，（类似于调用了onSurfaceChanged）
+		2>绘制方法：
+			创建textureId,清除环境色，使用program,激活通道，绑定texture，设置matrix,并绑定数据，
+		绑定其他顶点，颜色，纹理，等等数据
+			 从GLES20.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(),GLES20.GL_RGBA,
+		GLES20.GL_UNSIGNED_BYTE, mBuffer)，获取buffer数据，并倒置翻转获取数据存储再int[]里面，
+		创建bitmap，bitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat))，把数据存在bitmap里面，
+		并保存数据到本地并显示
+		3>destory
+			执行自己创建的destroy

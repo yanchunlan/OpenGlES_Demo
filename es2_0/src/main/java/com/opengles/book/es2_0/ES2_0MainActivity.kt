@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.opengles.book.es2_0.camera.CameraActivity
+import com.opengles.book.es2_0.camera.camera2.Camera2Activity
+import com.opengles.book.es2_0.camera.camera3.Camera3Activity
 import com.opengles.book.es2_0.egl.EGLActivity
 import com.opengles.book.es2_0.etc.ZipActivity
 import com.opengles.book.es2_0.fbo.FBOActivity
@@ -43,9 +45,11 @@ class ES2_0MainActivity : AppCompatActivity() {
             add(MenuBean("图片处理(image)", SGLViewActivity::class.java))
             add(MenuBean("图形变换(vary)", VaryingActivity::class.java))
             add(MenuBean("相机(camera)", CameraActivity::class.java))
+            add(MenuBean("相机动画(camera2)", Camera2Activity::class.java))
+            add(MenuBean("相机美颜(camera3)", Camera3Activity::class.java))
             add(MenuBean("压缩纹理动画(etc)", ZipActivity::class.java))
             add(MenuBean("FBO离屏渲染(fbo)", FBOActivity::class.java))
-            add(MenuBean("EGL后台处理(egl)", EGLActivity::class.java))
+            add(MenuBean("EGL后台处理(egl环境搭建)", EGLActivity::class.java))
         }
     }
 }
