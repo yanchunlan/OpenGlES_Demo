@@ -84,26 +84,31 @@ public class GLES20BackEnv {
     }
 
     /**
-     *  前面是根据图片转换为bitmap设置到texture里面去了，此处是从texture里面
-     *  获取bitmap数据，并存在本地，并显示出来
+     * 前面是根据图片转换为bitmap设置到texture里面去了，此处是从texture里面
+     * 获取bitmap数据，并存在本地，并显示出来
      */
     private void convertToBitmap() {
-        // 获取buffer
-        IntBuffer ib = IntBuffer.allocate(mWidth * mHeight);
-        mHelper.getGL().glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA,
-                GLES20.GL_UNSIGNED_BYTE, ib);
-        int[] ia = ib.array();
+        try {
+            // 获取buffer
+            IntBuffer ib = IntBuffer.allocate(mWidth * mHeight);
+            mHelper.getGL().glReadPixels(0, 0, mWidth, mHeight, GLES20.GL_RGBA,
+                    GLES20.GL_UNSIGNED_BYTE, ib);
+            int[] ia = ib.array();
 
-        // 将倒置镜像反转图像转换为右侧正常的图像, 宽高置位 并把数据存在iat里面
-        int[] iat = new int[mWidth * mHeight];
-        for (int i = 0; i < mHeight; i++) {
-            System.arraycopy(ia, i * mWidth, iat,
-                    (mHeight - i - 1) * mWidth, mWidth);
+            // 将倒置镜像反转图像转换为右侧正常的图像, 宽高置位 并把数据存在iat里面
+            int[] iat = new int[mWidth * mHeight];
+            for (int i = 0; i < mHeight; i++) {
+                System.arraycopy(ia, i * mWidth, iat,
+                        (mHeight - i - 1) * mWidth, mWidth);
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+            bitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat)); // 从iat里面获取的数据，存在bitmap里面去
+            save(bitmap);
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            Log.e(TAG, "convertToBitmap: ", e);
         }
-
-        Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat)); // 从iat里面获取的数据，存在bitmap里面去
-        save(bitmap);
     }
 
     private int createTextureId(Bitmap bitmap) {
@@ -157,17 +162,18 @@ public class GLES20BackEnv {
             }
         }
         if (mCallBack != null) {
-            mCallBack.callSuccess(bitmap);
+            mCallBack.callSuccess(bitmap,imagePath);
         }
     }
 
 
-    public void setCallBack(GLES20BackEnv.CallBack callBack) {
+    public GLES20BackEnv setCallBack(GLES20BackEnv.CallBack callBack) {
         mCallBack = callBack;
+        return this;
     }
 
     interface CallBack {
-        void callSuccess(Bitmap bitmap);
+        void callSuccess(Bitmap bitmap, String imagePath);
 
         void callFailed();
     }

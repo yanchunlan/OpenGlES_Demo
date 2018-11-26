@@ -1,0 +1,35 @@
+	1>目的：
+		FBO可以让我们的渲染不渲染到屏幕上，而是渲染到离屏Buffer中。这样的作用是什么呢？
+	比如我们需要处理一张图片，在上传时增加时间的水印，这个时候不需要显示出来的。
+	再比如我们需要对摄像头采集的数据，一个彩色原大小的显示出来，一个黑白的长宽各一半录制成视频
+	2>原理：
+		获取2个可用的texture,一个作为texture[0]数据源，一个作为真实输出图像texture[1]，其中texture[0]，
+		直接显示在界面，texture[1]是存在FrameBuffer里面，后期可以通过glReadPixels获取其数据buffer，并存在本地
+
+	3>Frame Buffer Object: FBO是一个容器，自身不能用于渲染，需要与一些可渲染的缓冲区绑定在一起，像纹理或者渲染缓冲区。 
+	  Render Buffer Object：RBO即为渲染缓冲对象，分为color buffer(颜色)、depth buffer(深度)、stencil buffer(模板)
+	如果是texture,GLES20.glFramebufferTexture2D,为FrameBuffer挂载Texture[1]来存储颜色即可
+	如果是包含其他，
+	4>
+		使用步骤：
+			create:
+				glGenFramebuffers // 创建framebuffer
+				
+				glGenRenderbuffers // 创建renderbuffer
+				glBindRenderbuffer // 绑定renderbuffer
+				glRenderbufferStorage //  设置为深度的Render Buffer，并传入大小
+				glFramebufferRenderbuffer // 为FrameBuffer挂载fRender[0]来存储深度
+				glBindRenderbuffer(0) // 解绑定renderbuffer
+				
+				glGenTextures
+				...
+				// 创建纹理流程
+			user:
+				glBindFramebuffer // 绑定framebuffer
+				glFramebufferTexture2D //为FrameBuffer挂载Texture[1]来存储颜色
+				glFramebufferRenderbuffer   //为FrameBuffer挂载fRender[0]来存储深度
+				glBindFramebuffer(0) // 解绑定framebuffer
+			delete：
+				glDeleteTextures
+				glDeleteRenderbuffers
+				glDeleteFramebuffers

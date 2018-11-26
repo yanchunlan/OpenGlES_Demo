@@ -41,6 +41,7 @@ public class FBORenderer implements GLSurfaceView.Renderer {
         //  执行创建program,并编译shader,获取texture,并设置渲染参数
         mAFilter.create();
         // 设置matrix，y轴旋转 ，此处没有wh,所以没有projectMatrix,viewMatrix,mvpMatrix
+        // 因为android坐标轴与实际坐标y轴是反转的，所以需要反转y轴 ,并原图显示，所以没有其他多余的matrix变换
         mAFilter.setMatrix(MatrixUtils.flip(MatrixUtils.getOriginalMatrix(), false, true));
     }
 
@@ -76,7 +77,7 @@ public class FBORenderer implements GLSurfaceView.Renderer {
         mAFilter.setTextureId(fTexture[0]);
         mAFilter.draw();
 
-        // 获取到buffer
+        // 获取到buffer（一般是获取buffer，保持图片）
         GLES20.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(),
                 GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, mBuffer);
         if (mCallBack != null) {
@@ -133,6 +134,8 @@ public class FBORenderer implements GLSurfaceView.Renderer {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         }
+
+        mBuffer = ByteBuffer.allocate(mBitmap.getWidth() * mBitmap.getHeight() * 4);
     }
 
 

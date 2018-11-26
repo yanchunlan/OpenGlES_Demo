@@ -179,6 +179,7 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
 
+        // 目的是达到图片居中的效果 ，centerInside
         float sWH = w / (float) h;
         float sWidthHeight = width / (float) height;
         uXY=sWidthHeight;

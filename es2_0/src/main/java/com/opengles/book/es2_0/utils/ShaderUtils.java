@@ -23,7 +23,7 @@ public class ShaderUtils {
     }
 
     public static void checkGLError(String op){
-        Log.e("wuwang",op);
+        Log.e(TAG,op);
     }
 
     public static int loadShader(int shaderType,String source){

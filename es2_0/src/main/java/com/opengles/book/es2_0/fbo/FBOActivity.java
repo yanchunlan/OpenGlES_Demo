@@ -85,11 +85,11 @@ public class FBOActivity extends AppCompatActivity implements FBOSurfaceView.Cal
     }
 
     @Override
-    public void callSuccess(final Bitmap bitmap) {
+    public void callSuccess(final Bitmap bitmap, final String imagePath) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(FBOActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FBOActivity.this, "保存成功: "+imagePath, Toast.LENGTH_SHORT).show();
                 if (bitmap != null) {
                     mImageView.setImageBitmap(bitmap);
                 }

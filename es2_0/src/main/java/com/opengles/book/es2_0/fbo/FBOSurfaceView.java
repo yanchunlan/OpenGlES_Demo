@@ -103,7 +103,7 @@ public class FBOSurfaceView extends GLSurfaceView implements FBORenderer.CallBac
             }
         }
         if (mCallBack != null) {
-            mCallBack.callSuccess(bitmap);
+            mCallBack.callSuccess(bitmap,imagePath);
         }
     }
 
@@ -113,7 +113,7 @@ public class FBOSurfaceView extends GLSurfaceView implements FBORenderer.CallBac
     }
 
     interface CallBack {
-        void callSuccess(Bitmap bitmap);
+        void callSuccess(Bitmap bitmap, String imagePath);
 
         void callFailed();
     }

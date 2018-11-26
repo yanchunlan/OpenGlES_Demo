@@ -70,8 +70,7 @@ public class EGLActivity extends AppCompatActivity implements View.OnClickListen
             Log.i(TAG, "onActivityResult:   --> mImagePath: " + imagePath);
 
             mBackEnv = new GLES20BackEnv(this, imagePath);
-            mBackEnv.draw();
-            mBackEnv.setCallBack(this);
+            mBackEnv.setCallBack(this).draw();
 
             if (!cursor.isClosed()) {
                 cursor.close();
@@ -81,11 +80,11 @@ public class EGLActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void callSuccess(final Bitmap bitmap) {
+    public void callSuccess(final Bitmap bitmap, final String imagePath) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(EGLActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EGLActivity.this, "保存成功: " + imagePath, Toast.LENGTH_SHORT).show();
                 if (bitmap != null) {
                     mImageView.setImageBitmap(bitmap);
                 }
