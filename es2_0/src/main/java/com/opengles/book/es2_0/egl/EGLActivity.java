@@ -87,6 +87,7 @@ public class EGLActivity extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(EGLActivity.this, "保存成功: " + imagePath, Toast.LENGTH_SHORT).show();
                 if (bitmap != null) {
                     mImageView.setImageBitmap(bitmap);
+//                    bitmap.recycle();
                 }
             }
         });

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import com.opengles.book.es2_0.camera.CameraActivity
+import com.opengles.book.es2_0.camera.camera1.CameraActivity
 import com.opengles.book.es2_0.camera.camera2.Camera2Activity
 import com.opengles.book.es2_0.camera.camera3.Camera3Activity
 import com.opengles.book.es2_0.egl.EGLActivity

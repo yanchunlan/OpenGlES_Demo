@@ -1,4 +1,4 @@
-package com.opengles.book.es2_0.camera;
+package com.opengles.book.es2_0.camera.camera1;
 
 import android.Manifest;
 import android.os.Bundle;

@@ -92,6 +92,7 @@ public class FBOActivity extends AppCompatActivity implements FBOSurfaceView.Cal
                 Toast.makeText(FBOActivity.this, "保存成功: "+imagePath, Toast.LENGTH_SHORT).show();
                 if (bitmap != null) {
                     mImageView.setImageBitmap(bitmap);
+//                    bitmap.recycle();
                 }
             }
         });
