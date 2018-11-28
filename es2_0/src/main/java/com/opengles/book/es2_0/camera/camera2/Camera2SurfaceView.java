@@ -55,7 +55,7 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
             mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer();
         } else {
             // 小于21 ，即小于5.0就用camera1
-            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera1Renderer();
+            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera1Renderer(mController);
         }
     }
 

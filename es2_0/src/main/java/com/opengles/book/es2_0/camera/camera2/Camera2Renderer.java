@@ -1,6 +1,7 @@
 package com.opengles.book.es2_0.camera.camera2;
 
 import android.content.Context;
+import android.graphics.SurfaceTexture;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -70,6 +71,29 @@ public class Camera2Renderer implements GLRenderer {
     public void destroy() {
     }
 
+
+    // 相机宽高 其实就是数据，图片的宽高，矩阵变换需要
+    public void setDataSize(int width, int height) {
+
+    }
+
+    // 相机方向 -- 因为需要根据相机方向做相应的矩阵变换
+    public void setImageDirection(int cameraId) {
+
+    }
+
+    // 相机预览的texture
+    public SurfaceTexture getTexture() {
+        return null;
+    }
+
+    // 相机获取数据之后不断调用刷新 requestRender
+    public void requestRender() {
+
+    }
+
+
+    //  callback
     public void setCallBackSize(int w, int h) {
         this.frameCallBackWidth = w;
         this.frameCallBackHeight = h;
@@ -83,6 +107,7 @@ public class Camera2Renderer implements GLRenderer {
     public void setRenderer(GLRenderer renderer) {
         mRenderer = renderer;
     }
+
 
     interface CallBack {
         public void onFrame(ByteBuffer buffer, int w, int h);
