@@ -52,7 +52,7 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     private void initRenderer() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // 大于21 ，即大于5.0就用camera2
-            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer();
+            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(),mController);
         } else {
             // 小于21 ，即小于5.0就用camera1
             mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera1Renderer(mController);
@@ -89,6 +89,12 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     public void surfaceDestroyed(SurfaceHolder holder) {
         if (mController != null) {
             mController.surfaceDestroyed(holder);
+        }
+    }
+
+    protected void takePhoto() {
+        if (mController != null) {
+            mController.takePhoto();
         }
     }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.opengles.book.es2_0.filter.camera2.ZipPkmAnimationFilter;
 import com.opengles.book.es2_0.utils.PermissionUtils;
 
 public class Camera2Activity extends AppCompatActivity implements Camera2SurfaceView.CallBack {
@@ -35,7 +36,9 @@ public class Camera2Activity extends AppCompatActivity implements Camera2Surface
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if ("拍照".equals(item.getTitle().toString())) {
-
+            if (mSurfaceView != null) {
+                mSurfaceView.takePhoto();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -52,7 +55,7 @@ public class Camera2Activity extends AppCompatActivity implements Camera2Surface
             mSurfaceView = new Camera2SurfaceView(Camera2Activity.this) {
                 @Override
                 void onFilterSet(Camera2Renderer controller) {
-                    onFilterSet(controller);
+                    onFilter(controller);
                 }
             };
             mSurfaceView.setCallBack(Camera2Activity.this);
@@ -61,8 +64,12 @@ public class Camera2Activity extends AppCompatActivity implements Camera2Surface
         }
     };
 
-    protected void onFilterSet(Camera2Renderer controller) {
-
+    protected void onFilter(Camera2Renderer controller) {
+        if (controller != null) {
+            ZipPkmAnimationFilter filter = new ZipPkmAnimationFilter(getResources());
+            filter.setAnimation("assets/etczip/output.zip");
+            controller.addFilter(filter);
+        }
     }
 
     @Override
