@@ -52,7 +52,7 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     private void initRenderer() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // 大于21 ，即大于5.0就用camera2
-            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(),mController);
+            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(), mController);
         } else {
             // 小于21 ，即小于5.0就用camera1
             mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera1Renderer(mController);
@@ -117,13 +117,13 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     }
 
     @Override
-    public void onFrame(final ByteBuffer buffer, final int w, final int h) {
+    public void onFrame(final byte[] buffer, final int w, final int h) {
         // onDraw 里面返回
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                bitmap.copyPixelsFromBuffer(buffer); // buffer 转化为bitmap
+                bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(buffer)); // buffer 转化为bitmap
                 save(bitmap);
                 bitmap.recycle();
             }

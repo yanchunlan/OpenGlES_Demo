@@ -84,7 +84,31 @@ public class GroupFilter extends AFilter {
 
     @Override
     public void draw() {
+        updateFilter();
+        textureIndex = 0;
 
+        if (size > 0) {
+            for (AFilter f : mFilters) {
+                // 绑定
+                GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fFrame[0]);
+
+                // 放置数据到缓冲区
+                GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
+                        GLES20.GL_TEXTURE_2D, ftexture[textureIndex % 2], 0);
+                GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
+                        GLES20.GL_RENDERBUFFER, frender[0]);
+
+                GLES20.glViewport(0, 0, width, height);
+                if (textureIndex == 0) {
+                    f.setTextureId(getTextureId());
+                } else {
+                    f.setTextureId(ftexture[(textureIndex - 1) % 2]);
+                }
+                f.draw();
+                unBindFrame();
+                textureIndex++;
+            }
+        }
     }
 
     private void updateFilter() {
@@ -98,6 +122,10 @@ public class GroupFilter extends AFilter {
         }
     }
 
+    @Override
+    public int getOutputTexture() {
+        return size == 0 ? getTextureId() : ftexture[(textureIndex - 1) % 2];
+    }
 
     private void createFrameBuffer() {
         // 创建
@@ -118,12 +146,17 @@ public class GroupFilter extends AFilter {
                 GLES20.GL_RENDERBUFFER, frender[0]);
 
         // 解绑
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, frender[0]);
+        unBindFrame();
 
         // 删除缓冲的节点
         GLES20.glDeleteTextures(ftextureSize, ftexture, 0);
         GLES20.glDeleteRenderbuffers(1, frender, 0);
         GLES20.glDeleteFramebuffers(1, fFrame, 0);
+    }
+
+    //取消绑定Texture
+    private void unBindFrame() {
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
     }
 }

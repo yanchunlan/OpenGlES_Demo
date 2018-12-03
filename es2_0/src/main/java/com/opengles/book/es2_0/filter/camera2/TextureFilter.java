@@ -28,8 +28,6 @@ public class TextureFilter extends AFilter {
     private SurfaceTexture mSurfaceTexture;
     private float[] CoordOM = new float[16];
 
-    private ByteBuffer mBuffer;
-
 
     public TextureFilter(Resources mRes) {
         super(mRes);
@@ -58,6 +56,7 @@ public class TextureFilter extends AFilter {
     protected void onCreate() {
         mFilter.create();
 
+        //  当前界面有2 个texture, 一个用于缓冲，一个用于界面显示
         GLES20.glGenTextures(1, fCameraTexture, 0);
         mSurfaceTexture = new SurfaceTexture(fCameraTexture[0]);
     }
