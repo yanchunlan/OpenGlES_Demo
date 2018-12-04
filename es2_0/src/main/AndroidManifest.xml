@@ -24,6 +24,7 @@
         <activity android:name=".render.ChooseActivity" />
         <activity android:name=".image.SGLViewActivity" />
         <activity android:name=".vary.VaryingActivity" />
+        <activity android:name=".beautiful.BeautyActivity" />
         <activity android:name=".camera.camera1.CameraActivity" />
         <activity android:name=".etc.ZipActivity" />
         <activity android:name=".fbo.FBOActivity" />

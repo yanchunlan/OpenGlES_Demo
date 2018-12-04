@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.opengles.book.es2_0.beautiful.BeautyActivity
 import com.opengles.book.es2_0.camera.camera1.CameraActivity
 import com.opengles.book.es2_0.camera.camera2.Camera2Activity
 import com.opengles.book.es2_0.camera.camera3.Camera3Activity
@@ -44,7 +45,8 @@ class ES2_0MainActivity : AppCompatActivity() {
     private fun setData() {
         data?.apply {
             add(MenuBean("绘制形体(render)", FGLViewActivity::class.java))
-            add(MenuBean("图片处理(image)", SGLViewActivity::class.java))
+            add(MenuBean("图片滤镜(image)", SGLViewActivity::class.java))
+            add(MenuBean("图片美颜(beautiful)", BeautyActivity::class.java))
             add(MenuBean("图形变换(vary)", VaryingActivity::class.java))
             add(MenuBean("相机(camera)", CameraActivity::class.java))
             add(MenuBean("相机动画(camera2)", Camera2Activity::class.java))
