@@ -1,5 +1,8 @@
 package com.opengles.book.es2_0.vr;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,7 +24,7 @@ public class VRActivity extends AppCompatActivity implements SensorEventListener
     private Sensor mSensor;
 
 
-    private float[] mMatrix=new float[16];
+    private float[] mMatrix = new float[16];
 
 
     @Override
@@ -32,10 +35,16 @@ public class VRActivity extends AppCompatActivity implements SensorEventListener
         setContentView(mGLSurfaceView);
 
 
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ConfigurationInfo info = activityManager.getDeviceConfigurationInfo();
+        if (info.reqGlEsVersion >= 0x30000) {
+            Log.d(TAG, "onCreate: enable 3.0");
+        }
+
         mRenderer = new VRRenderer(this);
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(mRenderer);
-        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR); // 旋转传感器

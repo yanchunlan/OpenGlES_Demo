@@ -1,12 +1,20 @@
-package com.opengles.book.es2_0.vr;
+package com.opengles.book.es2_0.vr_video;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.SurfaceTexture;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.util.Log;
+import android.view.Surface;
 
+import com.opengles.book.es2_0.R;
 import com.opengles.book.es2_0.utils.BufferUtils;
 import com.opengles.book.es2_0.utils.EasyGlUtils;
 import com.opengles.book.es2_0.utils.MatrixHelper;
@@ -24,30 +32,37 @@ import javax.microedition.khronos.opengles.GL10;
  * date: 2018-12-03 22:08
  * desc:
  */
-public class VRRenderer implements GLSurfaceView.Renderer {
+public class VRVideoRenderer implements GLSurfaceView.Renderer,
+        SurfaceTexture.OnFrameAvailableListener,
+        MediaPlayer.OnVideoSizeChangedListener {
     private String vertexShaderCodes =
             "uniform mat4 projectMatrix;" +
                     "uniform mat4 viewMatrix;" +
                     "uniform mat4 mvpMatrix;" +
                     "uniform mat4 rotateMatrix;" +
+                    "uniform mat4 uSTMatrix;" + // st纹理坐标矩阵
                     "attribute vec3 vPosition;" +
-                    "attribute vec2 vCoordinate;" +
+                    "attribute vec4 vCoordinate;" +
                     "varying vec2 aCoordinate;" +
                     "void main(){" +
                     "gl_Position=projectMatrix*rotateMatrix*viewMatrix*mvpMatrix*vec4(vPosition,1);" +// 注意此处是rotateMatrix 在view之前，目的是相机的变换
-                    "aCoordinate=vCoordinate;" +
+                    "aCoordinate=(uSTMatrix * vCoordinate).xy;" +
                     "}";
-    private String fragmentShaderCodes = "precision highp float;" +
-            "uniform sampler2D uTexture;" +
-            "varying vec2 aCoordinate;" +
-            "void main(){" +
-            "gl_FragColor=texture2D(uTexture,aCoordinate);" +
-            "}";
+    private String fragmentShaderCodes =
+            "#extension GL_OES_EGL_image_external:require\n" +   // 注意此处必须加上\n换行
+                    "precision mediump float;" +
+                    "uniform samplerExternalOES  uTexture;" +
+                    "varying vec2 aCoordinate;" +
+                    "void main(){" +
+                    "gl_FragColor=texture2D(uTexture,aCoordinate);" +
+                    "}";
+    private Context mContext;
     private int mHProgram;
     private int mHProjMatrix;
     private int mHViewMatrix;
     private int mHModelMatrix;
     private int mHRotateMatrix;
+    private int mHSTMatrix;
     private int mHUTexture;
     private int mHPosition;
     private int mHCoordinate;
@@ -59,77 +74,127 @@ public class VRRenderer implements GLSurfaceView.Renderer {
     private float[] mProjectMatrix = new float[16];
     private float[] mMVPMatrix = new float[16];
     private float[] mRotateMatrix = new float[16];
+    private float[] mSTMatrix = new float[16];
 
     private FloatBuffer posBuffer;
     private FloatBuffer cooBuffer;
     private int count;
 
-    private Bitmap mBitmap;
+    private SurfaceTexture surfaceTexture;
+    private MediaPlayer mediaPlayer;
+
+    private boolean updateSurface;
+    private boolean playerPrepared;
+    private int screenWidth, screenHeight;
 
 
-    public VRRenderer(Context context) {
+    public VRVideoRenderer(Context context) {
+        this.mContext = context;
+        playerPrepared = false;
+        synchronized (this) {
+            updateSurface = false;
+        }
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.setOnVideoSizeChangedListener(this);
+    }
+
+    public void setPath(String videoPath) {
         try {
-            mBitmap = BitmapFactory.decodeStream(context.getResources().getAssets().open("vr/360sp.jpg"));
+            mediaPlayer.setDataSource(mContext, Uri.parse(videoPath));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (!playerPrepared) {
+            try {
+                mediaPlayer.prepare();
+                playerPrepared = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaPlayer.start();
+            playerPrepared = true;
+        }
+    }
+
+    public void destroy() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
-        GLES20.glCullFace(GLES20.GL_FRONT);
-
         mHProgram = ShaderUtils.createProgram(vertexShaderCodes, fragmentShaderCodes);
         mHProjMatrix = GLES20.glGetUniformLocation(mHProgram, "projectMatrix");
         mHViewMatrix = GLES20.glGetUniformLocation(mHProgram, "viewMatrix");
         mHModelMatrix = GLES20.glGetUniformLocation(mHProgram, "mvpMatrix");
         mHRotateMatrix = GLES20.glGetUniformLocation(mHProgram, "rotateMatrix");
+        mHSTMatrix = GLES20.glGetUniformLocation(mHProgram, "uSTMatrix");
         mHUTexture = GLES20.glGetUniformLocation(mHProgram, "uTexture");
         mHPosition = GLES20.glGetAttribLocation(mHProgram, "vPosition");
         mHCoordinate = GLES20.glGetAttribLocation(mHProgram, "vCoordinate");
 
-        if (mBitmap != null && !mBitmap.isRecycled()) {
-            textureId = EasyGlUtils.genTexturesWithParameter(1, 0, mBitmap)[0];
-        } else {
-            textureId = 0;
-        }
         calculatingBall();
+
+        textureId = createTextureId();
+        surfaceTexture = new SurfaceTexture(textureId);
+        surfaceTexture.setOnFrameAvailableListener(this);
+
+        Surface surface = new Surface(surfaceTexture);
+        mediaPlayer.setSurface(surface);
+        surface.release();
     }
 
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
+        screenWidth = width;
+        screenHeight = height;
+
 
         float ratio = (float) width / height;
-        MatrixHelper.perspectiveM(mProjectMatrix, 0, 45, ratio, 1, 300);
+        MatrixHelper.perspectiveM(mProjectMatrix, 0, 90, ratio, 1, 500);
 
         // 注意设置相机在球心，才能在球心观看角度
         //第3-5个参数为相机位置，第6-8个参数为相机视线方向，第9-11个参数为相机的up方向
         Matrix.setLookAtM(mViewMatrix, 0,
                 0, 0, 0,    //  0,0,0 就是在物体的中心
                 0, 0, -1, // 镜头朝向
-                0, 1, 0);   // 眼球向上的向量
+                0, -1, 0);   // 眼球向上的向量
         // 设置模型矩阵
         Matrix.setIdentityM(mMVPMatrix, 0);
+
+        // x轴旋转180度
+        Matrix.rotateM(mMVPMatrix, 0, 180, 1, 0, 0);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        //        GLES20.glClearColor(1, 1, 1, 1); // 每次绘制之前都须清除
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        GLES20.glClearColor(0, 0, 0, 0); // 每次绘制之前都须清除
+
+        synchronized (this) {
+            if (updateSurface) {
+                surfaceTexture.updateTexImage();
+                surfaceTexture.getTransformMatrix(mSTMatrix);
+                updateSurface = false;
+            }
+        }
 
         GLES20.glUseProgram(mHProgram);
         GLES20.glUniformMatrix4fv(mHProjMatrix, 1, false, mProjectMatrix, 0);
         GLES20.glUniformMatrix4fv(mHViewMatrix, 1, false, mViewMatrix, 0);
         GLES20.glUniformMatrix4fv(mHModelMatrix, 1, false, mMVPMatrix, 0);
         GLES20.glUniformMatrix4fv(mHRotateMatrix, 1, false, mRotateMatrix, 0);
+        GLES20.glUniformMatrix4fv(mHSTMatrix, 1, false, mSTMatrix, 0);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0); // 激活0通道
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
         GLES20.glUniform1i(mHUTexture, 0);
 
         GLES20.glEnableVertexAttribArray(mHPosition);
@@ -137,6 +202,8 @@ public class VRRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnableVertexAttribArray(mHCoordinate);
         GLES20.glVertexAttribPointer(mHCoordinate, 2, GLES20.GL_FLOAT, false, 0, cooBuffer);
 
+
+        GLES20.glViewport(0, 0, screenWidth, screenHeight);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, count); // 绘制线段
 
         GLES20.glDisableVertexAttribArray(mHPosition);
@@ -222,5 +289,30 @@ public class VRRenderer implements GLSurfaceView.Renderer {
         count = alVertix.size() / 3;
         posBuffer = BufferUtils.list2FloatBuffer(alVertix);
         cooBuffer = BufferUtils.list2FloatBuffer(textureVertix);
+    }
+
+    private int createTextureId() {
+        int[] texture = new int[1];
+        GLES20.glGenTextures(1, texture, 0);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture[0]);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST); // GL_NEAREST
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
+                GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        return texture[0];
+    }
+
+    @Override
+    public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+        updateSurface = true;
+    }
+
+    @Override
+    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+
     }
 }

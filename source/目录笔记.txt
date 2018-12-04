@@ -16,6 +16,18 @@ OpenGlES 1.0:
     15.光照，混合，抗锯齿
     16.雾
     17.纹理贴图
+OpenGlES 2.0:（come from ww）
+        绘制形体(render)
+        图片处理(image)
+        图形变换(vary)
+        相机(camera)
+        相机动画(camera2)
+        相机美颜(camera3)
+        压缩纹理动画(etc)
+        FBO离屏渲染(fbo)
+        EGL后台处理(egl环境搭建)
+        VR球形效果(vr)
+        VR球形效果(vr_video)
 OpenGlES 2.0:
     绘制形状
 

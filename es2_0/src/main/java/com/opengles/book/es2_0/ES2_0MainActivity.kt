@@ -17,6 +17,7 @@ import com.opengles.book.es2_0.main.MenuBean
 import com.opengles.book.es2_0.render.FGLViewActivity
 import com.opengles.book.es2_0.vary.VaryingActivity
 import com.opengles.book.es2_0.vr.VRActivity
+import com.opengles.book.es2_0.vr_video.VRVideoActivity
 
 
 class ES2_0MainActivity : AppCompatActivity() {
@@ -52,6 +53,7 @@ class ES2_0MainActivity : AppCompatActivity() {
             add(MenuBean("FBO离屏渲染(fbo)", FBOActivity::class.java))
             add(MenuBean("EGL后台处理(egl环境搭建)", EGLActivity::class.java))
             add(MenuBean("VR球形效果(vr)", VRActivity::class.java))
+            add(MenuBean("VR球形效果(vr_video)", VRVideoActivity::class.java))
         }
     }
 }
