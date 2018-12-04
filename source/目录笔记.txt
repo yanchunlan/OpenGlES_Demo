@@ -19,6 +19,7 @@ OpenGlES 1.0:
 OpenGlES 2.0:（come from ww）
         绘制形体(render)
         图片处理(image)
+        图片美颜(beautiful)
         图形变换(vary)
         相机(camera)
         相机动画(camera2)
