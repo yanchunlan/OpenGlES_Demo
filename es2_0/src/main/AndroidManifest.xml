@@ -30,7 +30,9 @@
         <activity android:name=".egl.EGLActivity" />
         <activity android:name=".camera.camera2.Camera2Activity" />
         <activity android:name=".camera.camera3.Camera3Activity" />
-        <activity android:name=".vr.VRActivity"></activity>
+        <activity android:name=".vr.VRActivity" />
+        <activity android:name=".blend.BlendActivity"/>
+        <activity android:name=".obj.ObjLoadActivity1"/>
     </application>
 
 </manifest>

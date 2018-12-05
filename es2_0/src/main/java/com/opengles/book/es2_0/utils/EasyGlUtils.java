@@ -54,13 +54,13 @@ public class EasyGlUtils {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
-    public static int[] genTexturesWithParameter(int size, int start, Bitmap bitmap) {
+    public static int[] genTexturesWithParameter(int size, int start, Bitmap... bitmap) {
         int[] texture = new int[size];
         GLES20.glGenTextures(size, texture, start);
         for (int i = 0; i < size; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
             useTexParameter();
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap[i], 0);
         }
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         return texture;

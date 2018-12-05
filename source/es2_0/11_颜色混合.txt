@@ -1,0 +1,38 @@
+公式：最终颜色=(目标颜色*目标因子)@(源颜色*源因子)
+
+	//调用此方法，传入GL_BLEND开启BLEND功能
+	void glEnable(GLenum cap);
+	//调用此方法，出入GL_BLEND关闭BLEND功能
+	void glDisable(GLenum cap);
+	//设置BLEND颜色，结合glBlendFuncSeparate或glBlendFunc使用
+	void glBlendColor(GLclampf red,GLclampf green,GLclampf blue,GLclampf alpha);
+	//设置BLEND方程式
+	void glBlendEquation(GLenum mode);
+	//对RGB和Alpha分别设置BLEND方程式
+	void glBlendEquationSeparate(GLenum modeRGB,GLenum modeAlpha);
+	//设置BLEND函数
+	void glBlendFunc(GLenum sfactor,GLenum dfactor);
+	//对RGB和Alpha分别设置BLEND函数
+	void glBlendFuncSeparate(GLenum srcRGB,GLenum dstRGB,GLenum srcAlpha,GLenum dstAlpha);
+
+	
+	使用：
+        // 开启混合
+        GLES20.glEnable(GLES20.GL_BLEND);
+        // 设置混合函数，第一个参数为源混合因子，第二个参数为目的混合因子
+        GLES20.glBlendFunc(nSrcPar, nDstPar);
+        // 设置混合方程式，GLES2.0中有三种, GL_MIN和GL_MAX是在OpenGLES3.0才有的。
+        GLES20.glBlendEquation(equaInt[nEquaIndex]);
+
+        GLES20.glViewport(0, 0, width, height);
+        // 先渲染目的纹理出来，再渲染源纹理出来，是源纹理去与目的纹理混合
+        mDstFilter.draw();
+        mSrcFilter.draw();
+	
+	结论：
+	1. 当目标和源因子都设置为GL_ZERO，无论混合方程怎样设置，最终肯定啥也没有。 
+	2. 当源设置为GL_ONE，目标设置为GL_ZERO，方程设置为加还是减，最终应该渲染的就是目标的颜色，也就是之渲染出金币。 
+	3. 当源设置为GL_ONE，目标设置为GL_SRC_COLOR，方程设置为加，根据公式最终颜色=(目标颜色*目标因子)+(源颜色*源因子)，得到最终有颜色的区域必定是源alpha不为0的区域，因为源是作为目标因子的，源*目标，最终源中alpha为0的区域，这个结果也为0，也就是最终的结果区域透明了。 
+
+	
+	
