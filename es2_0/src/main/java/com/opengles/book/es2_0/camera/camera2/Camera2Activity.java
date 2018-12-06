@@ -55,16 +55,21 @@ public class Camera2Activity extends AppCompatActivity implements Camera2Surface
             mSurfaceView = new Camera2SurfaceView(Camera2Activity.this) {
                 @Override
                 void onFilterSet(Camera2Renderer controller) {
-                    onFilter(controller);
+                    addFilter(controller);
                 }
             };
             mSurfaceView.setCallBack(Camera2Activity.this);
             f.addView(mSurfaceView);
+            addContentView(f);
             setContentView(f);
         }
     };
 
-    protected void onFilter(Camera2Renderer controller) {
+    protected void addContentView(FrameLayout f) {
+
+    }
+
+    protected void addFilter(Camera2Renderer controller) {
         if (controller != null) {
             ZipPkmAnimationFilter filter = new ZipPkmAnimationFilter(getResources());
             filter.setAnimation("assets/etczip/output.zip");
