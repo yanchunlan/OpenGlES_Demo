@@ -13,8 +13,11 @@ import com.opengles.book.es2_0.egl.EGLActivity
 import com.opengles.book.es2_0.etc.ZipActivity
 import com.opengles.book.es2_0.fbo.FBOActivity
 import com.opengles.book.es2_0.image.SGLViewActivity
+import com.opengles.book.es2_0.light.LightActivity
 import com.opengles.book.es2_0.main.MenuAdapter
 import com.opengles.book.es2_0.main.MenuBean
+import com.opengles.book.es2_0.obj.ObjLoadActivity1
+import com.opengles.book.es2_0.obj_mtl.ObjLoadActivity2
 import com.opengles.book.es2_0.render.FGLViewActivity
 import com.opengles.book.es2_0.vary.VaryingActivity
 import com.opengles.book.es2_0.vr.VRActivity
@@ -56,6 +59,10 @@ class ES2_0MainActivity : AppCompatActivity() {
             add(MenuBean("EGL后台处理(egl环境搭建)", EGLActivity::class.java))
             add(MenuBean("VR球形效果(vr)", VRActivity::class.java))
             add(MenuBean("VR球形效果(vr_video)", VRVideoActivity::class.java))
+            add(MenuBean("颜色混合(blend)", VRVideoActivity::class.java))
+            add(MenuBean("3D obj模型(obj)", ObjLoadActivity1::class.java))
+            add(MenuBean("obj+mtl模型(obj_mtl)", ObjLoadActivity2::class.java))
+            add(MenuBean("光照(light)", LightActivity::class.java))
         }
     }
 }

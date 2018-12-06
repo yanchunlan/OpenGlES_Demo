@@ -32,7 +32,10 @@
         <activity android:name=".camera.camera2.Camera2Activity" />
         <activity android:name=".camera.camera3.Camera3Activity" />
         <activity android:name=".vr.VRActivity" />
-        <activity android:name=".vr_video.VRVideoActivity"/>
+        <activity android:name=".vr_video.VRVideoActivity" />
+        <activity android:name=".obj.ObjLoadActivity1" />
+        <activity android:name=".obj_mtl.ObjLoadActivity2" />
+        <activity android:name=".light.LightActivity"></activity>
     </application>
 
 </manifest>

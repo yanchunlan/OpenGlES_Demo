@@ -31,6 +31,10 @@ OpenGlES for learn
           EGL后台处理(egl环境搭建)
           VR球形效果(vr)
           VR球形效果(vr_video)
+          颜色混合(blend)
+          3D obj模型(obj)
+          obj+mtl模型(obj_mtl)
+          光照(light)
   ##OpenGlES 2.0:
       绘制形状
 
