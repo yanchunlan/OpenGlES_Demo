@@ -13,13 +13,19 @@ public class ObjLoadActivity1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mGLSurfaceView = new GLSurfaceView(this);
         setContentView(mGLSurfaceView);
 
 
         mGLSurfaceView.setEGLContextClientVersion(2);
-        mGLSurfaceView.setRenderer(new ObjLoadRender(getResources()));
+        mGLSurfaceView.setRenderer(getRender());
         mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+
+    protected GLSurfaceView.Renderer getRender() {
+        return new ObjLoadRender(this);
     }
 
     @Override
