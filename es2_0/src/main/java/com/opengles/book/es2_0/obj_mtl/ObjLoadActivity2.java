@@ -2,9 +2,9 @@ package com.opengles.book.es2_0.obj_mtl;
 
 import android.opengl.GLSurfaceView;
 
-import com.opengles.book.es2_0.obj.ObjLoadActivity1;
+import com.opengles.book.es2_0.obj.BaseGlSVActivity;
 
-public class ObjLoadActivity2 extends ObjLoadActivity1 {
+public class ObjLoadActivity2 extends BaseGlSVActivity {
 
     @Override
     protected GLSurfaceView.Renderer getRender() {

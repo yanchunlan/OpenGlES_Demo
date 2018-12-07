@@ -58,6 +58,15 @@ public class ObjFilter2 extends AFilter {
         }
     }
 
+
+    // 异常原因，控制不要清除纹理就不会美颜脸显示出来了
+    @Override
+    protected void onClear() {
+//        super.onClear();// 控制不要清除纹理
+    }
+
+
+
     @Override
     public void onSizeChanged(int width, int height) {
         GLES20.glViewport(0, 0, width, height);
