@@ -69,9 +69,9 @@ public class BlendActivity extends AppCompatActivity {
         mMGLView.setEGLConfigChooser(8, 8, 8, 8, 16, 8);
         mMGLView.getHolder().setFormat(PixelFormat.TRANSPARENT);
         mMGLView.setZOrderOnTop(true);
-        mMGLView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         mRender = new BlendRender(this);
         mMGLView.setRenderer(mRender);
+        mMGLView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private void initView() {

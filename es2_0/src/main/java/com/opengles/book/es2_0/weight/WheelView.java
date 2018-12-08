@@ -189,7 +189,11 @@ public class WheelView extends View {
             invalidate();
         }else{
             if(!isTouchDown&&mOnCenterItemChangedListener!=null){
-                mOnCenterItemChangedListener.onItemChange(getCenterItem());
+                try {
+                    mOnCenterItemChangedListener.onItemChange(getCenterItem());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         super.computeScroll();

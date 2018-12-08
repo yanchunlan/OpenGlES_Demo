@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.opengles.book.es2_0.beautiful.BeautyActivity
+import com.opengles.book.es2_0.blend.BlendActivity
 import com.opengles.book.es2_0.camera.camera1.CameraActivity
 import com.opengles.book.es2_0.camera.camera2.Camera2Activity
 import com.opengles.book.es2_0.camera.camera3.Camera3Activity
@@ -59,7 +60,7 @@ class ES2_0MainActivity : AppCompatActivity() {
             add(MenuBean("EGL后台处理(egl环境搭建)", EGLActivity::class.java))
             add(MenuBean("VR球形效果(vr)", VRActivity::class.java))
             add(MenuBean("VR球形效果(vr_video)", VRVideoActivity::class.java))
-            add(MenuBean("颜色混合(blend)", VRVideoActivity::class.java))
+            add(MenuBean("颜色混合(blend)", BlendActivity::class.java))
             add(MenuBean("3D obj模型(obj)", ObjLoadActivity1::class.java))
             add(MenuBean("obj+mtl模型(obj_mtl)", ObjLoadActivity2::class.java))
             add(MenuBean("光照(light)", LightActivity::class.java))

@@ -29,7 +29,7 @@ public class LightActivity extends AppCompatActivity implements CompoundButton.O
         mDiffuse.setOnCheckedChangeListener(this);
         mSpecular.setOnCheckedChangeListener(this);
 
-        mRenderer = new LightRenderer();
+        mRenderer = new LightRenderer(getResources());
         mGlView.setEGLContextClientVersion(2);
         mGlView.setRenderer(mRenderer);
         mGlView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);

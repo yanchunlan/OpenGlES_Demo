@@ -1,16 +1,18 @@
 attribute vec4 aPosition;
 attribute vec2 aCoord;
 attribute vec3 aNormal;
-uniform mat4 uMatrix;
-uniform vec4 uBaseColor;
-uniform vec3 uLightColor;
-uniform float uAmbientStrength;
-uniform float uDiffuseStrength;
-uniform float uSpecularStrength;
-uniform vec3 uLightPosition;
+uniform mat4 uMatrix; // 物体的矩阵
+uniform vec4 uBaseColor; // 物体颜色    物体有a,所以是4个颜色
+uniform vec3 uLightColor; // 光源颜色    光源是没有a,所以是3个颜色
+uniform float uAmbientStrength;//默认0.3 光强度
+uniform float uDiffuseStrength;//默认0.5
+uniform float uSpecularStrength;//默认0.8
+uniform vec3 uLightPosition;  // 光源位置
 varying vec4 vColor;
 
 //在片元着色器中计算光照会获得更好更真实的光照效果，但是会比较耗性能
+//在片元着色器里面只需要赋值颜色就可以了
+
 
 //环境光的计算
 vec4 ambientColor(){
