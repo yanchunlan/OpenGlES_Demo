@@ -78,6 +78,10 @@ public class Cube {
         mMatrix = matrix;
     }
 
+    public float[] getMatrix() {
+        return mMatrix;
+    }
+
     public void drawSelf() {
         GLES20.glUseProgram(mProgram);
         if (mMatrix != null) {

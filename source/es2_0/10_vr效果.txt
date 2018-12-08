@@ -1,0 +1,58 @@
+原理：其实就是纹理图片，到一个球上面去，其中旋转是旋转相机角度，根据传感器返回的matrix控制
+
+	顶点着色器： 
+		uniform mat4 uProjMatrix;
+		uniform mat4 uViewMatrix;
+		uniform mat4 uModelMatrix;
+		uniform mat4 uRotateMatrix;
+
+		attribute vec3 aPosition;
+		attribute vec2 aCoordinate;
+
+		varying vec2 vCoordinate;
+
+		void main(){
+		// 注意此处是 uRotateMatrix*uViewMatrix 在view之前的，是因为控制的相机位置旋转，此处position必须转换为4维才能*
+			gl_Position=uProjMatrix*uRotateMatrix*uViewMatrix*uModelMatrix*vec4(aPosition,1);
+			vCoordinate=aCoordinate;
+		}
+	片元着色器：
+		precision highp float;
+		uniform sampler2D uTexture;
+		varying vec2 vCoordinate;
+		void main(){
+		   vec4 color=texture2D(uTexture,vCoordinate);
+		   gl_FragColor=color;
+		}
+	球的点的原理：
+	
+			2	1
+			3	0
+			
+		coord:因为纹理在0-1之间，所以此处hAngle应该是0-2pi，angle是0-pi,3维变st2维坐标
+		s代表是圆的一个平面，t代表是经的一个平面
+						s1
+						|
+						s0
+		t1   <-   t0
+			1-0-3 逆时针
+		则：1->s1，t0  ;   0 -> s0,t0 ;  3 -> s0,t1
+			1-3-2 逆时针
+		则：1->s1，t0  ;   3 -> s0,t1 ;	 0 -> s1,t1 ; 
+		
+	矩阵计算：
+		public void onSurfaceChanged(GL10 gl, int width, int height) {
+			GLES20.glViewport(0, 0, width, height);
+
+			float ratio = (float) width / height;
+			MatrixHelper.perspectiveM(mProjectMatrix, 0, 45, ratio, 1, 300); // 主要是对view的xyz,进行计算
+
+			// 注意设置相机在球心，才能在球心观看角度
+			//第3-5个参数为相机位置，第6-8个参数为相机视线方向，第9-11个参数为相机的up方向
+			Matrix.setLookAtM(mViewMatrix, 0,
+					0, 0, 0,
+					0, 0, -1, // 镜头朝向
+					0, 1, 0);   // 眼球向上的向量
+			// 设置模型矩阵
+			Matrix.setIdentityM(mMVPMatrix, 0);
+		}

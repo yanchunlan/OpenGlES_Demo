@@ -134,7 +134,7 @@ public class BlendRender implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 
-        // 开启混合
+        // 开启混合  家里
         GLES20.glEnable(GLES20.GL_BLEND);
         // 设置混合函数，第一个参数为源混合因子，第二个参数为目的混合因子
         GLES20.glBlendFunc(nSrcPar, nDstPar);

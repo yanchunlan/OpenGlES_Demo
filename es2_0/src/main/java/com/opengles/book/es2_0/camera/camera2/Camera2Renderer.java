@@ -225,7 +225,7 @@ public class Camera2Renderer implements GLSurfaceView.Renderer {
     //   ------------  callback回调  end ---------------
 
 
-    public void addFilter(ZipPkmAnimationFilter filter) {
+    public void addFilter(AFilter filter) {
         mGroupFilter.addFilter(filter);
     }
 
