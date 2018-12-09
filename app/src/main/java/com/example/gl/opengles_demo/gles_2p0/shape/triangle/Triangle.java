@@ -63,21 +63,24 @@ public class Triangle {
         GLES20.glAttachShader(mProgram, vertexShader);
         GLES20.glAttachShader(mProgram, fragmentShader);
         GLES20.glLinkProgram(mProgram);
+
+        mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
     }
 
 
     public void draw() {
         GLES20.glUseProgram(mProgram);
 
-        mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glVertexAttribPointer(mPositionHandle, COORDS_PER_VERTEX,
                 GLES20.GL_FLOAT, false,
                 vertexStride, fbb);
 
-        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         GLES20.glUniform4fv(mColorHandle, 1, colors, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount);
+
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+        GLES20.glDisableVertexAttribArray(mColorHandle);
     }
 }

@@ -3,7 +3,6 @@ package com.example.gl.opengles_demo.gles_2p0;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
-import com.example.gl.opengles_demo.gles_2p0.shape.square.Square;
 import com.example.gl.opengles_demo.gles_2p0.shape.triangle.Triangle;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -19,14 +18,11 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class MyGLRenderer implements GLSurfaceView.Renderer {
     private Triangle mTriangle;
-    private Square mSquare;
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(0, 0, 0, 1);
-
         mTriangle = new Triangle();
-        mSquare = new Square();
     }
 
     @Override

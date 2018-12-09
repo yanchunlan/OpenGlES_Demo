@@ -53,11 +53,10 @@
 
 
         <!-- #################  ES 2.0  start  ################### -->
-
+        <activity android:name=".gles_2p0.GLES2p0Activity"/>
 
 
         <!-- #################  ES 2.0  end  ################### -->
-        <activity android:name=".gles_2p0.GLES2p0Activity"/>
     </application>
 
 </manifest>
