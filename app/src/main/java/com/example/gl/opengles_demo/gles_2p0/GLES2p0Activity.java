@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.gl.opengles_demo.R;
 
+import kotlin.internal.HidesMembers;
+
+/** @hide this is my test activity hide it  */
 public class GLES2p0Activity extends AppCompatActivity {
 
     @Override
