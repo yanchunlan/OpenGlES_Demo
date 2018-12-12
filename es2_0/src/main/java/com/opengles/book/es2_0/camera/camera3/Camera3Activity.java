@@ -2,7 +2,6 @@ package com.opengles.book.es2_0.camera.camera3;
 
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
@@ -47,12 +46,14 @@ public class Camera3Activity extends Camera2Activity {
 
     @Override
     protected void addFilter(Camera2Renderer controller) {
-        mLookupFilter = new LookupFilter(getResources());
-        mLookupFilter.setIntensity(0.0f);
-        mLookupFilter.setMaskImageAssets(asstesName);
-        controller.addFilter(mLookupFilter);
+        if (controller != null) {
+            mLookupFilter = new LookupFilter(getResources());
+            mLookupFilter.setIntensity(0.0f);
+            mLookupFilter.setMaskImageAssets(asstesName);
+            controller.addFilter(mLookupFilter);
 
-        mBeautyFilter = new BeautyFilter(getResources());
-        controller.addFilter(mBeautyFilter);
+            mBeautyFilter = new BeautyFilter(getResources());
+            controller.addFilter(mBeautyFilter);
+        }
     }
 }

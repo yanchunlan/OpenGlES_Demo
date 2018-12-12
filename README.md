@@ -26,6 +26,7 @@ OpenGlES for learn
           ### 相机(camera)
           ### 相机动画(camera2)
           ### 相机美颜(camera3)
+          ### 相机水印(camera4)
           ### 压缩纹理动画(etc)
           ### FBO离屏渲染(fbo)
           ### EGL后台处理(egl环境搭建)
