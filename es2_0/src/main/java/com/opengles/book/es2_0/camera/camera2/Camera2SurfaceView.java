@@ -51,13 +51,13 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     }
 
     private void initRenderer() {
-////        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-////            // 大于21 ，即大于5.0就用camera2
-//            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(), mController);
-////        } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            // 大于21 ，即大于5.0就用camera2
+            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(), mController);
+        } else {
 //            // 小于21 ，即小于5.0就用camera1
             mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera1Renderer(mController);
-//        }
+        }
     }
 
     private void initController() {
@@ -134,8 +134,8 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     // 保存bitmap成为本地文件
     private void save(Bitmap bitmap) {
         String folderPath = mContext.getExternalCacheDir().getAbsolutePath() + "/OpenGLDemo/photo/";
-        File file = new File(folderPath);
-        if (file == null || !file.isDirectory() || (!file.exists() && !file.mkdirs())) {
+        File folder = new File(folderPath);
+        if(!folder.exists()&&!folder.mkdirs()){
             if (mCallBack != null) {
                 mCallBack.callFailed();
             }

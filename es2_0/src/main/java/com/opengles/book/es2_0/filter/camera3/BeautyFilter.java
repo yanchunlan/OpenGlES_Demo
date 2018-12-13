@@ -10,6 +10,7 @@ import com.opengles.book.es2_0.filter.AFilter;
  * author:  ycl
  * date:  2018/12/6 9:42
  * desc:
+ *      bug记录： f,i单位错误
  */
 public class BeautyFilter extends AFilter {
     private int gHiternum; // 便利数量
@@ -88,11 +89,12 @@ public class BeautyFilter extends AFilter {
     @Override
     protected void onSetExpandData() {
         super.onSetExpandData();
-        GLES20.glUniform1f(gHiternum, iternum);
+        // 注意单位 f, i区别
+        GLES20.glUniform1i(gHiternum, iternum);
         GLES20.glUniform1f(gHaaCoef, aaCoef);
         GLES20.glUniform1f(gHmixCoef, mixCoef);
 
-        GLES20.glUniform1f(gHWidth, mWidth);
-        GLES20.glUniform1f(gHHeight, mHeight);
+        GLES20.glUniform1i(gHWidth, mWidth);
+        GLES20.glUniform1i(gHHeight, mHeight);
     }
 }

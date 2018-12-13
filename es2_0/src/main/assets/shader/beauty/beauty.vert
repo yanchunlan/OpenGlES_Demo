@@ -2,8 +2,8 @@ attribute vec4 vPosition;
 attribute vec2 vCoord;
 varying vec2 textureCoordinate;
 varying vec2 blurCoord1s[14];
-const highp float mWidth=1280.0;
-const highp float mHeight=1920.0;
+const highp float mWidth=720.0;
+const highp float mHeight=1280.0;
 uniform mat4 vMatrix;
 void main( )
 {

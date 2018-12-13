@@ -13,7 +13,9 @@ import java.nio.ByteBuffer;
  * author:  ycl
  * date:  2018/11/29 17:31
  * desc:
- *      修复bug记录：  onDraw 不需要绘制父类
+ *      修复bug记录：
+ *      onDraw 不需要绘制父类,且方法错误，是draw
+ *      getOutputTexture 实现类必须实现
  */
 public class TextureFilter extends AFilter {
     private CameraFilter mFilter;
@@ -36,6 +38,12 @@ public class TextureFilter extends AFilter {
     }
 
     @Override
+    protected void initBuffer() {
+
+
+    }
+
+    @Override
     public void setFlag(int flag) {
         mFilter.setFlag(flag);
     }
@@ -45,7 +53,8 @@ public class TextureFilter extends AFilter {
         mFilter.setMatrix(matrix);
     }
 
-    public int getfTexture() {
+    @Override
+    public int getOutputTexture() {
         return fTexture[0];
     }
 
@@ -79,9 +88,7 @@ public class TextureFilter extends AFilter {
     }
 
     @Override
-    protected void onDraw() {
-//        super.onDraw(); // 不需要父类的绘制
-
+    public void draw() {
         boolean isDepthTest = GLES20.glIsEnabled(GLES20.GL_DEPTH_TEST);
         if (isDepthTest) {
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);

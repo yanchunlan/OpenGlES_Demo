@@ -138,7 +138,7 @@ public class Camera2Renderer implements GLSurfaceView.Renderer {
         if (isParamSet.get()) {
             mEffectFilter.draw();
 
-            mGroupFilter.setTextureId(mEffectFilter.getfTexture());// frameBuffer
+            mGroupFilter.setTextureId(mEffectFilter.getOutputTexture());// frameBuffer
             mGroupFilter.draw();
 
             // 显示在屏幕上的界面的宽高

@@ -68,7 +68,7 @@ public class Camera2Renderer implements GLRenderer {
     public Camera2Renderer(Context context, com.opengles.book.es2_0.camera.camera2.Camera2Renderer controller) {
         this.mController = controller;
         mCameraManager = (CameraManager) context.getSystemService(context.CAMERA_SERVICE);
-        mThreadHandler = new HandlerThread("CAMERA2");
+        mThreadHandler = new HandlerThread("camera2");
         mThreadHandler.start();
         mHandler = new Handler(mThreadHandler.getLooper());
     }
@@ -85,7 +85,10 @@ public class Camera2Renderer implements GLRenderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         try {
-            surfaceDestroyed(null);
+            if (mCameraDevice != null) {
+                mCameraDevice.close();
+                mCameraDevice = null;
+            }
 
             //获取可用相机设备列表
             CameraCharacteristics c = mCameraManager.getCameraCharacteristics(cameraId + "");
@@ -141,7 +144,7 @@ public class Camera2Renderer implements GLRenderer {
                 public void onError(@NonNull CameraDevice camera, int error) {
                 }
             }, mHandler);
-            mController.setImageDirection(cameraId);
+//            mController.setImageDirection(cameraId);
 
         } catch (CameraAccessException e) {
             e.printStackTrace();
