@@ -29,9 +29,9 @@ public class KitkatCamera implements ICamera {
 
     public KitkatCamera() {
         mConfig = new Config();
-        mConfig.minPictureWidth = CameraConfig.width;
-        mConfig.minPreviewWidth = CameraConfig.width;
-        mConfig.rate = 1.778f;
+        mConfig.minPictureWidth = 720;
+        mConfig.minPreviewWidth = 720;
+        mConfig.rate = 1.778f; // 1280/720=1.778f
         mSizeComparator = new CameraSizeComparator();
     }
 

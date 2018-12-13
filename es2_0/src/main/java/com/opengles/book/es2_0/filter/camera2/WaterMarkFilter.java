@@ -11,6 +11,9 @@ import com.opengles.book.es2_0.utils.MatrixUtils;
  * author: ycl
  * date: 2018-12-12 21:12
  * desc: 水印Filter
+ *      bug记录：
+ *          onClear 不需要清除父类的缓冲
+ *
  */
 public class WaterMarkFilter extends NoFilter {
     private Bitmap mBitmap;
@@ -20,7 +23,12 @@ public class WaterMarkFilter extends NoFilter {
 
     public WaterMarkFilter(Resources mRes) {
         super(mRes);
-        mFilter = new NoFilter(mRes);
+        mFilter = new NoFilter(mRes){
+            @Override
+            protected void onClear() {
+                // 不要清除缓冲区的数据
+            }
+        };
     }
 
     @Override

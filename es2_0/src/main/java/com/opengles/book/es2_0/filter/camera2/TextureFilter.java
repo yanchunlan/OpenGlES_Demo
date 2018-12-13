@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
  * author:  ycl
  * date:  2018/11/29 17:31
  * desc:
+ *      修复bug记录：  onDraw 不需要绘制父类
  */
 public class TextureFilter extends AFilter {
     private CameraFilter mFilter;
@@ -79,7 +80,7 @@ public class TextureFilter extends AFilter {
 
     @Override
     protected void onDraw() {
-        super.onDraw();
+//        super.onDraw(); // 不需要父类的绘制
 
         boolean isDepthTest = GLES20.glIsEnabled(GLES20.GL_DEPTH_TEST);
         if (isDepthTest) {

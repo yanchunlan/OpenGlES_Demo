@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.opengles.book.es2_0.camera.CameraConfig;
 import com.opengles.book.es2_0.camera.camera2.camera_render.GLRenderer;
 
 import java.io.BufferedOutputStream;
@@ -50,19 +51,19 @@ public abstract class Camera2SurfaceView extends SurfaceView implements
     }
 
     private void initRenderer() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // 大于21 ，即大于5.0就用camera2
-            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(), mController);
-        } else {
-            // 小于21 ，即小于5.0就用camera1
+////        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+////            // 大于21 ，即大于5.0就用camera2
+//            mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera2Renderer(getContext(), mController);
+////        } else {
+//            // 小于21 ，即小于5.0就用camera1
             mRenderer = new com.opengles.book.es2_0.camera.camera2.camera_render.Camera1Renderer(mController);
-        }
+//        }
     }
 
     private void initController() {
         mController = new Camera2Renderer(mContext);
         onFilterSet(mController);
-        mController.setCallBackSize(this.getWidth(), this.getHeight());
+        mController.setCallBackSize(CameraConfig.width, CameraConfig.height);
         mController.setCallBack(this);
     }
 

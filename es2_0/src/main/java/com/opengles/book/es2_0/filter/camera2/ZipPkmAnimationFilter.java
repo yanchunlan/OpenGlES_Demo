@@ -16,6 +16,10 @@ import java.nio.ByteBuffer;
  * author:  ycl
  * date:  2018/11/29 11:25
  * desc:
+ *      bug记录：
+ *          draw 方法写成onDraw方法了，
+ *          未重写onClear
+ *          未翻转flip
  */
 public class ZipPkmAnimationFilter extends AFilter {
     private ZipPkmReader mPkmReader;
@@ -47,7 +51,10 @@ public class ZipPkmAnimationFilter extends AFilter {
 
         mNoFilter.create();
     }
+    @Override
+    protected void onClear() {
 
+    }
     @Override
     protected void onSizeChanged(int width, int height) {
         // 因为不同的宽高，创建ETC1Texture 需要的buffer不同，所有在此处设置
@@ -77,7 +84,7 @@ public class ZipPkmAnimationFilter extends AFilter {
             //根据不同的type设置不同的矩阵变换，显示不同的图片样式
             MatrixUtils.getMatrix(super.getMatrix(), MatrixUtils.TYPE_FITEND,
                     t.getWidth(), t.getHeight(), width, height);
-//            MatrixUtils.flip(super.getMatrix(), false, true);
+            MatrixUtils.flip(super.getMatrix(), false, true);
             onSetExpandData();
 
             // bind  texture
@@ -126,13 +133,13 @@ public class ZipPkmAnimationFilter extends AFilter {
     }
 
     @Override
-    protected void onDraw() {
+    public void draw() {
         if (getTextureId() != 0) {
             mNoFilter.setTextureId(getTextureId());
             mNoFilter.draw();
         }
         GLES20.glViewport(100, 0, width / 6, height / 6);
-        super.onDraw();
+        super.draw();
         GLES20.glViewport(0, 0, width, height);
     }
 

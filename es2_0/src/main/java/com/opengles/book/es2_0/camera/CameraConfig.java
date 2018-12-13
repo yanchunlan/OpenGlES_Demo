@@ -6,6 +6,6 @@ package com.opengles.book.es2_0.camera;
  * desc:
  */
 public class CameraConfig {
-    public static final int width = 1280;
-    public static final int height = 1920;
+    public static final int width = 720;
+    public static final int height = 1280;
 }

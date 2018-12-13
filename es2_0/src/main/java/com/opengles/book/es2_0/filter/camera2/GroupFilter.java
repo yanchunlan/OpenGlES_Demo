@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 
 import com.opengles.book.es2_0.filter.AFilter;
 import com.opengles.book.es2_0.utils.EasyGlUtils;
+import com.opengles.book.es2_0.utils.MatrixUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,10 @@ import java.util.concurrent.LinkedBlockingDeque;
  * author:  ycl
  * date:  2018/11/29 17:32
  * desc:
+ *   修复bug记录：
+ *      addFilter 内容错误
+ *      glFramebufferTexture2D -> GLES20.GL_COLOR_ATTACHMENT0, 应该是颜色
+ *
  */
 public class GroupFilter extends AFilter {
 
@@ -38,13 +43,16 @@ public class GroupFilter extends AFilter {
         mFilterQueue = new ConcurrentLinkedQueue<>();//为何用这个queue队列
     }
 
+    @Override
+    protected void initBuffer() {
 
-    public boolean addFilter(AFilter filter) {
-        boolean b = mFilters.remove(filter);
-        if (b) {
-            size--;
-        }
-        return b;
+    }
+
+    public void addFilter(AFilter filter) {
+        //绘制到frameBuffer上和绘制到屏幕上的纹理坐标是不一样的
+        //Android屏幕相对GL世界的纹理Y轴翻转
+        MatrixUtils.flip(filter.getMatrix(),false,true);
+        mFilterQueue.add(filter);
     }
 
     public boolean removeFilter(AFilter filter) {
@@ -92,8 +100,8 @@ public class GroupFilter extends AFilter {
                 // 绑定
                 GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fFrame[0]);
 
-                // 放置数据到缓冲区
-                GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
+                // 放置数据到缓冲区  texture 里面放置颜色
+                GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
                         GLES20.GL_TEXTURE_2D, ftexture[textureIndex % 2], 0);
                 GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
                         GLES20.GL_RENDERBUFFER, frender[0]);
@@ -140,7 +148,7 @@ public class GroupFilter extends AFilter {
 
         // 放置数据到缓冲区
         GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16, width, height);
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
                 GLES20.GL_TEXTURE_2D, ftexture[0], 0);
         GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
                 GLES20.GL_RENDERBUFFER, frender[0]);
@@ -149,9 +157,9 @@ public class GroupFilter extends AFilter {
         unBindFrame();
 
         // 删除缓冲的节点
-        GLES20.glDeleteTextures(ftextureSize, ftexture, 0);
-        GLES20.glDeleteRenderbuffers(1, frender, 0);
-        GLES20.glDeleteFramebuffers(1, fFrame, 0);
+//        GLES20.glDeleteTextures(ftextureSize, ftexture, 0);
+//        GLES20.glDeleteRenderbuffers(1, frender, 0);
+//        GLES20.glDeleteFramebuffers(1, fFrame, 0);
     }
 
     //取消绑定Texture
