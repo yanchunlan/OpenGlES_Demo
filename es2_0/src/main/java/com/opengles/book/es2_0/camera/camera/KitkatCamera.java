@@ -4,6 +4,8 @@ import android.graphics.Point;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 
+import com.opengles.book.es2_0.camera.CameraConfig;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,8 +29,8 @@ public class KitkatCamera implements ICamera {
 
     public KitkatCamera() {
         mConfig = new Config();
-        mConfig.minPictureWidth = 720;
-        mConfig.minPreviewWidth = 720;
+        mConfig.minPictureWidth = CameraConfig.width;
+        mConfig.minPreviewWidth = CameraConfig.width;
         mConfig.rate = 1.778f;
         mSizeComparator = new CameraSizeComparator();
     }

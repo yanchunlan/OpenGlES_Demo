@@ -1,29 +1,29 @@
-GLSurfaceViewÄÚ²¿·â×°ÁËEGL»·¾³µÄ²Ù×÷£¬ËùÒÔGLSurfaceView¿ÉÒÔµ±×öÒ»¸öEGLÊ¹ÓÃµÄÊ¾ÀýÀ´¿´
-EGLÊ¹ÓÃ²½Öè£º
-	1.È¡µÃEGLÊµÀý
-	2.Ñ¡ÔñDisplay
-	3.Ñ¡ÔñConfig
-	4.´´½¨Context
-	5.´´½¨Surface
-	6.Ö¸¶¨µ±Ç°µÄ»·¾³Îª»æÖÆ»·¾³
-	7.´´½¨GL
-	ÆäÖÐGLSurfaceViewÔ´ÂëÖÐ£¬context´´½¨³É¹¦£¬¾Íµ÷ÓÃonSurfaceCreated(gl, mEglConfig);
-		ÉÏÃæ7²½È«²¿´´½¨ok,¾ÍÊÍ·Å×èÈû£¬µ÷ÓÃonSurfaceChanged(gl, w, h);²¢ÇÒÖ»µ÷ÓÃÒ»´Î£¬
-		µ«ÊÇÄÚ²¿onDrawFrame(gl) ÊÇ²»¶ÏÔÚµ÷ÓÃ£¬ÒòÎªÊÇwhile()ËÀÑ­»·
-		readyToDraw ·½·¨ÀïÃæÓÐÈç¹ûmRenderMode == RENDERMODE_CONTINUOUSLY£¬²Å»á²»¶Ïµ÷ÓÃ´´½¨EGL»·¾³£¬
-		·ñÔò¾ÍÊÇrequestRenderÒ»´Î£¬´´½¨Ò»´Î»·¾³
-	
-	Ê¹ÓÃ£º
-		1>³õÊ¼»¯·½·¨£º
-			´î½¨EGL»·¾³: new EGLHelper(mWidth, mHeight);
-			´´½¨¶¥µã£¬Æ¬Ôª×ÅÉ«Æ÷£¬»ñÈ¡ÖØÒªµã¾ä±ú£¨ÀàËÆÓÚµ÷ÓÃÁËonSurfaceCreated£©
-			´«Èë¿í¸ß£¬£¨ÀàËÆÓÚµ÷ÓÃÁËonSurfaceChanged£©
-		2>»æÖÆ·½·¨£º
-			´´½¨textureId,Çå³ý»·¾³É«£¬Ê¹ÓÃprogram,¼¤»îÍ¨µÀ£¬°ó¶¨texture£¬ÉèÖÃmatrix,²¢°ó¶¨Êý¾Ý£¬
-		°ó¶¨ÆäËû¶¥µã£¬ÑÕÉ«£¬ÎÆÀí£¬µÈµÈÊý¾Ý
-			 ´ÓGLES20.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(),GLES20.GL_RGBA,
-		GLES20.GL_UNSIGNED_BYTE, mBuffer)£¬»ñÈ¡bufferÊý¾Ý£¬²¢µ¹ÖÃ·­×ª»ñÈ¡Êý¾Ý´æ´¢ÔÙint[]ÀïÃæ£¬
-		´´½¨bitmap£¬bitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat))£¬°ÑÊý¾Ý´æÔÚbitmapÀïÃæ£¬
-		²¢±£´æÊý¾Ýµ½±¾µØ²¢ÏÔÊ¾
+GLSurfaceViewå†…éƒ¨å°è£…äº†EGLçŽ¯å¢ƒçš„æ“ä½œï¼Œæ‰€ä»¥GLSurfaceViewå¯ä»¥å½“åšä¸€ä¸ªEGLä½¿ç”¨çš„ç¤ºä¾‹æ¥çœ‹
+EGLä½¿ç”¨æ­¥éª¤ï¼š
+	1.å–å¾—EGLå®žä¾‹
+	2.é€‰æ‹©Display
+	3.é€‰æ‹©Config
+	4.åˆ›å»ºContext
+	5.åˆ›å»ºSurface
+	6.æŒ‡å®šå½“å‰çš„çŽ¯å¢ƒä¸ºç»˜åˆ¶çŽ¯å¢ƒ
+	7.åˆ›å»ºGL
+	å…¶ä¸­GLSurfaceViewæºç ä¸­ï¼Œcontextåˆ›å»ºæˆåŠŸï¼Œå°±è°ƒç”¨onSurfaceCreated(gl, mEglConfig);
+		ä¸Šé¢7æ­¥å…¨éƒ¨åˆ›å»ºok,å°±é‡Šæ”¾é˜»å¡žï¼Œè°ƒç”¨onSurfaceChanged(gl, w, h);å¹¶ä¸”åªè°ƒç”¨ä¸€æ¬¡ï¼Œ
+		ä½†æ˜¯å†…éƒ¨onDrawFrame(gl) æ˜¯ä¸æ–­åœ¨è°ƒç”¨ï¼Œå› ä¸ºæ˜¯while()æ­»å¾ªçŽ¯
+		readyToDraw æ–¹æ³•é‡Œé¢æœ‰å¦‚æžœmRenderMode == RENDERMODE_CONTINUOUSLYï¼Œæ‰ä¼šä¸æ–­è°ƒç”¨åˆ›å»ºEGLçŽ¯å¢ƒï¼Œ
+		å¦åˆ™å°±æ˜¯requestRenderä¸€æ¬¡ï¼Œåˆ›å»ºä¸€æ¬¡çŽ¯å¢ƒ
+
+	ä½¿ç”¨ï¼š
+		1>åˆå§‹åŒ–æ–¹æ³•ï¼š
+			æ­å»ºEGLçŽ¯å¢ƒ: new EGLHelper(mWidth, mHeight);
+			åˆ›å»ºé¡¶ç‚¹ï¼Œç‰‡å…ƒç€è‰²å™¨ï¼ŒèŽ·å–é‡è¦ç‚¹å¥æŸ„ï¼ˆç±»ä¼¼äºŽè°ƒç”¨äº†onSurfaceCreatedï¼‰
+			ä¼ å…¥å®½é«˜ï¼Œï¼ˆç±»ä¼¼äºŽè°ƒç”¨äº†onSurfaceChangedï¼‰
+		2>ç»˜åˆ¶æ–¹æ³•ï¼š
+			åˆ›å»ºtextureId,æ¸…é™¤çŽ¯å¢ƒè‰²ï¼Œä½¿ç”¨program,æ¿€æ´»é€šé“ï¼Œç»‘å®štextureï¼Œè®¾ç½®matrix,å¹¶ç»‘å®šæ•°æ®ï¼Œ
+		ç»‘å®šå…¶ä»–é¡¶ç‚¹ï¼Œé¢œè‰²ï¼Œçº¹ç†ï¼Œç­‰ç­‰æ•°æ®
+			 ä»ŽGLES20.glReadPixels(0, 0, mBitmap.getWidth(), mBitmap.getHeight(),GLES20.GL_RGBA,
+		GLES20.GL_UNSIGNED_BYTE, mBuffer)ï¼ŒèŽ·å–bufferæ•°æ®ï¼Œå¹¶å€’ç½®ç¿»è½¬èŽ·å–æ•°æ®å­˜å‚¨å†int[]é‡Œé¢ï¼Œ
+		åˆ›å»ºbitmapï¼Œbitmap.copyPixelsFromBuffer(IntBuffer.wrap(iat))ï¼ŒæŠŠæ•°æ®å­˜åœ¨bitmapé‡Œé¢ï¼Œ
+		å¹¶ä¿å­˜æ•°æ®åˆ°æœ¬åœ°å¹¶æ˜¾ç¤º
 		3>destory
-			Ö´ÐÐ×Ô¼º´´½¨µÄdestroy
+			æ‰§è¡Œè‡ªå·±åˆ›å»ºçš„destroy

@@ -10,6 +10,7 @@ import com.opengles.book.es2_0.blend.BlendActivity
 import com.opengles.book.es2_0.camera.camera1.CameraActivity
 import com.opengles.book.es2_0.camera.camera2.Camera2Activity
 import com.opengles.book.es2_0.camera.camera3.Camera3Activity
+import com.opengles.book.es2_0.camera.camera4.Camera4Activity
 import com.opengles.book.es2_0.egl.EGLActivity
 import com.opengles.book.es2_0.etc.ZipActivity
 import com.opengles.book.es2_0.fbo.FBOActivity
@@ -55,6 +56,7 @@ class ES2_0MainActivity : AppCompatActivity() {
             add(MenuBean("相机(camera)", CameraActivity::class.java))
             add(MenuBean("相机动画(camera2)", Camera2Activity::class.java))
             add(MenuBean("相机美颜(camera3)", Camera3Activity::class.java))
+            add(MenuBean("相机水印(camera4)", Camera4Activity::class.java))
             add(MenuBean("压缩纹理动画(etc)", ZipActivity::class.java))
             add(MenuBean("FBO离屏渲染(fbo)", FBOActivity::class.java))
             add(MenuBean("EGL后台处理(egl环境搭建)", EGLActivity::class.java))

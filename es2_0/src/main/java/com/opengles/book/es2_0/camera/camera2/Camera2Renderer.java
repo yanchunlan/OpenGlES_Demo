@@ -11,12 +11,12 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.opengles.book.es2_0.camera.CameraConfig;
 import com.opengles.book.es2_0.camera.camera2.camera_render.GLRenderer;
 import com.opengles.book.es2_0.filter.AFilter;
 import com.opengles.book.es2_0.filter.camera2.GroupFilter;
 import com.opengles.book.es2_0.filter.camera2.NoFilter;
 import com.opengles.book.es2_0.filter.camera2.TextureFilter;
-import com.opengles.book.es2_0.filter.camera2.ZipPkmAnimationFilter;
 import com.opengles.book.es2_0.utils.EasyGlUtils;
 import com.opengles.book.es2_0.utils.MatrixUtils;
 
@@ -92,8 +92,8 @@ public class Camera2Renderer implements GLSurfaceView.Renderer {
         mGroupFilter = new GroupFilter(mContext.getResources());
 
         // 设置默认宽高
-        mDataSize = new Point(720, 1280);
-        mWindowSize = new Point(720, 1280);
+        mDataSize = new Point(CameraConfig.width, CameraConfig.height);
+        mWindowSize = new Point(CameraConfig.width, CameraConfig.height);
     }
 
     //  ------------  glSurfaceView回调  start ---------------

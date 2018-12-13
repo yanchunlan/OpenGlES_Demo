@@ -3,6 +3,7 @@ package com.opengles.book.es2_0.filter.camera3;
 import android.content.res.Resources;
 import android.opengl.GLES20;
 
+import com.opengles.book.es2_0.camera.CameraConfig;
 import com.opengles.book.es2_0.filter.AFilter;
 
 /**
@@ -24,8 +25,8 @@ public class BeautyFilter extends AFilter {
     private float aaCoef;
     private float mixCoef;
 
-    private int mWidth = 720;
-    private int mHeight = 1280;
+    private int mWidth = CameraConfig.width;
+    private int mHeight = CameraConfig.height;
 
 
     public BeautyFilter(Resources mRes) {

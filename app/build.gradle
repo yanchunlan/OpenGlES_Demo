@@ -46,4 +46,5 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
     implementation project(':es2_0')
+    implementation project(':es2_0_test')
 }

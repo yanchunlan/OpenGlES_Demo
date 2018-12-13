@@ -26,17 +26,18 @@
         <activity android:name=".vary.VaryingActivity" />
         <activity android:name=".beautiful.BeautyActivity" />
         <activity android:name=".camera.camera1.CameraActivity" />
+        <activity android:name=".camera.camera2.Camera2Activity" />
+        <activity android:name=".camera.camera3.Camera3Activity" />
+        <activity android:name=".camera.camera4.Camera4Activity"/>
         <activity android:name=".etc.ZipActivity" />
         <activity android:name=".fbo.FBOActivity" />
         <activity android:name=".egl.EGLActivity" />
-        <activity android:name=".camera.camera2.Camera2Activity" />
-        <activity android:name=".camera.camera3.Camera3Activity" />
         <activity android:name=".vr.VRActivity" />
         <activity android:name=".vr_video.VRVideoActivity" />
         <activity android:name=".obj.ObjLoadActivity1" />
         <activity android:name=".obj_mtl.ObjLoadActivity2" />
-        <activity android:name=".light.LightActivity"></activity>
-        <activity android:name=".blend.BlendActivity"/>
+        <activity android:name=".light.LightActivity" />
+        <activity android:name=".blend.BlendActivity" />
     </application>
 
 </manifest>
