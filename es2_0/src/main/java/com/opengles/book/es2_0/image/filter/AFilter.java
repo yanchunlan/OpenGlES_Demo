@@ -94,7 +94,7 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
                     "    }\n" +
                     "}";*/
 
-   private String vertexShaderCodes;
+    private String vertexShaderCodes;
     private String fragmentShaderCodes;
 
     // ################# 为何使用坐标反了就不行了？？？？？ ############
@@ -104,10 +104,10 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
 //            1.0f, -1f,
 //            1.0f, 1f,
 
-            -1.0f,1.0f,
-            -1.0f,-1.0f,
-            1.0f,1.0f,
-            1.0f,-1.0f
+            -1.0f, 1.0f,
+            -1.0f, -1.0f,
+            1.0f, 1.0f,
+            1.0f, -1.0f
     };
     // 0-1之间纹理间距
     private final float[] coords = {
@@ -116,10 +116,10 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
 //            1.0f, 1.0f,
 //            0.0f, 1.0f
 
-            0.0f,0.0f,
-            0.0f,1.0f,
-            1.0f,0.0f,
-            1.0f,1.0f,
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
     };
 
     private FloatBuffer posBuffer, coordsBuffer;
@@ -182,7 +182,7 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         // 目的是达到图片居中的效果 ，centerInside
         float sWH = w / (float) h;
         float sWidthHeight = width / (float) height;
-        uXY=sWidthHeight;
+        uXY = sWidthHeight;
         if (width > height) {
             if (sWH > sWidthHeight) {
                 Matrix.orthoM(projectMatrix, 0,
@@ -213,21 +213,131 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
         GLES20.glUseProgram(program);
         onDrawSet();
 
-        GLES20.glUniform1i(hIsHalf,isHalf?1:0);
-        GLES20.glUniform1f(glHUxy,uXY);
+        GLES20.glUniform1i(hIsHalf, isHalf ? 1 : 0);
+        GLES20.glUniform1f(glHUxy, uXY);
 
         GLES20.glUniformMatrix4fv(glHMatrix, 1, false, mvpMatrix, 0);
         GLES20.glEnableVertexAttribArray(glHPosition);
         GLES20.glEnableVertexAttribArray(glHCoordinate);
-        GLES20.glUniform1f(glHTexture, 0);
-        textureId = createTexture();
 
+
+        // 原先的代码
+        // 创建texture
+        textureId = createTexture();
+        // 激活texture0通道，并设置绑定texture
+        int textureType = 0;
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + textureType);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        GLES20.glUniform1f(glHTexture, textureType);
+
+        /*
         //传入顶点坐标
         GLES20.glVertexAttribPointer(glHPosition, 2, GLES20.GL_FLOAT, false, 0, posBuffer);
         //传入纹理坐标
         GLES20.glVertexAttribPointer(glHCoordinate, 2, GLES20.GL_FLOAT, false, 0, coordsBuffer);
         // 因为是2维的图形，所以需要顶点个数/2 即可
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vPos.length / 2);
+        */
+
+        // --------------------- 加入FBO start ---------------------
+      /*
+
+      // 1>  未绑定bitmap数据的纹理，绑定到FBO
+        // 创建texture
+        textureId = EasyGlUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, bitmap.getWidth(), bitmap.getHeight())[0];
+
+        // 激活texture0通道，并设置绑定texture
+        int textureType = 0;
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + textureType);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        GLES20.glUniform1f(glHTexture, textureType);
+
+        // 2> 创建FBO ，并绑定纹理
+        int fboId = createFBO();
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0); // 解绑纹理
+
+        // 3>  绑定bitmap数据的纹理，会知道离屏里面去
+        // 绑定FBO
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);
+
+        // 绑定数据到FBO的纹理里面去
+        int imgTextureId = createTexture();
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imgTextureId);
+
+
+        // 解绑fbo
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+        */
+
+        // 上面执行的是绘制的数据存在FBO缓冲区里面去了，但是怎么显示呢？需要再次实现一个FBORenderer ,
+        // 把textureId即FBO的textureId传入进去，就能实现缓冲区的显示
+
+
+        // --------------------- 加入FBO end ---------------------
+
+        //------------------------ 加入VBO start  ------------------
+        // 创建VBO
+        int bosId = createVertexBuffer();
+        // 绑定显卡顶点
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, bosId);
+
+
+        //传入顶点坐标 ，或者传入顶点从显卡获取数据的起始位置
+        GLES20.glVertexAttribPointer(glHPosition, 2, GLES20.GL_FLOAT, false, 4 * 2, 0); // 偏移量 一个间隔是4字节，-1 到1 偏移4*2=8
+        //传入纹理坐标，或者传入顶点从显卡获取数据的起始位置
+        GLES20.glVertexAttribPointer(glHCoordinate, 2, GLES20.GL_FLOAT, false, 4 * 2, vPos.length * 4);
+        // 因为是2维的图形，所以需要顶点个数/2 即可
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vPos.length / 2);
+
+        //释放资源
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        // 解绑显卡顶点
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        GLES20.glDisableVertexAttribArray(glHPosition);
+        GLES20.glDisableVertexAttribArray(glHCoordinate);
+        //------------------------ 加入VBO end  ------------------
+    }
+
+    // 绑定顶点，纹理顶点数据到vbo
+    private int createVertexBuffer() {
+        int[] vbos = new int[1];
+        // 创建vbo
+        GLES20.glGenBuffers(1, vbos, 0);
+        // 绑定vbo
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbos[0]);
+        // 分配vbo大小 , 最后一个参数是静态大小
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vPos.length * 4 + coords.length * 4, null, GLES20.GL_STATIC_DRAW);
+        // 绑定顶点数据到显卡内存
+        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, vPos.length * 4, posBuffer);
+        // 绑定纹理顶点数据到显卡内存
+        GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, vPos.length * 4, coords.length * 4, coordsBuffer);
+        // 解绑
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+        return vbos[0];
+    }
+
+    // 创建纹理，并把纹理绑定到FBO
+    private int createFBO() {
+        int[] fbos = new int[1];
+        // 创建
+        GLES20.glGenFramebuffers(1, fbos, 0);
+        // 绑定
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fbos[0]);
+        // 设置FBO大小，空数据
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
+                bitmap.getWidth(), bitmap.getHeight(), 0, GLES20.GL_RGBA,
+                GLES20.GL_UNSIGNED_BYTE, null);
+        //绑定纹理到FBO
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D, textureId, 0);
+        //检查绑定是否成功
+        if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
+            // 绑定失败
+        }
+        // 解绑
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        return fbos[0];
     }
 
 
@@ -247,6 +357,8 @@ public abstract class AFilter implements GLSurfaceView.Renderer {
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
             //根据以上指定的参数，生成一个2D纹理
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);// 解绑
             return texture[0];
         }
         return 0;

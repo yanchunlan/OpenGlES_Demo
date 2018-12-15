@@ -44,6 +44,20 @@ public class EasyGlUtils {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
+    public static int[] genTexturesWithParameter(int size , int start,
+                                                 int gl_format, int width, int height) {
+        int[] textures = new int[size];
+        GLES20.glGenTextures(size, textures, start);
+        for (int i = 0; i < size; i++) {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[i]);
+            GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, gl_format, width, height,
+                    0, gl_format, GLES20.GL_UNSIGNED_BYTE, null);
+            useTexParameter();
+        }
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        return textures;
+    }
+
     public static void genTexturesWithParameter(int size, int[] textures, int start, Bitmap bitmap) {
         if (bitmap != null && !bitmap.isRecycled()) {
             GLES20.glGenTextures(size, textures, start);
@@ -59,8 +73,8 @@ public class EasyGlUtils {
     public static int[] genTexturesWithParameter(int size, int start, Bitmap... bitmap) {
         int[] texture = new int[size];
         GLES20.glGenTextures(size, texture, start);
-            for (int i = 0; i < size; i++) {
-                if (bitmap[i] != null && !bitmap[i].isRecycled()) {
+        for (int i = 0; i < size; i++) {
+            if (bitmap[i] != null && !bitmap[i].isRecycled()) {
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
                 useTexParameter();
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap[i], 0);

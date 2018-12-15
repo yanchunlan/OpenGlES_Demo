@@ -32,7 +32,7 @@ public class EGLHelper {
     private int surfaceType = SURFACE_PBUFFER;
     private Object surface_native_obj;
 
-    private int redSize, greenSize, blueSize, alphaSize, depthSize, renderType; // GlSurfaceView 里面是  EGL10.EGL_STENCIL_SIZE, stencilSize,;
+    private int redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize,renderType; // GlSurfaceView 里面是  EGL10.EGL_STENCIL_SIZE, stencilSize,;
 
     public EGLHelper(int width, int height) {
         redSize = 8;
@@ -40,7 +40,8 @@ public class EGLHelper {
         blueSize = 8;
         alphaSize = 8;
         depthSize = 16;
-        renderType = 4;
+        stencilSize = 0;
+        renderType = 4;// 默认2.0=4
         eglInit(width, height);
     }
 
@@ -77,7 +78,8 @@ public class EGLHelper {
                 EGL10.EGL_BLUE_SIZE, blueSize,
                 EGL10.EGL_ALPHA_SIZE, alphaSize,
                 EGL10.EGL_DEPTH_SIZE, depthSize,//指定深度缓存(Z Buffer)大小
-                EGL10.EGL_RENDERABLE_TYPE, renderType,//指定渲染api版本, EGL14.EGL_OPENGL_ES2_BIT
+                EGL10.EGL_STENCIL_SIZE, stencilSize,//指定深度缓存(Z Buffer)大小
+                EGL10.EGL_RENDERABLE_TYPE, renderType,//指定渲染api版本, EGL14.EGL_OPENGL_ES2_BIT,默认 2.0 就是4
                 EGL10.EGL_NONE};//总是以EGL10.EGL_NONE结尾
         int[] num_config = new int[1];
         if (!mEgl.eglChooseConfig(mEglDisplay, configSpec, null, 0, num_config)) {
@@ -150,6 +152,21 @@ public class EGLHelper {
             throw new RuntimeException("eglDestroyContex" + mEgl.eglGetError());
         }
         mEgl.eglTerminate(mEglDisplay);
+
+        mEglSurface = null;
+        mEglContext = null;
+        mEglDisplay = null;
+        mEgl = null;
+    }
+
+
+
+    // 刷新
+    public int swap() {
+        if (! mEgl.eglSwapBuffers(mEglDisplay, mEglSurface)) {
+            return mEgl.eglGetError();
+        }
+        return EGL10.EGL_SUCCESS;
     }
 
 

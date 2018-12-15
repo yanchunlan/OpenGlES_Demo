@@ -1,0 +1,99 @@
+一.VBO
+    主要是直接在显卡创建并缓存顶点数据，避免顶点数据每次从cpu取出，并设置到显卡去的一个过程，
+
+    1>使用：
+        创建：
+              int[] vbos = new int[1];
+                // 创建vbo
+                GLES20.glGenBuffers(1, vbos, 0);
+                // 绑定vbo
+                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vbos[0]);
+                // 分配vbo大小 , 最后一个参数是静态大小
+                GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vPos.length * 4 + coords.length * 4, null, GLES20.GL_STATIC_DRAW);
+                // 绑定顶点数据到显卡内存
+                GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, 0, vPos.length*4, posBuffer);
+                // 绑定纹理顶点数据到显卡内存
+                GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, vPos.length*4, coords.length*4, coordsBuffer);
+                // 解绑
+                GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER,0);
+
+         使用：
+                 // 创建VBO
+                 int bosId = createVertexBuffer(); // 如上创建
+                 // 绑定显卡顶点
+                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, bosId);
+                 ...
+
+                 //传入顶点坐标 ，或者传入顶点从显卡获取数据的起始位置
+                 GLES20.glVertexAttribPointer(glHPosition, 2, GLES20.GL_FLOAT, false, 4*2, 0); // 偏移量 一个间隔是4字节，-1 到1 偏移4*2=8
+                 //传入纹理坐标，或者传入顶点从显卡获取数据的起始位置
+                 GLES20.glVertexAttribPointer(glHCoordinate, 2, GLES20.GL_FLOAT, false, 4*2, vPos.length * 4);
+                 ...
+
+                 // 解绑显卡顶点
+                 GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+
+二.FBO
+	1>目的：
+		FBO可以让我们的渲染不渲染到屏幕上，而是渲染到离屏Buffer中。这样的作用是什么呢？
+	比如我们需要处理一张图片，在上传时增加时间的水印，这个时候不需要显示出来的。
+	再比如我们需要对摄像头采集的数据，一个彩色原大小的显示出来，一个黑白的长宽各一半录制成视频
+	2>原理：
+		获取2个可用的texture,一个作为texture[0]数据源，一个作为真实输出图像texture[1]，其中texture[0]，
+		直接显示在界面，texture[1]是存在FrameBuffer里面，后期可以通过glReadPixels获取其数据buffer，并存在本地
+
+	3>Frame Buffer Object: FBO是一个容器，自身不能用于渲染，需要与一些可渲染的缓冲区绑定在一起，像纹理或者渲染缓冲区。 
+	  Render Buffer Object：RBO即为渲染缓冲对象，分为color buffer(颜色)、depth buffer(深度)、stencil buffer(模板)
+	如果是texture,GLES20.glFramebufferTexture2D,为FrameBuffer挂载Texture[1]来存储颜色即可
+	如果是包含其他，
+	4>
+	    流程： es->FBO（纹理绑定到fbo）->绑定的纹理绑定bitmap->显示在屏幕上
+	    注意：FBO坐标跟纹理坐标是x轴相反的
+
+	    FBO:
+        private void createFBO() {
+             int[] fbos = new int[1];
+             // 创建
+             GLES20.glGenFramebuffers(1, fbos, 0);
+             // 绑定
+             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fbos[0]);
+             // 设置FBO大小
+             GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
+                     720, 1280, 0, GLES20.GL_RGBA,
+                     GLES20.GL_UNSIGNED_BYTE, null);
+             //绑定纹理到FBO
+             GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
+                     GLES20.GL_TEXTURE_2D, fTexture[1], 0);
+             //检查绑定是否成功
+             if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
+                 // 绑定失败
+             }
+             // 解绑
+             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+         }
+
+
+	    FBO+RBO结合：
+	    // Renderbuffers 主要是存储深度信息
+		使用步骤：
+			create:
+				glGenFramebuffers // 创建framebuffer
+				
+				glGenRenderbuffers // 创建renderbuffer
+				glBindRenderbuffer // 绑定renderbuffer
+				glRenderbufferStorage //  设置为深度的Render Buffer，并传入大小
+				glFramebufferRenderbuffer // 为FrameBuffer挂载fRender[0]来存储深度
+				glBindRenderbuffer(0) // 解绑定renderbuffer
+				
+				glGenTextures  // 创建一个外部绘制图片的纹理，一个fbo缓冲纹理，通过外部绘制纹理缓冲到内部
+				...
+				// 创建纹理流程
+			user:
+				glBindFramebuffer // 绑定framebuffer
+				glFramebufferTexture2D //为FrameBuffer挂载Texture[1]来存储颜色
+				glFramebufferRenderbuffer   //为FrameBuffer挂载fRender[0]来存储深度
+				glBindFramebuffer(0) // 解绑定framebuffer
+			delete：
+				glDeleteTextures
+				glDeleteRenderbuffers
+				glDeleteFramebuffers

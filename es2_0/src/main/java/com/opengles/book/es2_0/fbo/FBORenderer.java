@@ -123,7 +123,7 @@ public class FBORenderer implements GLSurfaceView.Renderer {
             if (i == 0) {
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mBitmap, 0); // border 是边框
             } else {
-                // 第二个纹理渲染离屏，即后台存储
+                // 第二个纹理渲染离屏，即后台存储，指定FBO缓冲区大小
                 GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
                         mBitmap.getWidth(), mBitmap.getHeight(), 0, GLES20.GL_RGBA,
                         GLES20.GL_UNSIGNED_BYTE, null);
@@ -137,7 +137,6 @@ public class FBORenderer implements GLSurfaceView.Renderer {
 
         mBuffer = ByteBuffer.allocate(mBitmap.getWidth() * mBitmap.getHeight() * 4);
     }
-
 
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;

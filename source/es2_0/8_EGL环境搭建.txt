@@ -7,6 +7,7 @@ EGL使用步骤：
 	5.创建Surface
 	6.指定当前的环境为绘制环境
 	7.创建GL
+	8.刷新swap
 	其中GLSurfaceView源码中，context创建成功，就调用onSurfaceCreated(gl, mEglConfig);
 		上面7步全部创建ok,就释放阻塞，调用onSurfaceChanged(gl, w, h);并且只调用一次，
 		但是内部onDrawFrame(gl) 是不断在调用，因为是while()死循环
