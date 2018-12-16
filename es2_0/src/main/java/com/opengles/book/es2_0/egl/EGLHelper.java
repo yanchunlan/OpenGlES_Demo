@@ -31,6 +31,7 @@ public class EGLHelper {
     private static final int SURFACE_WINDOW = 3; // GLSurfaceView默认的创建的surface
     private int surfaceType = SURFACE_PBUFFER;
     private Object surface_native_obj;
+    private EGLContext eglContext; // 传入同一个EGLContext，能够实现数据共享，后面的共享前面的FBO的数据
 
     private int redSize, greenSize, blueSize, alphaSize, depthSize, stencilSize,renderType; // GlSurfaceView 里面是  EGL10.EGL_STENCIL_SIZE, stencilSize,;
 
@@ -97,8 +98,13 @@ public class EGLHelper {
 
         //创建Context
         int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, mEGLContextClientVersion, EGL10.EGL_NONE};
-        mEglContext = mEgl.eglCreateContext(mEglDisplay, mEglConfig, EGL10.EGL_NO_CONTEXT,
-                mEGLContextClientVersion != 0 ? attrib_list : null);
+        if (eglContext != null) {
+            mEglContext = mEgl.eglCreateContext(mEglDisplay, mEglConfig, eglContext,
+                    mEGLContextClientVersion != 0 ? attrib_list : null);
+        } else {
+            mEglContext = mEgl.eglCreateContext(mEglDisplay, mEglConfig, EGL10.EGL_NO_CONTEXT,
+                    mEGLContextClientVersion != 0 ? attrib_list : null);
+        }
         if (mEglContext == null || mEglContext == EGL10.EGL_NO_CONTEXT) {
             mEglContext = null;
             throw new RuntimeException("createContext");
@@ -175,6 +181,13 @@ public class EGLHelper {
         this.surfaceType = type;
         if (obj != null) {
             this.surface_native_obj = obj[0];
+        }
+    }
+
+    // 定义创建的EGLContext的类型
+    public void setEGLContext(EGLContext... context) {
+        if (context != null) {
+            this.eglContext = context[0];
         }
     }
 

@@ -3,7 +3,7 @@ EGL使用步骤：
 	1.取得EGL实例
 	2.选择Display
 	3.选择Config
-	4.创建Context
+	4.创建Context (传入同一个EGLContext，能够实现数据共享，后面的共享前面的FBO的数据)
 	5.创建Surface
 	6.指定当前的环境为绘制环境
 	7.创建GL

@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.opengles.book.es2_0.camera.camera.KitkatCamera;
 
@@ -52,6 +53,7 @@ public class CameraGlSurfaceView extends GLSurfaceView implements GLSurfaceView.
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         mCamera = new KitkatCamera();
         mRenderer = new CameraRenderer(getResources());
+        mRenderer.setContext(getContext());
     }
 
     @Override
@@ -97,6 +99,7 @@ public class CameraGlSurfaceView extends GLSurfaceView implements GLSurfaceView.
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        Log.d("123", "onSurfaceChanged: ");
         mRenderer.setViewSize(width, height);
         GLES20.glViewport(0, 0, width, height);
     }

@@ -70,3 +70,70 @@
 		GLES20.glActiveTexture(GLES20.GL_TEXTURE0+getTextureType()); // 激活纹理单元0
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,getTextureId()); //绑定2D纹理
         GLES20.glUniform1i(mHTexture,getTextureType()); //将纹理设置给Shader
+
+
+##################################################################################################
+ 优化：
+        1> 加入VBO,FBO缓存优化
+        2> 横竖屏适配
+    （流程： 相机录制-->  camera.setPreviewTexture(surfaceTexture)-->
+                                     surfaceTexture.setOnFrameAvailableListener-->
+                                     SurfaceTexture surfaceTexture = new SurfaceTexture(cameraTextureid)-->
+                                     cameraTextureid-->
+                                     GL_TEXTURE_EXTERNAL_OES-->
+                                     FBO( GL_TEXTURE_2D)-->
+                                     在根据FBO里面的GL_TEXTURE_2D的textureId直接绘制出来）
+        1>
+       onSurfaceCreated 新增：
+            VBO 缓存顶点，像素点，并在onDrawFrame里面使用，
+            创建2个texture,一个是简单的纹理GL_TEXTURE_2D，用于在FBO里面，一个是相机的纹理GL_TEXTURE_EXTERNAL_OES，用于相机绘制的纹理到里面去，
+        2> 自己尝试适配横竖屏即可，录制直接设置满屏录制， 在FBO缓存texture与纹理相机时候的宽高，直接设置屏幕宽高，真正绘制时候的宽高是根据onSurfaceChanged去设置即可
+        （此处有2个不同的宽高，固有不同之处）
+        calculateMatrix在初始化和activity里面的onConfigurationChanged中调用：
+       （activity的xml里面设置 ：  android:configChanges="orientation|keyboardHidden|screenSize" ）
+          private void calculateMatrix(Context context) {
+                // 重置matrix
+                Matrix.setIdentityM(matrix, 0);
+
+                int angle = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+                switch (angle) {
+                    case Surface.ROTATION_0:
+                        Log.d("123", "0");
+                        if (cameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            Matrix.rotateM(matrix,0,90, 0, 0, 1);
+                            Matrix.rotateM(matrix,0,180, 1, 0, 0);
+                        } else {
+                            Matrix.rotateM(matrix,0,90f, 0f, 0f, 1f);
+                        }
+
+                        break;
+                    case Surface.ROTATION_90:
+                        Log.d("123", "90");
+                        if (cameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            Matrix.rotateM(matrix,0,180, 0, 0, 1);
+                            Matrix.rotateM(matrix,0,180, 0, 1, 0);
+                        } else {
+                            Matrix.rotateM(matrix,0,90f, 0f, 0f, 1f);
+                        }
+                        break;
+                    case Surface.ROTATION_180:
+                        Log.d("123", "180");
+                        if (cameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            Matrix.rotateM(matrix,0,90f, 0.0f, 0f, 1f);
+                            Matrix.rotateM(matrix,0,180f, 0.0f, 1f, 0f);
+                        } else {
+                            Matrix.rotateM(matrix,0,-90, 0f, 0f, 1f);
+                        }
+                        break;
+                    case Surface.ROTATION_270:
+                        Log.d("123", "270");
+                        if (cameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
+                            Matrix.rotateM(matrix,0,180f, 0.0f, 1f, 0f);
+                        } else {
+                            Matrix.rotateM(matrix,0,0f, 0f, 0f, 1f);
+                        }
+                        break;
+                }
+                mOesFilter.setMatrix(matrix);
+            }
+
