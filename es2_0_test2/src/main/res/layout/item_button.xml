@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="14sp"
+    android:textAllCaps="false"
+    android:textColor="#FF2B2B2B"
+    android:id="@+id/mBtn"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

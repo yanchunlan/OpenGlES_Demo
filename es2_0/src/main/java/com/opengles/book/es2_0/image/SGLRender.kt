@@ -26,7 +26,7 @@ class SGLRender : GLSurfaceView.Renderer, AnkoLogger {
     private var refreshFlag = false
 
     constructor(c: Context) {
-        aFilter = ContrastColorFilter(c, Filter.NONE)
+        aFilter = ContrastColorFilter(c, Filter.NONE) as AFilter?
     }
 
     // 调用一次之后就会调用所有具体类的所有方法

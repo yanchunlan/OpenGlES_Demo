@@ -1,4 +1,4 @@
-package com.opengles.book.es2_0_test2.egl;
+package com.opengles.book.es2_0_test2.utils;
 
 import android.util.Log;
 import android.view.Surface;
@@ -20,7 +20,11 @@ public class EglHelper {
     private EGLContext mEglContext;
     private EGLSurface mEglSurface;
 
-    public void initEgl(Surface surface, EGLContext eglContext) {
+    private int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
+    private int mEGLContextClientVersion = 2;// 默认是2.0版本
+
+
+    public void initEgl(Surface surface, EGLContext eglContext ) {
         //取得EGL实例
         mEgl = (EGL10) EGLContext.getEGL();
 
@@ -60,10 +64,11 @@ public class EglHelper {
         }
 
         //创建Context
+        int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, mEGLContextClientVersion, EGL10.EGL_NONE};
         if (eglContext != null) {
-            mEglContext = mEgl.eglCreateContext(mEglDisplay, configs[0], eglContext, null);
+            mEglContext = mEgl.eglCreateContext(mEglDisplay, configs[0], eglContext, attrib_list);
         } else {
-            mEglContext = mEgl.eglCreateContext(mEglDisplay, configs[0], EGL10.EGL_NO_CONTEXT, null);
+            mEglContext = mEgl.eglCreateContext(mEglDisplay, configs[0], EGL10.EGL_NO_CONTEXT, attrib_list);
         }
         if (mEglContext == null || mEglContext == EGL10.EGL_NO_CONTEXT) {
             mEglContext = null;
@@ -71,7 +76,11 @@ public class EglHelper {
         }
 
         //创建Surface
-        mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay, configs[0], surface, num_config);
+        if (surface == null) {
+            mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay, configs[0], surface, null);
+        } else {
+            mEglSurface = mEgl.eglCreateWindowSurface(mEglDisplay, configs[0], surface, null);
+        }
         if (mEglSurface == null || mEglSurface == EGL10.EGL_NO_SURFACE) {
             int error = mEgl.eglGetError();
             if (error == EGL10.EGL_BAD_NATIVE_WINDOW) {
