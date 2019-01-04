@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".muti.MutiActivity">
+    android:orientation="vertical"
+    tools:context=".muti.MutiActivity"
+    tools:ignore="MissingDefaultResource">
+    <com.opengles.book.es2_0_test2.muti.surface.MyGLSurfaceView
+        android:id="@+id/myglsurfaceviw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/my_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal" />
+
+</LinearLayout>

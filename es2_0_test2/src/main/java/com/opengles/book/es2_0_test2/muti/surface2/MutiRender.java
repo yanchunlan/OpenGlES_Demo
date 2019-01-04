@@ -1,17 +1,14 @@
-package com.opengles.book.es2_0_test2.muti.surface;
+package com.opengles.book.es2_0_test2.muti.surface2;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
-import android.util.Log;
 
 import com.opengles.book.es2_0_test2.R;
 import com.opengles.book.es2_0_test2.eglUtils.EglSurfaceView;
 import com.opengles.book.es2_0_test2.utils.BufferUtils;
 import com.opengles.book.es2_0_test2.utils.EasyGlUtils;
-import com.opengles.book.es2_0_test2.utils.MatrixUtils;
 import com.opengles.book.es2_0_test2.utils.ShaderUtils;
 import com.opengles.book.es2_0_test2.utils.TextureUtils;
 
@@ -22,8 +19,7 @@ import java.nio.FloatBuffer;
  * date: 2019-01-04 10:57
  * desc:
  */
-public class MyRender implements EglSurfaceView.EglRenderer {
-    private static final String TAG = "MyRender";
+public class MutiRender implements EglSurfaceView.EglRenderer {
     private Context context;
     private float[] vertexData = {
             -1f, -1f,
@@ -31,10 +27,9 @@ public class MyRender implements EglSurfaceView.EglRenderer {
             -1f, 1f,
             1f, 1f,
 
-            -0.5f, -0.5f,
-            0.5f, -0.5f,
-            -0.5f, 0.5f,
-            0.5f, 0.5f
+            -0.25f, -0.25f,
+            0.25f, -0.25f,
+            0f, 0.15f
 
     };
     private FloatBuffer vertexBuffer;
@@ -52,98 +47,76 @@ public class MyRender implements EglSurfaceView.EglRenderer {
     private int program;
     private int vPosition;
     private int fPosition;
-    private int textureid;
     private int sampler;
 
-    private int umatrix;
-    private float[] matrix = new float[16];
 
     private int vboId;
-    private int fboId;
 
-    private int imgTextureId;
-    private int imgTextureId2;
+    private int textureId;
+    private int migTextureId;
 
-    private int width;
-    private int height;
-
-    private int imgWidth;
-    private int imgHeight;
-
-    private MyTextureRender mTextureRender;
-    private OnRenderCreateListener onRenderCreateListener;
+    private int index;
 
 
-    public MyRender(Context context) {
+    public MutiRender(Context context) {
         this.context = context;
-        mTextureRender = new MyTextureRender(context);
-
         vertexBuffer = BufferUtils.arr2FloatBuffer(vertexData);
         fragmentBuffer = BufferUtils.arr2FloatBuffer(fragmentData);
     }
 
+
+    public void setTextureId(int textureId, int index) {
+        this.textureId = textureId;
+        this.index = index;
+    }
+
+
     @Override
     public void onSurfaceCreated() {
-        mTextureRender.onCreate();
+        String fragmentSource;
+        if (index == 0) {
+            fragmentSource = ShaderUtils.readRawTextFile(context, R.raw.fragment_shader1);
+        } else if (index == 1) {
+            fragmentSource = ShaderUtils.readRawTextFile(context, R.raw.fragment_shader2);
+        } else if (index == 2) {
+            fragmentSource = ShaderUtils.readRawTextFile(context, R.raw.fragment_shader3);
+        } else {
+            fragmentSource = ShaderUtils.readRawTextFile(context, R.raw.fragment_shader);
+        }
 
-        program = ShaderUtils.createProgram(ShaderUtils.readRawTextFile(context, R.raw.vertex_shader_m),
-                ShaderUtils.readRawTextFile(context, R.raw.fragment_shader));
+
+        program = ShaderUtils.createProgram(ShaderUtils.readRawTextFile(context, R.raw.vertex_shader), fragmentSource);
 
         vPosition = GLES20.glGetAttribLocation(program, "v_Position");
         fPosition = GLES20.glGetAttribLocation(program, "f_Position");
         sampler = GLES20.glGetUniformLocation(program, "sTexture");
-        umatrix = GLES20.glGetUniformLocation(program, "u_Matrix");
 
         vboId = EasyGlUtils.getVboId(vertexData, fragmentData, vertexBuffer, fragmentBuffer);
-        // 缓冲区
-        textureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, 720, 1280)[0];
 
-        // 激活一个通道，绘制图片即可
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glUniform1i(sampler, 0);
-
-
-        fboId = EasyGlUtils.getFboId(textureid);
-
-
+        // 最小空间的图片
         Bitmap b = BitmapFactory.decodeResource(context.getResources(), R.drawable.muti);
-        imgWidth = b.getWidth();
-        imgHeight = b.getHeight();
-
-        imgTextureId = TextureUtils.genTexturesWithParameter(1, 0, b)[0];
-        imgTextureId2 = TextureUtils.genTexturesWithParameter(1, 0, b)[0];
-
-        if (onRenderCreateListener != null) {
-            onRenderCreateListener.onCreate(textureid);
-        }
+        migTextureId = TextureUtils.genTexturesWithParameter(1, 0, b)[0];
     }
 
     @Override
     public void onSurfaceChanged(int width, int height) {
-        this.width = width;
-        this.height = height;
-
-        Log.d(TAG, "onSurfaceChanged:width " + width + " height " + height + " imgWidth " + imgWidth + " imgHeight " + imgHeight);
-        MatrixUtils.getCenterMatrix(matrix, imgWidth, imgHeight, 720f, 1280f);
-        Matrix.rotateM(matrix, 0, 180, 1, 0, 0);
+        GLES20.glViewport(0, 0, width, height);
     }
 
     @Override
     public void onDrawFrame() {
-
-        GLES20.glViewport(0, 0, 720, 1280);
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glClearColor(1f, 0f, 0f, 1f);
 
+
+
         GLES20.glUseProgram(program);
-        GLES20.glUniformMatrix4fv(umatrix, 1, false, matrix, 0);
 
         // 顶点缓冲
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboId);
 
         //绘制第一张图片
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imgTextureId);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 
         GLES20.glEnableVertexAttribArray(vPosition);
         GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
@@ -154,14 +127,14 @@ public class MyRender implements EglSurfaceView.EglRenderer {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
         //绘制第二张图片
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imgTextureId2);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, migTextureId);
         GLES20.glEnableVertexAttribArray(vPosition);
         GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
-                vertexData.length / 2 * 4);
+                8 * 4);
         GLES20.glEnableVertexAttribArray(fPosition);
         GLES20.glVertexAttribPointer(fPosition, 2, GLES20.GL_FLOAT, false, 8,
                 vertexData.length * 4);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 3); // 3个点
 
 
         GLES20.glDisableVertexAttribArray(vPosition);
@@ -170,20 +143,5 @@ public class MyRender implements EglSurfaceView.EglRenderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0); // 解绑texture
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-
-
-        // 真实图片绘制
-        mTextureRender.onChange(width, height);
-        mTextureRender.onDraw(textureid);
-    }
-
-
-    public void setOnRenderCreateListener(OnRenderCreateListener onRenderCreateListener) {
-        this.onRenderCreateListener = onRenderCreateListener;
-    }
-
-    public interface OnRenderCreateListener {
-        void onCreate(int textureId);
     }
 }

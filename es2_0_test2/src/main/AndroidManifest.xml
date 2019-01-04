@@ -18,7 +18,7 @@
         <activity android:name=".egl.EGLActivity" />
         <activity android:name=".ES2p0_test2_MainActivity" />
         <activity android:name=".surfaceview.SurfaceViewActivity" />
-        <activity android:name=".muti.MutiActivity"></activity>
+        <activity android:name=".muti.MutiActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

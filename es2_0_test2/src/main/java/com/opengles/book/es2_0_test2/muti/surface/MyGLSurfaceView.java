@@ -11,17 +11,26 @@ import com.opengles.book.es2_0_test2.eglUtils.EglSurfaceView;
  * desc:
  */
 public class MyGLSurfaceView extends EglSurfaceView {
+    private MyRender mMyRender;
+
     public MyGLSurfaceView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public MyGLSurfaceView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public MyGLSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setRenderer(new MyRender(context));
-        setRenderMode(EglSurfaceView.RENDERMODE_WHEN_DIRTY);
+        mMyRender = new MyRender(context);
+        setRenderer(mMyRender);
+        setRenderMode(EglSurfaceView.RENDERMODE_CONTINUOUSLY);
+    }
+
+    public void setOnRenderCreateListener(MyRender.OnRenderCreateListener onRenderCreateListener) {
+        if (mMyRender != null) {
+            mMyRender.setOnRenderCreateListener(onRenderCreateListener);
+        }
     }
 }

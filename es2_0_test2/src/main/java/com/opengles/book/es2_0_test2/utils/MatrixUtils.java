@@ -110,6 +110,19 @@ public enum MatrixUtils {
         }
     }
 
+    public static void getCenterMatrix(float[] matrix, int imgWidth, int imgHeight, float viewWidth, float
+            viewHeight) {
+        if (viewWidth > viewHeight) {
+            Matrix.orthoM(matrix, 0,
+                    -viewWidth / ((viewHeight / imgHeight) * imgWidth), viewWidth / ((viewHeight / imgHeight) * imgWidth),
+                    -1f, 1f, -1f, 1f);
+        } else {
+            Matrix.orthoM(matrix, 0, -1, 1,
+                    -viewHeight / ((viewWidth / imgWidth) * imgHeight), viewHeight / ((viewWidth / imgWidth) * imgHeight),
+                    -1f, 1f);
+        }
+    }
+
     public static float[] rotate(float[] m, float angle) {
         Matrix.rotateM(m, 0, angle, 0, 0, 1);
         return m;

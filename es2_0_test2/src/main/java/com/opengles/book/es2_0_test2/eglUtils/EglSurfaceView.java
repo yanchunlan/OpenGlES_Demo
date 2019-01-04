@@ -65,7 +65,7 @@ public abstract class EglSurfaceView extends SurfaceView implements SurfaceHolde
     public void surfaceDestroyed(SurfaceHolder holder) {
         mEglThread.onDestroy();
         mEglThread = null;
-        mRenderer = null;
+//        mRenderer = null;  // render不要释放，因为退出后台，重建的时候，后面还需要render
         surface = null;
         eglContext = null;
     }
