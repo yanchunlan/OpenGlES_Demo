@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import com.opengles.book.es2_0_test2.camera.CameraActivity
 import com.opengles.book.es2_0_test2.egl.EGLActivity
+import com.opengles.book.es2_0_test2.encodec.EncodecActivity
 import com.opengles.book.es2_0_test2.main.MenuAdapter
 import com.opengles.book.es2_0_test2.main.MenuBean
 import com.opengles.book.es2_0_test2.muti.MutiActivity
@@ -37,6 +39,8 @@ class ES2p0_test2_MainActivity : AppCompatActivity() {
             add(MenuBean("EGL", EGLActivity::class.java))
             add(MenuBean("SurfaceView", SurfaceViewActivity::class.java))
             add(MenuBean("多SurfaceView多texture绘制图片", MutiActivity::class.java))
+            add(MenuBean("摄像头预览", CameraActivity::class.java))
+            add(MenuBean("视频编码录制", EncodecActivity::class.java))
         }
     }
 }
