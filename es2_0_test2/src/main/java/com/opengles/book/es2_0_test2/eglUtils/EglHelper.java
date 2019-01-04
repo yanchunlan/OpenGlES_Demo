@@ -1,4 +1,4 @@
-package com.opengles.book.es2_0_test2.utils;
+package com.opengles.book.es2_0_test2.eglUtils;
 
 import android.util.Log;
 import android.view.Surface;

@@ -7,8 +7,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.opengles.book.es2_0_test2.R;
-import com.opengles.book.es2_0_test2.utils.EglSurfaceView;
+import com.opengles.book.es2_0_test2.eglUtils.EglSurfaceView;
 
 public class SurfaceViewActivity extends AppCompatActivity {
 

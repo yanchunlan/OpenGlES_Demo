@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.opengles.book.es2_0_test2.utils.EglHelper;
+import com.opengles.book.es2_0_test2.eglUtils.EglHelper;
 
 public class EGLActivity extends AppCompatActivity {
 
