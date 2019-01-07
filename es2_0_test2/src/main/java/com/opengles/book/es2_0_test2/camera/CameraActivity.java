@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.opengles.book.es2_0_test2.R;
@@ -29,8 +31,21 @@ public class CameraActivity extends AppCompatActivity {
     private Runnable okRunnable = new Runnable() {
         @Override
         public void run() {
-            setContentView(R.layout.activity_camera);
-            mCameraSurfaceView = findViewById(R.id.cameraSurfaceView);
+            FrameLayout f = new FrameLayout(CameraActivity.this);
+            f.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            ));
+
+            mCameraSurfaceView = new CameraSurfaceView(CameraActivity.this);
+            // 假设宽高用于适配
+            f.setLayoutParams(new FrameLayout.LayoutParams(
+                    360,
+                    640
+            ));
+
+            f.addView(mCameraSurfaceView);
+            setContentView(f);
         }
     };
 

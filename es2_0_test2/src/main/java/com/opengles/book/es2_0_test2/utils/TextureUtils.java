@@ -1,8 +1,11 @@
 package com.opengles.book.es2_0_test2.utils;
 
 import android.graphics.Bitmap;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+
+import java.nio.ByteBuffer;
 
 /**
  * author:  ycl
@@ -22,6 +25,17 @@ public class TextureUtils {
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         //设置环绕方向T，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+    }
+
+    public static void useOESTexParameter() {
+        //设置缩小过滤为使用纹理中坐标最接近的一个像素的颜色作为需要绘制的像素颜色
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        //设置放大过滤为使用纹理中坐标最接近的若干个颜色，通过加权平均算法得到需要绘制的像素颜色
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        //设置环绕方向S，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        //设置环绕方向T，截取纹理坐标到[1/2n,1-1/2n]。将导致永远不会与border融合
+        GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
     }
 
     public static void useTexParameter(int gl_wrap_s, int gl_wrap_t, int gl_min_filter,
@@ -44,7 +58,7 @@ public class TextureUtils {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
     }
 
-    public static int[] genTexturesWithParameter(int size , int start,
+    public static int[] genTexturesWithParameter(int size, int start,
                                                  int gl_format, int width, int height) {
         int[] textures = new int[size];
         GLES20.glGenTextures(size, textures, start);
@@ -74,14 +88,39 @@ public class TextureUtils {
         int[] texture = new int[size];
         GLES20.glGenTextures(size, texture, start);
         for (int i = 0; i < size; i++) {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
+            useTexParameter();
             if (bitmap[i] != null && !bitmap[i].isRecycled()) {
-                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
-                useTexParameter();
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap[i], 0);
             }
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         }
         return texture;
+    }
+
+    public static int[] genTexturesWithParameter(int size, int start,
+                                                 int gl_format, int width, int height, ByteBuffer... buffers) {
+        int[] texture = new int[size];
+        GLES20.glGenTextures(size, texture, start);
+        for (int i = 0; i < size; i++) {
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
+            useTexParameter();
+            if (buffers[i] != null && buffers[i].hasArray()) {
+                GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, gl_format, width, height,
+                        0, gl_format, GLES20.GL_UNSIGNED_BYTE, buffers[i]);
+            }
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        }
+        return texture;
+    }
+
+    public static int genOESTexturesWithParameter(int start) {
+        int[] texture = new int[1];
+        GLES20.glGenTextures(1, texture, start);
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, texture[0]);
+        useOESTexParameter();
+        GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
+        return texture[0];
     }
 
 

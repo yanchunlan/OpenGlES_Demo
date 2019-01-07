@@ -14,14 +14,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <application android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+    <application>
         <activity android:name=".egl.EGLActivity" />
         <activity android:name=".ES2p0_test2_MainActivity" />
         <activity android:name=".surfaceview.SurfaceViewActivity" />
-        <activity android:name=".muti.MutiActivity" />
-        <activity android:name=".camera.CameraActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity android:name=".encodec.EncodecActivity"/>
+        <activity
+            android:name=".muti.MutiActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".camera.CameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".encodec.EncodecActivity" />
     </application>
 
 </manifest>

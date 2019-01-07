@@ -14,30 +14,31 @@ import java.nio.FloatBuffer;
  * author:  ycl
  * date:  2019/1/4 14:53
  * desc:  需要顶点，像素位置存储 从fbo里面获取的真实图片的真实的数据
+ *       也需要简单的2d 顶点，像素创造的program
  */
 public class MyTextureRender {
 
     private Context context;
 
-    private float[] vertexData = {
+    protected float[] vertexData = {
             -1f, -1f,
             1f, -1f,
             -1f, 1f,
             1f, 1f
     };
-    private FloatBuffer vertexBuffer;
+    protected FloatBuffer vertexBuffer;
 
-    private float[] fragmentData = {
+    protected float[] fragmentData = {
             0f, 1f,
             1f, 1f,
             0f, 0f,
             1f, 0f
     };
-    private FloatBuffer fragmentBuffer;
+    protected FloatBuffer fragmentBuffer;
 
     private int program;
-    private int vPosition;
-    private int fPosition;
+    protected int vPosition;
+    protected int fPosition;
     private int textureid;
     private int sampler;
 
@@ -46,6 +47,10 @@ public class MyTextureRender {
 
     public MyTextureRender(Context context) {
         this.context = context;
+        initBuffer();
+    }
+
+    protected void initBuffer() {
         vertexBuffer = BufferUtils.arr2FloatBuffer(vertexData);
         fragmentBuffer = BufferUtils.arr2FloatBuffer(fragmentData);
     }
@@ -74,17 +79,23 @@ public class MyTextureRender {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboId);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 
+        // 绘制fbo的纹理
         GLES20.glEnableVertexAttribArray(vPosition);
         GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
                 0);
-
         GLES20.glEnableVertexAttribArray(fPosition);
         GLES20.glVertexAttribPointer(fPosition, 2, GLES20.GL_FLOAT, false, 8,
                 vertexData.length * 4);
-
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+
+        onDrawExp();
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+    }
+
+    protected void onDrawExp() {
+
     }
 }
