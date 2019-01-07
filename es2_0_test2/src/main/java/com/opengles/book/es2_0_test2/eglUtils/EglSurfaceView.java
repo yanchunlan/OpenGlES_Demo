@@ -14,7 +14,7 @@ import javax.microedition.khronos.egl.EGLContext;
 /**
  * author: ycl
  * date: 2018-12-24 23:28
- * desc:
+ * desc: 包含有surfaceView的生命周期的一个自定义的子类，类似于GlSurfaceView
  */
 public abstract class EglSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "EglSurfaceView";

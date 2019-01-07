@@ -39,8 +39,8 @@ class ES2p0_test2_MainActivity : AppCompatActivity() {
             add(MenuBean("EGL环境搭建", EGLActivity::class.java))
             add(MenuBean("SurfaceView自定义", SurfaceViewActivity::class.java))
             add(MenuBean("多SurfaceView多texture绘制图片", MutiActivity::class.java))
-            add(MenuBean("摄像头预览+方向视频+文字水印", CameraActivity::class.java))
-            add(MenuBean("视频编码录制", EncodecActivity::class.java))
+            add(MenuBean("摄像头预览+方向适配+文字水印", CameraActivity::class.java))
+            add(MenuBean("视频编码录制+音乐裁剪合成 mp4", EncodecActivity::class.java))
         }
     }
 }

@@ -16,13 +16,15 @@ import com.opengles.book.es2_0_test2.utils.PermissionUtils;
 public class CameraActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISSIONS = 1001;
 
-    private CameraSurfaceView mCameraSurfaceView;
+    protected CameraSurfaceView mCameraSurfaceView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PermissionUtils.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
                         Manifest.permission.CAMERA},
                 REQUEST_CODE_PERMISSIONS,
                 okRunnable);
@@ -39,16 +41,20 @@ public class CameraActivity extends AppCompatActivity {
 
             mCameraSurfaceView = new CameraSurfaceView(CameraActivity.this);
             // 假设宽高用于适配
-            f.setLayoutParams(new FrameLayout.LayoutParams(
-                    360,
+            mCameraSurfaceView.setLayoutParams(new FrameLayout.LayoutParams(
+                    360  , // px
                     640
             ));
 
             f.addView(mCameraSurfaceView);
+            addContentView(f); // 子类继续实现需要的效果
             setContentView(f);
         }
     };
 
+    protected void addContentView(FrameLayout f ) {
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -68,12 +74,16 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCameraSurfaceView.onDestroy();
+        if (mCameraSurfaceView != null) {
+            mCameraSurfaceView.onDestroy();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mCameraSurfaceView.previewAngle(this);
+        if (mCameraSurfaceView != null) {
+            mCameraSurfaceView.previewAngle(this);
+        }
     }
 }
