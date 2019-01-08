@@ -77,6 +77,8 @@ public class MyTextureRender {
         GLES20.glUseProgram(program);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboId);
+
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0); // 需要激活通道，因为前面用了3个通道，全部都用一个，会拥堵通道
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 
         // 绘制fbo的纹理

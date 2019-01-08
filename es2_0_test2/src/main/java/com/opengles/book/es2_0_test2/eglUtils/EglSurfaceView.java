@@ -139,7 +139,7 @@ public abstract class EglSurfaceView extends SurfaceView implements SurfaceHolde
                 }
 
                 if (isStart) {
-                    Log.d(TAG, "run: "+eglSurfaceViewWeakReference.get().mRenderMode);
+                    Log.d(TAG, "run: renderMode： "+eglSurfaceViewWeakReference.get().mRenderMode);
                     if (eglSurfaceViewWeakReference.get().mRenderMode == RENDERMODE_WHEN_DIRTY) {
                         // 一次就堵塞
                         synchronized (object) {

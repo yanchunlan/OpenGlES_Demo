@@ -90,7 +90,7 @@ public class TextureUtils {
         for (int i = 0; i < size; i++) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture[i]);
             useTexParameter();
-            if (bitmap[i] != null && !bitmap[i].isRecycled()) {
+            if (bitmap != null && bitmap.length > 0 && bitmap[i] != null && !bitmap[i].isRecycled()) {
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap[i], 0);
             }
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
