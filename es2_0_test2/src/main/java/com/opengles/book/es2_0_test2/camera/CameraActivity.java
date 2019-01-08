@@ -24,7 +24,6 @@ public class CameraActivity extends AppCompatActivity {
         PermissionUtils.requestPermissions(this,
                 new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
                         Manifest.permission.CAMERA},
                 REQUEST_CODE_PERMISSIONS,
                 okRunnable);

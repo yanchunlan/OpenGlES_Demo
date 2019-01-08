@@ -27,13 +27,17 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mSurfaceView.onResume();
+        if (mSurfaceView != null) {
+            mSurfaceView.onResume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSurfaceView.onPause();
+        if (mSurfaceView != null) {
+            mSurfaceView.onPause();
+        }
     }
 
     @Override
