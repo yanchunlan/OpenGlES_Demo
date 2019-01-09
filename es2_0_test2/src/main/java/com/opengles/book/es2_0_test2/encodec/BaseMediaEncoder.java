@@ -306,6 +306,7 @@ public abstract class BaseMediaEncoder {
                     break;
                 }
                 // 开始编码
+                //  java.lang.IllegalStateException
                 int outputBufferIndex = audioEncodec.dequeueOutputBuffer(audioBufferInfo, 0);
                 if (outputBufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) { // 开始合成
                     if (mediaMuxer != null) {

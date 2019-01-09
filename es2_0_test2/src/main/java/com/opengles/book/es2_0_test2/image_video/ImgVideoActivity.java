@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.opengles.book.es2_0_test2.BuildConfig;
 import com.opengles.book.es2_0_test2.R;
@@ -13,6 +14,9 @@ import com.opengles.book.es2_0_test2.encodec.MediaEncodec;
 import com.ywl5320.libmusic.WlMusic;
 import com.ywl5320.listener.OnPreparedListener;
 import com.ywl5320.listener.OnShowPcmDataListener;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ImgVideoActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,8 +52,19 @@ public class ImgVideoActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onPcmInfo(int samplerate, int bit, int channels) {
                 mediaEncodec = new MediaEncodec(ImgVideoActivity.this, mImgvideoview.getFbotextureid());
-                mediaEncodec.initEncodec(mImgvideoview.getEglContext(),
-                        Environment.getExternalStorageDirectory().getAbsolutePath() + "/wl_image_video.mp4",
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/image_video.mp4");
+                if (file.isFile() && !file.exists()) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (file == null) {
+                    return;
+                }
+
+                mediaEncodec.initEncodec(mImgvideoview.getEglContext(),file.getAbsolutePath(),
                         720, 500, samplerate, channels);
                 mediaEncodec.startRecord();
 
@@ -76,7 +91,13 @@ public class ImgVideoActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.btn_start) {
-            wlMusic.setSource(Environment.getExternalStorageDirectory().getAbsolutePath() + "/the girl.m4a");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/the girl.m4a");
+            if (!file.exists()) {
+                Toast.makeText(this, "声音文件不存在", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            wlMusic.setSource(file.getAbsolutePath());
             wlMusic.prePared();
         }
     }

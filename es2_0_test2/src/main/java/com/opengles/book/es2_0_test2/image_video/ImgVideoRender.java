@@ -106,8 +106,10 @@ public class ImgVideoRender implements EglSurfaceView.EglRenderer {
 
         Bitmap b = BitmapFactory.decodeResource(context.getResources(), srcImg);
         imgTextureId = TextureUtils.genTexturesWithParameter(1, 0, b)[0];
-        b.recycle();
-        b = null;
+        if (b != null && !b.isRecycled()) {
+            b.recycle();
+            b = null;
+        }
 
         Log.d(TAG, "id is : " + imgTextureId);
 
