@@ -53,8 +53,18 @@ OpenGlES for learn<br>
       相机处理
            利用OpenGLES完成Camera基本预览效果
            基于预览完成拍照，并增加水印功能
+   OpenGlES 2.0 test2 :<br>
+   
+          EGL环境搭建
+          SurfaceView自定义
+          多SurfaceView多texture绘制图片
+          摄像头预览+方向适配+文字水印
+          视频编码录制+音乐裁剪合成 mp4
+          图片合成视频
+          yvu视频数据纹理绘制
 
    ![](./pic/20181206105251.png)
    ![](./pic/20181206105332.png)
    ![](./pic/20181206105348.png)
    ![](./pic/20181206105402.png)
+   ![](./pic/20190110113605.png)
