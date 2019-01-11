@@ -7,12 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.opengles.book.es2_0_test2.camera.CameraActivity;
 import com.ywl5320.libmusic.WlMusic;
 import com.ywl5320.listener.OnCompleteListener;
 import com.ywl5320.listener.OnPreparedListener;
 import com.ywl5320.listener.OnShowPcmDataListener;
+
+import java.io.File;
+import java.io.IOException;
 
 public class EncodecActivity extends CameraActivity {
     private static final String TAG = "EncodecActivity";
@@ -43,6 +47,7 @@ public class EncodecActivity extends CameraActivity {
     }
 
     private void initListener() {
+        // 6.0以上手机貌似会奔溃
         wlMusic = WlMusic.getInstance();
         wlMusic.setCallBackPcmData(true);
         wlMusic.setOnPreparedListener(new OnPreparedListener() {
@@ -73,9 +78,19 @@ public class EncodecActivity extends CameraActivity {
             public void onPcmInfo(int samplerate, int bit, int channels) {
                 Log.d(TAG, "onPcmInfo: samplerate: " + samplerate + " bit: " + bit + " channels: " + channels);
                 Log.d(TAG, "onPcmInfo: textureId: " + mCameraSurfaceView.getTextureId());
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/live_pusher.mp4");
+                if (file.isFile() && !file.exists()) {
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (file == null) {
+                    return;
+                }
                 mediaEncodec = new MediaEncodec(EncodecActivity.this, mCameraSurfaceView.getTextureId());
-                mediaEncodec.initEncodec(mCameraSurfaceView.getEglContext(),
-                        Environment.getExternalStorageDirectory().getAbsolutePath() + "/live_pusher.mp4",
+                mediaEncodec.initEncodec(mCameraSurfaceView.getEglContext(),file.getAbsolutePath(),
                         720, 1280, samplerate, channels);
                 mediaEncodec.setOnMediaInfoListener(new BaseMediaEncoder.OnMediaInfoListener() {
                     @Override
@@ -99,7 +114,12 @@ public class EncodecActivity extends CameraActivity {
             @Override
             public void onClick(View v) {
                 if (mediaEncodec == null) {
-                    wlMusic.setSource(Environment.getExternalStorageDirectory().getAbsolutePath() + "/gebitaishang.mp3");
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/the girl.m4a");
+                    if (!file.exists()) {
+                        Toast.makeText(EncodecActivity.this, "声音文件不存在", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    wlMusic.setSource(file.getAbsolutePath());
                     wlMusic.prePared();
                     btn_Record.setText("正在录制");
                 } else {

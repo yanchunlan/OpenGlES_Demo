@@ -91,7 +91,7 @@ public class CameraRender implements EglSurfaceView.EglRenderer {
 
         vboId = EasyGlUtils.getVboId(vertexData, fragmentData, vertexBuffer, fragmentBuffer);
         // 缓冲区
-        fboTextureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, 720, 1280)[0];
+        fboTextureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, screenWidth, screenHeight)[0];
         fboId = EasyGlUtils.getFboId(fboTextureid);
 
         // 默认是激活了一个通道，绘制图片即可

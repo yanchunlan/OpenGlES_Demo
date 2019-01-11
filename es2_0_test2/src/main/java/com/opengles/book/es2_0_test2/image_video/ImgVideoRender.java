@@ -34,11 +34,10 @@ public class ImgVideoRender implements EglSurfaceView.EglRenderer {
     private FloatBuffer vertexBuffer;
 
     private float[] fragmentData = {
-            0f, 1f,
-            1f, 1f,
             0f, 0f,
-            1f, 0f
-
+            1f, 0f,
+            0f, 1f,
+            1f, 1f
     };
     private FloatBuffer fragmentBuffer;
 
@@ -80,8 +79,14 @@ public class ImgVideoRender implements EglSurfaceView.EglRenderer {
         fPosition = GLES20.glGetAttribLocation(program, "f_Position");
 
         vboId = EasyGlUtils.getVboId(vertexData, fragmentData, vertexBuffer, fragmentBuffer);
+    }
+
+    @Override
+    public void onSurfaceChanged(int width, int height) {
+
+        // ----------------- 因为需要确定textureID的宽高，所以在此执行 --------------
         // 缓冲区
-        textureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, 720, 1280)[0];
+        textureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, width, height)[0];
 
         // 激活一个通道，绘制图片即可
 //        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -93,14 +98,18 @@ public class ImgVideoRender implements EglSurfaceView.EglRenderer {
         if (onRenderCreateListener != null) {
             onRenderCreateListener.onCreate(textureid);
         }
-    }
+        // ----------------- 因为需要确定textureID的宽高，所以在此执行 --------------
 
-    @Override
-    public void onSurfaceChanged(int width, int height) {
+
         GLES20.glViewport(0, 0, width, height);
         mTextureRender.onChange(width, height);
     }
 
+
+    /**
+     * 在for循环快速循环，调用 requestRender ，此处存在掉帧问题，可能调用了，绘制还来不及绘制，就调用下一个去了，此处存在bug
+     *  暂时只是demo,暂时不解决问题
+     */
     @Override
     public void onDrawFrame() {
 
@@ -136,9 +145,7 @@ public class ImgVideoRender implements EglSurfaceView.EglRenderer {
 
         GLES20.glDisableVertexAttribArray(vPosition);
         GLES20.glDisableVertexAttribArray(fPosition);
-
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0); // 解绑texture
-
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 

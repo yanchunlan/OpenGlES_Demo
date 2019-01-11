@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.opengles.book.es2_0_test2.R;
 
@@ -37,12 +38,17 @@ public class YuvActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.btn_start) {
+            final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sintel_640_360.yuv");
+            if (!file.exists()) {
+                Toast.makeText(this, "yuv文件不存在", Toast.LENGTH_SHORT).show();
+                return;
+            }
             AsyncTask.SERIAL_EXECUTOR.execute(new Runnable() {
                 @Override
                 public void run() {
 
                     try {
-                        FileInputStream fis = new FileInputStream(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sintel_640_360.yuv"));
+                        FileInputStream fis = new FileInputStream(file);
                         int w = 640;
                         int h = 360;
                         byte[] y = new byte[w * h];

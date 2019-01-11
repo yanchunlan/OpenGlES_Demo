@@ -100,13 +100,17 @@ public class YuvRender implements EglSurfaceView.EglRenderer {
         // yuv纹理 只设置3个纹理，但是没有绑定数据，宽高
         texture_yuv = TextureUtils.genTexturesWithParameter(3, 0);
 
-        // 缓冲区
-        textureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, 640, 360)[0];
-        fboId = EasyGlUtils.getFboId(textureid);
+
     }
 
     @Override
     public void onSurfaceChanged(int width, int height) {
+        // -------------------  控制宽高与显示空间一致  ----------------------
+        // 缓冲区
+        textureid = TextureUtils.genTexturesWithParameter(1, 0, GLES20.GL_RGBA, width, height)[0];
+        fboId = EasyGlUtils.getFboId(textureid);
+        // -------------------  控制宽高与显示空间一致  ----------------------
+
         // 用了fbo ,纹理需要x旋转180
         Matrix.rotateM(matrix, 0, 180f, 1, 0, 0);
 
@@ -116,9 +120,9 @@ public class YuvRender implements EglSurfaceView.EglRenderer {
 
     @Override
     public void onDrawFrame() {
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glClearColor(1f, 0f, 0f, 1f);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);
 
         if (w > 0 && h > 0 && y != null && u != null && v != null) {
             GLES20.glUseProgram(program);

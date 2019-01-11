@@ -140,6 +140,11 @@ public abstract class BaseMediaEncoder {
         }
     }
 
+
+    /**
+     * 此处同时停止视频的同时停止了音频，就导致了音频实际上可能并不是视频指定的时间，此处如果需要根据精确
+     * 就需要自己做音频大小判断，裁剪指定的音频大小再一起合成
+     */
     public void stopRecord() {
         if (eglMediaThread != null && videoEncodecThread != null && audioEncodecThread != null) {
             videoEncodecThread.exit();
@@ -181,8 +186,8 @@ public abstract class BaseMediaEncoder {
             videoTrackIndex = -1;
             pts = 0;
             isExit = false;
-            videoEncodec.start();
 
+            videoEncodec.start();// 开启编码
             while (true) {
                 if (isExit) {
                     videoEncodec.stop();
@@ -200,6 +205,7 @@ public abstract class BaseMediaEncoder {
                 }
                 // 开始编码
                 int outputBufferIndex = videoEncodec.dequeueOutputBuffer(videoBufferInfo, 0);
+                Log.d(TAG, "run: outputBufferIndex: "+outputBufferIndex);
                 if (outputBufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) { // 开始合成
                     if (mediaMuxer != null) {
                         videoTrackIndex = mediaMuxer.addTrack(videoEncodec.getOutputFormat());
@@ -215,9 +221,11 @@ public abstract class BaseMediaEncoder {
                             outputBuffer.position(videoBufferInfo.offset);
                             outputBuffer.limit(videoBufferInfo.offset + videoBufferInfo.size);
 
+                            // 如果==0,就代表没值，不处理它
                             if (pts == 0) {
                                 pts = videoBufferInfo.presentationTimeUs;
                             }
+                            Log.d(TAG, "run: video: pts: "+pts+" before  presentationTimeUs: "+videoBufferInfo.presentationTimeUs);
                             videoBufferInfo.presentationTimeUs = videoBufferInfo.presentationTimeUs - pts;
                             Log.d(TAG, "run: video: pts: "+pts+" presentationTimeUs: "+videoBufferInfo.presentationTimeUs);
                             mediaMuxer.writeSampleData(videoTrackIndex, outputBuffer, videoBufferInfo);
@@ -259,7 +267,9 @@ public abstract class BaseMediaEncoder {
     }
 
     private long getAudioPts(int size, int sampleRate) {
-        audioPts += (1.0 * size / (sampleRate * 2 * 2) * 1000000.0);
+        audioPts += (long)(1.00 * size / (sampleRate * 2 * 2) * 1000000.00);
+        // 时间=大小/44100*2通道*byte单位2
+        // 总时间，所以后面直接累加时间是累加的，因为此处直接四舍五人了，所以时间精度有丢失，与真实时间是有点误差的
         return audioPts;
     }
 
@@ -290,6 +300,8 @@ public abstract class BaseMediaEncoder {
             audioTrackIndex = -1;
             pts = 0;
             isExit = false;
+
+            audioEncodec.start(); // 开启编码
             while (true) {
                 if (isExit) {
                     audioEncodec.stop();
@@ -306,8 +318,9 @@ public abstract class BaseMediaEncoder {
                     break;
                 }
                 // 开始编码
-                //  java.lang.IllegalStateException
+                //  java.lang.IllegalStateException  主要是因为 audioEncodec.start 未执行
                 int outputBufferIndex = audioEncodec.dequeueOutputBuffer(audioBufferInfo, 0);
+                Log.d(TAG, "run: outputBufferIndex: "+outputBufferIndex);
                 if (outputBufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) { // 开始合成
                     if (mediaMuxer != null) {
                         audioTrackIndex = mediaMuxer.addTrack(audioEncodec.getOutputFormat());
@@ -326,8 +339,10 @@ public abstract class BaseMediaEncoder {
                             if (pts == 0) {
                                 pts = audioBufferInfo.presentationTimeUs;
                             }
+                            // 发现传入数据的时间，与此处赋值的时间不一致
+                            Log.d(TAG, "run: audio: pts: "+pts+" before  presentationTimeUs: "+audioBufferInfo.presentationTimeUs);
                             audioBufferInfo.presentationTimeUs = audioBufferInfo.presentationTimeUs - pts;
-                            Log.d(TAG, "run: audio: pts: "+pts+" presentationTimeUs: "+audioBufferInfo.presentationTimeUs);
+                            Log.d(TAG, "run: audio: pts: "+pts+" after presentationTimeUs: "+audioBufferInfo.presentationTimeUs);
                             mediaMuxer.writeSampleData(audioTrackIndex, outputBuffer, audioBufferInfo);
                         }
                         audioEncodec.releaseOutputBuffer(outputBufferIndex, false);
