@@ -33,10 +33,6 @@ import com.opengles.book.es2_0_test2.ES2p0_test2_MainActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static {
-        System.loadLibrary("native-lib");
-    }
-
     private TextView mTvTitle;
     private Button mButton0;
     private Button mButton1;
@@ -62,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton21;
     private Button mButton22;
 
-    public native String stringFromJNI();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         mTvTitle = (TextView) findViewById(R.id.tv_title);
-        mTvTitle.setText(stringFromJNI());
+        mTvTitle.setText("openGlES_Demo: learn OpenGlES 1.x");
         mButton0 = (Button) findViewById(R.id.button0);
         mButton1 = (Button) findViewById(R.id.button1);
         mButton2 = (Button) findViewById(R.id.button2);

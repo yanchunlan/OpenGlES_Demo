@@ -1,0 +1,8 @@
+cMake配置需要删除app及library的build.gradle里面的
+
+externalNativeBuild {
+        cmake {
+            path file('CMakeLists.txt')
+        }
+    }
+切换Project到Android模式，再分别在app及其library点击右键，link c project，重新配置cmake即可
