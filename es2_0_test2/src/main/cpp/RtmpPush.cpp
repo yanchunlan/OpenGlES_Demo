@@ -27,6 +27,8 @@ void *callBackPush(void *data) {
     RtmpPush *rtmpPush = static_cast<RtmpPush *>(data); // 获取到当前指针，因为是子线程，所以需要传递进去
 
 //    rtmpPush->callJava->onConnecting(THREAD_CHILD);
+    rtmpPush->startPushing = false;
+
 
     rtmpPush->rtmp = RTMP_Alloc();
     RTMP_Init(rtmpPush->rtmp);
@@ -43,13 +45,37 @@ void *callBackPush(void *data) {
         goto end;
     }
 
-    if (!RTMP_ConnectStream(rtmpPush->rtmp, 0)) {
-//        LOGE("can not connect the stream of service");
+    if (!RTMP_ConnectStream(rtmpPush->rtmp, ++++++++++++++++++++++++++f service");
         rtmpPush->callJava->onConnectFail("can not connect the stream of service");
         goto end;
     }
+
+    // 成功 开始推流
 //    LOGD("链接成功， 开始推流");
     rtmpPush->callJava->onConnectSuccess();
+    rtmpPush->startPushing = true;
+    rtmpPush->startTime = RTMP_GetTime(); // 得到RTMP的初始值，后面计算减去落差
+
+    // 推流逻辑 ,从队列去除数据，推流到服务器
+    while(true){
+        if(!rtmp->startPushing){
+            break;
+        }
+        RTMPPacket *packet=NULL;
+        packet=rtmpPush->queue->getRtmpPacket();
+        if(packet!=NULL){
+            int result=RTMP_SendPacket(rtmpPush->rtmp,packet,1) // 一次只推流一个
+       LOGD("RTMP_SendPacket result is %d", result);
+       // 推流完成释放packet资源
+       RTMPPacket_Free(packet);
+        free(packet);
+                   packet = NULL;
+        }
+
+    }
+
+
+
 
 
     // 执行异常，直接退出线程, end 是随便取的一个参数
@@ -64,4 +90,92 @@ void RtmpPush::init() {
     callJava->onConnecting(THREAD_MAIN);
     // 创建线程，在线程里面执行rtmp初始化 ， 回调返回coid* ,内部也返回*,后面的this,就是参数
     pthread_create(&push_thread_t, NULL, callBackPush, this);
+}
+
+
+void RtmpPush::pushSPSPPS(char *sps, int sps_len, char *pps, int pps_len) {
+    int bodySize=sps_lan+pps_len+16; // sps , pps 都是严格按照其格式存储
+
+    RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
+    RTMPPacket_Alloc(packet, bodysize);
+    RTMPPacket_Reset(packet);
+
+    char *body = packet->m_body;
+
+    int i = 0;
+
+    body[i++] = 0x17;
+
+    body[i++] = 0x00;
+    body[i++] = 0x00;
+    body[i++] = 0x00;
+    body[i++] = 0x00;
+
+    body[i++] = 0x01;
+    body[i++] = sps[1];
+    body[i++] = sps[2];
+    body[i++] = sps[3];
+
+    body[i++] = 0xFF;
+
+    body[i++] = 0xE1;
+    body[i++] = (sps_len >> 8) & 0xff; // 此处有移位，其实就是移动空间位置，前面显示前面的一半，后面显示后面的一半
+    body[i++] = sps_len & 0xff;
+    memcpy(&body[i], sps, sps_len); // 裸数据
+    i += sps_len;
+
+    body[i++] = 0x01;
+    body[i++] = (pps_len >> 8) & 0xff;
+    body[i++] = pps_len & 0xff;
+    memcpy(&body[i], pps, pps_len);
+
+    packet->m_packetType = RTMP_PACKET_TYPE_VIDEO;
+    packet->m_nBodySize = bodysize;
+    packet->m_nTimeStamp = 0; // sps,pps不需要时间轴
+    packet->m_hasAbsTimestamp = 0;
+    packet->m_nChannel = 0x04;
+    packet->m_headerType = RTMP_PACKET_SIZE_MEDIUM;// 数据不大，所以用medium即可
+    packet->m_nInfoField2 = rtmp->m_stream_id;
+
+    queue->putRtmpPacket(packet);
+
+
+
+}
+void RtmpPush::pushVideoData(char *data, int data_len, bool keyframe) {
+ int bodysize = data_len + 9;
+    RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
+    RTMPPacket_Alloc(packet, bodysize);
+    RTMPPacket_Reset(packet);
+
+    char *body = packet->m_body;
+    int i = 0;
+
+    if(keyframe) // 关键帧与非关键帧数据不同
+    {
+        body[i++] = 0x17;
+    } else{
+        body[i++] = 0x27;
+    }
+
+    body[i++] = 0x01;  // 这里是null单元 跟上面不同
+    body[i++] = 0x00;
+    body[i++] = 0x00;
+    body[i++] = 0x00;
+
+    body[i++] = (data_len >> 24) & 0xff;
+    body[i++] = (data_len >> 16) & 0xff;
+    body[i++] = (data_len >> 8) & 0xff;
+    body[i++] = data_len & 0xff;
+    memcpy(&body[i], data, data_len);
+
+    packet->m_packetType = RTMP_PACKET_TYPE_VIDEO;
+    packet->m_nBodySize = bodysize;
+    packet->m_nTimeStamp = RTMP_GetTime() - startTime; // 减去初始值，需要加时间轴
+    packet->m_hasAbsTimestamp = 0;
+    packet->m_nChannel = 0x04;
+    packet->m_headerType = RTMP_PACKET_SIZE_LARGE;// 数据大，所以用large
+    packet->m_nInfoField2 = rtmp->m_stream_id;
+
+    queue->putRtmpPacket(packet);
 }

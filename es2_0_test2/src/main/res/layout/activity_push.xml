@@ -5,6 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".push.PushActivity">
+
+    <com.opengles.book.es2_0_test2.camera.CameraSurfaceView
+        android:id="@+id/cameraSurfaceView"
+        android:layout_width="640dp"
+        android:layout_height="360dp" />
     <Button
         android:id="@+id/btn_start_push"
         android:layout_width="wrap_content"

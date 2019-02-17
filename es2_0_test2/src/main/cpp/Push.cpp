@@ -54,3 +54,35 @@ JNIEXPORT void JNICALL
 JNI_OnUnload(JavaVM *javaVM1, void *reserved) {
     javaVM = NULL;
 };
+
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushSPSPPS(JNIEnv *env, jobject instance,
+jbyteArray sps_, jint sps_len,
+jbyteArray pps_, jint pps_len) {
+                                                                jbyte *sps = env->GetByteArrayElements(sps_, NULL);
+                                                                jbyte *pps = env->GetByteArrayElements(pps_, NULL);
+
+
+                                                                if(rtmpPush != NULL)
+                                                                {
+                                                                    rtmpPush->pushSPSPPS(reinterpret_cast<char *>(sps), sps_len, reinterpret_cast<char *>(pps), pps_len);
+                                                                }
+
+                                                                env->ReleaseByteArrayElements(sps_, sps, 0);
+                                                                env->ReleaseByteArrayElements(pps_, pps, 0);
+                                                            }
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushVideoData(JNIEnv *env, jobject instance,
+                                                                                                                 jbyteArray data_, jint data_len, jboolean keyframe) {
+                                                        jbyte *data = env->GetByteArrayElements(data_, NULL);
+                                                        // TODO
+                                                        if(rtmpPush != NULL)
+                                                        {
+                                                            rtmpPush->pushVideoData(reinterpret_cast<char *>(data), data_len, keyframe);
+                                                        }
+                                                        env->ReleaseByteArrayElements(data_, data, 0);
+                                                    }
