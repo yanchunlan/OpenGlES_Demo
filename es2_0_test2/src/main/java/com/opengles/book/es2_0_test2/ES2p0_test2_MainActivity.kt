@@ -12,6 +12,7 @@ import com.opengles.book.es2_0_test2.image_video.ImgVideoActivity
 import com.opengles.book.es2_0_test2.main.MenuAdapter
 import com.opengles.book.es2_0_test2.main.MenuBean
 import com.opengles.book.es2_0_test2.muti.MutiActivity
+import com.opengles.book.es2_0_test2.push.PushActivity
 import com.opengles.book.es2_0_test2.surfaceview.SurfaceViewActivity
 import com.opengles.book.es2_0_test2.yuv.YuvActivity
 
@@ -45,6 +46,7 @@ class ES2p0_test2_MainActivity : AppCompatActivity() {
             add(MenuBean("视频编码录制+音乐裁剪合成 mp4", EncodecActivity::class.java))
             add(MenuBean("图片合成视频", ImgVideoActivity::class.java))
             add(MenuBean("yvu视频数据纹理绘制", YuvActivity::class.java))
+            add(MenuBean("直播推流", PushActivity::class.java))
         }
     }
 }

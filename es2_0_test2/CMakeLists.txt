@@ -4,9 +4,12 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNO_CRYPTO")
 
 
 add_library( # Sets the name of the library.
-        native-lib
+        push-lib
         SHARED
-        src/main/cpp/native-lib.cpp
+        src/main/cpp/Push.cpp
+        src/main/cpp/Queue.cpp
+        src/main/cpp/RtmpPush.cpp
+        src/main/cpp/CallJava.cpp
 
         # .c 文件加入里面一起生成so文件
         src/main/cpp/librtmp/amf.c
@@ -21,7 +24,7 @@ find_library( # Sets the name of the path variable.
         log-lib
         log )
 target_link_libraries( # Specifies the target library.
-        native-lib
+        push-lib
 
         # Links the target library to the log library
         # included in the NDK.

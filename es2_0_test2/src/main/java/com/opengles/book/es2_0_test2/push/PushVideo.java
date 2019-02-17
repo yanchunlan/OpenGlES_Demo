@@ -10,8 +10,10 @@ import android.text.TextUtils;
 public class PushVideo {
 
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("push-lib");
     }
+
+    private PushConnectListener mConnectListener;
 
     public void initLivePush(String url)
     {
@@ -21,5 +23,36 @@ public class PushVideo {
         }
     }
 
+
     private native void initPush(String pushUrl);
+
+    // --------------------------------------------------------------
+
+    public void setConnectListener(PushConnectListener connectListener) {
+        mConnectListener = connectListener;
+    }
+
+    private void onConnecting()
+    {
+        if(mConnectListener != null)
+        {
+            mConnectListener.onConnecting();
+        }
+    }
+
+    private void onConnectSuccess()
+    {
+        if(mConnectListener != null)
+        {
+            mConnectListener.onConnectSuccess();
+        }
+    }
+
+    private void onConnectFail(String msg)
+    {
+        if(mConnectListener != null)
+        {
+            mConnectListener.onConnectFail(msg);
+        }
+    }
 }

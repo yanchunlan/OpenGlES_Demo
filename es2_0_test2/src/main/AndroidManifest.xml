@@ -31,7 +31,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.NoActionBar.Fullscreen" />
         <activity android:name=".image_video.ImgVideoActivity" />
-        <activity android:name=".yuv.YuvActivity"/>
+        <activity android:name=".yuv.YuvActivity" />
+        <activity android:name=".push.PushActivity"></activity>
     </application>
 
 </manifest>
