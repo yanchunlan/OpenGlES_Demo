@@ -10,6 +10,7 @@ import android.view.Surface;
 
 import com.opengles.book.es2_0_test2.eglUtils.EglHelper;
 import com.opengles.book.es2_0_test2.eglUtils.EglSurfaceView;
+import com.opengles.book.es2_0_test2.push.AudioRecordUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -57,6 +58,8 @@ public abstract class BasePushEncoder {
 
     private OnMediaInfoListener onMediaInfoListener;
 
+    private AudioRecordUtil audioRecordUtil;
+
 
     // -------------------------------  init codec start --------------------------------------
     public void initEncodec(EGLContext eglContext,  // egl 数据共享
@@ -68,7 +71,9 @@ public abstract class BasePushEncoder {
 
         initVideoEncodec(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
         initAudioEncodec(MediaFormat.MIMETYPE_AUDIO_AAC, sampleRate, channelCount);
+        initPCMRecord(sampleRate, channelCount);
     }
+
 
     private void initVideoEncodec(String mimeType, int width, int height) {
         try {
@@ -110,6 +115,20 @@ public abstract class BasePushEncoder {
         }
     }
 
+    private void initPCMRecord(int sampleRate, int channelCount) {
+        audioRecordUtil = new AudioRecordUtil(sampleRate, channelCount);
+        audioRecordUtil.setOnRecordLisener(new AudioRecordUtil.OnRecordLisener() {
+            @Override
+            public void recordByte(byte[] audioData, int readSize) {
+                if (audioRecordUtil.isStart()) {
+                    // 放置录音数据到编码器
+                    putPCMData(audioData, readSize);
+                }
+            }
+        });
+    }
+
+
     public void startRecord() {
         if (surface != null && eglContext != null) {
             audioPts = 0;
@@ -122,7 +141,7 @@ public abstract class BasePushEncoder {
             eglMediaThread.isChange = true;
             eglMediaThread.start();
             videoEncodecThread.start();
-//            audioEncodecThread.start();
+            audioEncodecThread.start();
         }
     }
 
@@ -229,7 +248,7 @@ public abstract class BasePushEncoder {
                             if (encoder.get().onMediaInfoListener != null) {
                                 encoder.get().onMediaInfoListener.onSPSPPSInfo(sps, pps);
                             }
-                        }else {
+                        } else {
                             keyFrame = false;
                         }
 
@@ -330,6 +349,11 @@ public abstract class BasePushEncoder {
                         audioBufferInfo.presentationTimeUs = audioBufferInfo.presentationTimeUs - pts;
                         Log.d(TAG, "run: audio: pts: " + pts + " after presentationTimeUs: " + audioBufferInfo.presentationTimeUs);
 
+                        byte[] data = new byte[outputBuffer.remaining()]; // 存储真是的数据
+                        outputBuffer.get(data, 0, data.length);
+                        if (encoder.get().onMediaInfoListener != null) {
+                            encoder.get().onMediaInfoListener.onAudioInfo(data);
+                        }
 
                         audioEncodec.releaseOutputBuffer(outputBufferIndex, false);
                         outputBufferIndex = audioEncodec.dequeueOutputBuffer(audioBufferInfo, 0); // 循环下一个
@@ -486,6 +510,8 @@ public abstract class BasePushEncoder {
         void onSPSPPSInfo(byte[] sps, byte[] pps);
 
         void onVideoInfo(byte[] data, boolean keyFrame);
+
+        void onAudioInfo(byte[] data);
     }
 
     private static String byteToHex(byte[] bytes) {

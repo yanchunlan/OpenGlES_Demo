@@ -143,7 +143,7 @@ void RtmpPush::pushSPSPPS(char *sps, int sps_len, char *pps, int pps_len) {
 
 }
 void RtmpPush::pushVideoData(char *data, int data_len, bool keyframe) {
- int bodysize = data_len + 9;
+ int bodysize = data_len + 9; // h.264 avc 加9个byte
     RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
     RTMPPacket_Alloc(packet, bodysize);
     RTMPPacket_Reset(packet);
@@ -178,4 +178,36 @@ void RtmpPush::pushVideoData(char *data, int data_len, bool keyframe) {
     packet->m_nInfoField2 = rtmp->m_stream_id;
 
     queue->putRtmpPacket(packet);
+}
+void RtmpPush::pushAudioData(char *data, int data_len) {
+    int bodysize = data_len + 2; // aac是只加2个byte
+    RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
+    RTMPPacket_Alloc(packet, bodysize);
+    RTMPPacket_Reset(packet);
+    char *body = packet->m_body;
+    // 前4位的数值表示了音频数据格式 ---- 10(A)表示 AAC
+    //第5-6位的数值表示采样率，0 = 5.5 kHz，1 = 11 kHz，2 = 22 kHz，3(11) = 44 kHz。
+    //第7位表示采样精度，0 = 8bits，1 = 16bits。
+    //第8位表示音频类型，0 = mono，1 = stereo
+    // 10  1111  == 0xAF
+    body[0] = 0xAF;
+    // 0x00 aac头信息  
+    // 0x01 aac 原始数据
+    body[1] = 0x01;
+    memcpy(&body[2], data, data_len); // 后面放置裸数据
+
+    packet->m_packetType = RTMP_PACKET_TYPE_AUDIO;  // 此处是Audio
+    packet->m_nBodySize = bodysize;
+    packet->m_nTimeStamp = RTMP_GetTime() - startTime;
+    packet->m_hasAbsTimestamp = 0;
+    packet->m_nChannel = 0x04;
+    packet->m_headerType = RTMP_PACKET_SIZE_LARGE;
+    packet->m_nInfoField2 = rtmp->m_stream_id;
+    queue->putRtmpPacket(packet);
+}
+
+void RtmpPush::pushStop() {
+    startPushing=false;
+    queue->notifyQueue(); // 防止卡住了
+    pthread_join(push_thread_t,NULL);
 }

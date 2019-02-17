@@ -64,6 +64,11 @@ public class PushActivity extends AppCompatActivity implements View.OnClickListe
                     public void onVideoInfo(byte[] data, boolean keyFrame) {
                         mPushVideo.pushVideoData(data, keyFrame);
                     }
+
+                    @Override
+                    public void onAudioInfo(byte[] data) {
+                        mPushVideo.pushAudioData(data);
+                    }
                 });
                 mPushEncodec.startRecord();
             }
@@ -85,6 +90,8 @@ public class PushActivity extends AppCompatActivity implements View.OnClickListe
                 // 开启nginx之后再开始推流
                 mPushVideo.initLivePush("rtmp://119.27.185.134/live/mystream");
             } else {
+
+                mPushVideo.stopPush();
                 // 关闭流
                 if (mPushEncodec != null) {
                     mPushEncodec.stopRecord();

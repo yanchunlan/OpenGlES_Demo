@@ -15,33 +15,44 @@ public class PushVideo {
 
     private PushConnectListener mConnectListener;
 
-    public void initLivePush(String url)
-    {
-        if(!TextUtils.isEmpty(url))
-        {
+    public void initLivePush(String url) {
+        if (!TextUtils.isEmpty(url)) {
             initPush(url);
         }
     }
-    public void pushSPSPPS(byte[] sps, byte[] pps)
-    {
-        if(sps != null && pps != null)
-        {
+
+    public void pushSPSPPS(byte[] sps, byte[] pps) {
+        if (sps != null && pps != null) {
             pushSPSPPS(sps, sps.length, pps, pps.length);
         }
     }
 
-    public void pushVideoData(byte[] data, boolean keyframe)
-    {
-        if(data != null)
-        {
+    public void pushVideoData(byte[] data, boolean keyframe) {
+        if (data != null) {
             pushVideoData(data, data.length, keyframe);
         }
     }
 
+    public void pushAudioData(byte[] data) {
+        if (data != null) {
+            pushAudioData(data, data.length);
+        }
+    }
+
+    public void stopPush() {
+        pushStop();
+    }
+
 
     private native void initPush(String pushUrl);
-    private native void pushSPSPPS(byte[] sps,int sps_len,byte[] pps,int pps_len);
+
+    private native void pushSPSPPS(byte[] sps, int sps_len, byte[] pps, int pps_len);
+
     private native void pushVideoData(byte[] data, int data_len, boolean keyFrame);
+
+    private native void pushAudioData(byte[] data, int data_len);
+
+    private native void pushStop();
 
     // --------------------------------------------------------------
 
@@ -49,26 +60,20 @@ public class PushVideo {
         mConnectListener = connectListener;
     }
 
-    private void onConnecting()
-    {
-        if(mConnectListener != null)
-        {
+    private void onConnecting() {
+        if (mConnectListener != null) {
             mConnectListener.onConnecting();
         }
     }
 
-    private void onConnectSuccess()
-    {
-        if(mConnectListener != null)
-        {
+    private void onConnectSuccess() {
+        if (mConnectListener != null) {
             mConnectListener.onConnectSuccess();
         }
     }
 
-    private void onConnectFail(String msg)
-    {
-        if(mConnectListener != null)
-        {
+    private void onConnectFail(String msg) {
+        if (mConnectListener != null) {
             mConnectListener.onConnectFail(msg);
         }
     }
