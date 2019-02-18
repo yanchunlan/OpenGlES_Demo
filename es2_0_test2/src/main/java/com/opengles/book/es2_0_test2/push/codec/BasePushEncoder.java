@@ -204,7 +204,7 @@ public abstract class BasePushEncoder {
                 }
                 // 开始编码
                 int outputBufferIndex = videoEncodec.dequeueOutputBuffer(videoBufferInfo, 0);
-                Log.d(TAG, "run: outputBufferIndex: " + outputBufferIndex);
+//                Log.d(TAG, "run: outputBufferIndex: " + outputBufferIndex);
                 if (outputBufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) { // 开始获取到sps,pps存储在buffer里面
 
                     Log.d(TAG, "INFO_OUTPUT_FORMAT_CHANGED");
@@ -214,7 +214,7 @@ public abstract class BasePushEncoder {
                     spsb.get(sps, 0, sps.length);
 
                     ByteBuffer ppsb = videoEncodec.getOutputFormat().getByteBuffer("csd-1");
-                    pps = new byte[spsb.remaining()];
+                    pps = new byte[ppsb.remaining()];
                     ppsb.get(pps, 0, pps.length);
 
                     Log.d(TAG, "sps: " + byteToHex(sps));
@@ -230,9 +230,9 @@ public abstract class BasePushEncoder {
                         if (pts == 0) {
                             pts = videoBufferInfo.presentationTimeUs;
                         }
-                        Log.d(TAG, "run: video: pts: " + pts + " before  presentationTimeUs: " + videoBufferInfo.presentationTimeUs);
+//                        Log.d(TAG, "run: video: pts: " + pts + " before  presentationTimeUs: " + videoBufferInfo.presentationTimeUs);
                         videoBufferInfo.presentationTimeUs = videoBufferInfo.presentationTimeUs - pts;
-                        Log.d(TAG, "run: video: pts: " + pts + " presentationTimeUs: " + videoBufferInfo.presentationTimeUs);
+//                        Log.d(TAG, "run: video: pts: " + pts + " presentationTimeUs: " + videoBufferInfo.presentationTimeUs);
 
                         byte[] data = new byte[outputBuffer.remaining()]; // 存储真是的数据
                         outputBuffer.get(data, 0, data.length);
@@ -332,7 +332,7 @@ public abstract class BasePushEncoder {
                 // 开始编码
                 //  java.lang.IllegalStateException  主要是因为 audioEncodec.start 未执行
                 int outputBufferIndex = audioEncodec.dequeueOutputBuffer(audioBufferInfo, 0);
-                Log.d(TAG, "run: outputBufferIndex: " + outputBufferIndex);
+//                Log.d(TAG, "run: outputBufferIndex: " + outputBufferIndex);
                 if (outputBufferIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) { // 开始合成
                     // 什么都不做
                 } else {
@@ -345,9 +345,9 @@ public abstract class BasePushEncoder {
                             pts = audioBufferInfo.presentationTimeUs;
                         }
                         // 发现传入数据的时间，与此处赋值的时间不一致
-                        Log.d(TAG, "run: audio: pts: " + pts + " before  presentationTimeUs: " + audioBufferInfo.presentationTimeUs);
+//                        Log.d(TAG, "run: audio: pts: " + pts + " before  presentationTimeUs: " + audioBufferInfo.presentationTimeUs);
                         audioBufferInfo.presentationTimeUs = audioBufferInfo.presentationTimeUs - pts;
-                        Log.d(TAG, "run: audio: pts: " + pts + " after presentationTimeUs: " + audioBufferInfo.presentationTimeUs);
+//                        Log.d(TAG, "run: audio: pts: " + pts + " after presentationTimeUs: " + audioBufferInfo.presentationTimeUs);
 
                         byte[] data = new byte[outputBuffer.remaining()]; // 存储真是的数据
                         outputBuffer.get(data, 0, data.length);
@@ -416,7 +416,7 @@ public abstract class BasePushEncoder {
                 }
 
                 if (isStart) {
-                    Log.d(TAG, "run: " + eglSurfaceViewWeakReference.get().mRenderMode);
+//                    Log.d(TAG, "run: " + eglSurfaceViewWeakReference.get().mRenderMode);
                     if (eglSurfaceViewWeakReference.get().mRenderMode == RENDERMODE_WHEN_DIRTY) {
                         // 一次就堵塞
                         synchronized (object) {

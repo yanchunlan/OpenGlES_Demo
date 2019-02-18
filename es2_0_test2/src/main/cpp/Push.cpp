@@ -72,7 +72,7 @@ JNI_OnUnload(JavaVM *javaVM1, void *reserved) {
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushSPSPPS__Lbyte_3_093_2ILbyte_3_093_2I(
+Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushSPSPPS(
         JNIEnv *env, jobject instance, jbyteArray sps_, jint sps_len, jbyteArray pps_,
         jint pps_len) {
     jbyte *sps = env->GetByteArrayElements(sps_, NULL);
@@ -89,7 +89,7 @@ Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushSPSPPS__Lbyte_3_093_2ILb
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushVideoData__Lbyte_3_093_2IZ(JNIEnv *env,
+Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushVideoData(JNIEnv *env,
                                                                                    jobject instance,
                                                                                    jbyteArray data_,
                                                                                    jint data_len,
@@ -105,7 +105,7 @@ Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushVideoData__Lbyte_3_093_2
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushAudioData__Lbyte_3_093_2I(JNIEnv *env,
+Java_com_opengles_book_es2_10_1test2_push_PushVideo_pushAudioData(JNIEnv *env,
                                                                                   jobject instance,
                                                                                   jbyteArray data_,
                                                                                   jint data_len) {
