@@ -11,9 +11,6 @@
 #include <AndroidLog.h>
 #include "librtmp/rtmp.h"
 
-extern "C" {
-#include <librtmp/rtmp.h>
-};
 
 class Queue {
 public:

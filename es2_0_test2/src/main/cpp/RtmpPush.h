@@ -13,11 +13,6 @@
 #include "AndroidLog.h"
 #include "CallJava.h"
 
-
-extern "C" {
-#include <librtmp/rtmp.h>
-};
-
 class RtmpPush {
 public:
     RTMP *rtmp = NULL;
@@ -25,8 +20,8 @@ public:
     Queue *queue = NULL; // 置位null,防止野指针
     pthread_t push_thread_t;
     CallJava *callJava = NULL;// 回调
-    bool startPushing=false;
-    long startTime=0;
+    bool startPushing = false;
+    long startTime = 0;
 
 public:
     RtmpPush(const char *url, CallJava *callJava);
@@ -35,13 +30,13 @@ public:
 
     void init();
 
-    void  pushSPSPPS(char *sps, int sps_len, char *pps, int pps_len);
+    void pushSPSPPS(char *sps, int sps_len, char *pps, int pps_len);
 
-    void pushVideoData(char *data, int data_len, bool keyframe) ;
+    void pushVideoData(char *data, int data_len, bool keyframe);
 
-    void  pushAudioData(char *data, int data_len) ;
+    void pushAudioData(char *data, int data_len);
 
-    void  pushStop() ;
+    void pushStop();
 };
 
 

@@ -7,8 +7,7 @@
 
 RtmpPush::RtmpPush(const char *url, CallJava *callJava) {
     // char 类型存在堆中
-
-    this->url = static_cast<char *> (malloc(512));
+    this->url = static_cast<char *>(malloc(512));
     strcpy(this->url, url);
     this->queue = new Queue();
     this->callJava = callJava;
@@ -45,40 +44,36 @@ void *callBackPush(void *data) {
         goto end;
     }
 
-    if (!RTMP_ConnectStream(rtmpPush->rtmp, ++++++++++++++++++++++++++f service");
+    if (!RTMP_ConnectStream(rtmpPush->rtmp, 0)) {
         rtmpPush->callJava->onConnectFail("can not connect the stream of service");
         goto end;
     }
 
-    // 成功 开始推流
+//    成功 开始推流
 //    LOGD("链接成功， 开始推流");
     rtmpPush->callJava->onConnectSuccess();
+
     rtmpPush->startPushing = true;
     rtmpPush->startTime = RTMP_GetTime(); // 得到RTMP的初始值，后面计算减去落差
 
-    // 推流逻辑 ,从队列去除数据，推流到服务器
-    while(true){
-        if(!rtmp->startPushing){
+// 推流逻辑 ,从队列去除数据，推流到服务器
+    while (true) {
+        if (!rtmpPush->startPushing) {
             break;
         }
-        RTMPPacket *packet=NULL;
-        packet=rtmpPush->queue->getRtmpPacket();
-        if(packet!=NULL){
-            int result=RTMP_SendPacket(rtmpPush->rtmp,packet,1) // 一次只推流一个
-       LOGD("RTMP_SendPacket result is %d", result);
-       // 推流完成释放packet资源
-       RTMPPacket_Free(packet);
-        free(packet);
-                   packet = NULL;
+        RTMPPacket *packet = NULL;
+        packet = rtmpPush->queue->getRtmpPacket();
+        if (packet != NULL) {
+            int result = RTMP_SendPacket(rtmpPush->rtmp, packet, 1); // 一次只推流一个
+            LOGD("RTMP_SendPacket result is %d", result);
+//          推流完成释放packet资源
+            RTMPPacket_Free(packet);
+            free(packet);
+            packet = NULL;
         }
-
     }
 
-
-
-
-
-    // 执行异常，直接退出线程, end 是随便取的一个参数
+// 执行异常，直接退出线程, end 是随便取的一个参数
     end:
     RTMP_Close(rtmpPush->rtmp); // 里面也有判断rtmp是否连接
     RTMP_Free(rtmpPush->rtmp);
@@ -94,7 +89,7 @@ void RtmpPush::init() {
 
 
 void RtmpPush::pushSPSPPS(char *sps, int sps_len, char *pps, int pps_len) {
-    int bodySize=sps_lan+pps_len+16; // sps , pps 都是严格按照其格式存储
+    int bodysize = sps_len + pps_len + 16; // sps , pps 都是严格按照其格式存储
 
     RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
     RTMPPacket_Alloc(packet, bodysize);
@@ -140,10 +135,10 @@ void RtmpPush::pushSPSPPS(char *sps, int sps_len, char *pps, int pps_len) {
     queue->putRtmpPacket(packet);
 
 
-
 }
+
 void RtmpPush::pushVideoData(char *data, int data_len, bool keyframe) {
- int bodysize = data_len + 9; // h.264 avc 加9个byte
+    int bodysize = data_len + 9; // h.264 avc 加9个byte
     RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
     RTMPPacket_Alloc(packet, bodysize);
     RTMPPacket_Reset(packet);
@@ -151,10 +146,10 @@ void RtmpPush::pushVideoData(char *data, int data_len, bool keyframe) {
     char *body = packet->m_body;
     int i = 0;
 
-    if(keyframe) // 关键帧与非关键帧数据不同
+    if (keyframe) // 关键帧与非关键帧数据不同
     {
         body[i++] = 0x17;
-    } else{
+    } else {
         body[i++] = 0x27;
     }
 
@@ -179,6 +174,7 @@ void RtmpPush::pushVideoData(char *data, int data_len, bool keyframe) {
 
     queue->putRtmpPacket(packet);
 }
+
 void RtmpPush::pushAudioData(char *data, int data_len) {
     int bodysize = data_len + 2; // aac是只加2个byte
     RTMPPacket *packet = static_cast<RTMPPacket *>(malloc(sizeof(RTMPPacket)));
@@ -207,7 +203,7 @@ void RtmpPush::pushAudioData(char *data, int data_len) {
 }
 
 void RtmpPush::pushStop() {
-    startPushing=false;
+    startPushing = false;
     queue->notifyQueue(); // 防止卡住了
-    pthread_join(push_thread_t,NULL);
+    pthread_join(push_thread_t, NULL);
 }

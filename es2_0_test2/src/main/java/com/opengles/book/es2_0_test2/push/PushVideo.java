@@ -13,8 +13,6 @@ public class PushVideo {
         System.loadLibrary("push-lib");
     }
 
-    private PushConnectListener mConnectListener;
-
     public void initLivePush(String url) {
         if (!TextUtils.isEmpty(url)) {
             initPush(url);
@@ -54,7 +52,10 @@ public class PushVideo {
 
     private native void pushStop();
 
-    // --------------------------------------------------------------
+    // ----------------------------- 推流监听 start ---------------------------------
+
+    private PushConnectListener mConnectListener;
+
 
     public void setConnectListener(PushConnectListener connectListener) {
         mConnectListener = connectListener;
@@ -77,4 +78,6 @@ public class PushVideo {
             mConnectListener.onConnectFail(msg);
         }
     }
+    // ----------------------------- 推流监听 end ---------------------------------
+
 }

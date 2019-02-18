@@ -60,6 +60,5 @@ CallJava::~CallJava() {
     jniEnv->DeleteGlobalRef(jobj);
     javaVM = NULL;
     jniEnv = NULL;
-
     // 方法id不用管，只需要释放jniEnv=NULL即可
 }
