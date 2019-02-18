@@ -8,7 +8,6 @@
 
 #include <queue>
 #include <pthread.h>
-#include <AndroidLog.h>
 #include "librtmp/rtmp.h"
 
 

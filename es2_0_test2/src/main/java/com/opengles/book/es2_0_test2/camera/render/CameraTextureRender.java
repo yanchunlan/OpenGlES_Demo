@@ -40,7 +40,7 @@ public class CameraTextureRender extends MyTextureRender {
                 0f, 0f
         };
 
-        bitmap = DrawUtils.createTextImage("水印哈哈哈", 50,
+        bitmap = DrawUtils.createTextImage("rtmp://192.168.139.128/myapp/mystream", 50,
                 "#ff0000", "#00000000", 0);
 
         // 假设高度占据总高度的1/10，则高度为0.1f,宽度为0.1f*r

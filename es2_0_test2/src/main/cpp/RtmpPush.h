@@ -6,7 +6,7 @@
 #define OPENGLES_DEMO_RTMPPUSH_H
 
 #include <malloc.h>
-#include <string.h>
+#include <string>
 #include <pthread.h>
 #include "librtmp/rtmp.h"
 #include "Queue.h"

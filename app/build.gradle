@@ -16,7 +16,7 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
-                abiFilters 'armeabi', "x86"
+                abiFilters "armeabi", "armeabi-v7a", "x86"
             }
         }
 
@@ -27,6 +27,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // 这个添加目的是给c提示,其实是不需要的
     externalNativeBuild {
         cmake {
             path file('../es2_0_test2/CMakeLists.txt')

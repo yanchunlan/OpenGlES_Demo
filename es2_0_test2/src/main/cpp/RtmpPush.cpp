@@ -39,18 +39,21 @@ void *callBackPush(void *data) {
     RTMP_EnableWrite(rtmpPush->rtmp);
 
     if (!RTMP_Connect(rtmpPush->rtmp, NULL)) {
-//        LOGE("can not connect the url");
-        rtmpPush->callJava->onConnectFail("can not connect the url");
+        LOGE("can not connect the url");
+        std::string msg = "can not connect the url";
+        rtmpPush->callJava->onConnectFail(const_cast<char *>(msg.c_str()));
         goto end;
     }
 
     if (!RTMP_ConnectStream(rtmpPush->rtmp, 0)) {
-        rtmpPush->callJava->onConnectFail("can not connect the stream of service");
+        LOGE("can not connect the stream of service");
+        std::string msg = "can not connect the stream of service";
+        rtmpPush->callJava->onConnectFail(const_cast<char *>(msg.c_str()));
         goto end;
     }
 
 //    成功 开始推流
-//    LOGD("链接成功， 开始推流");
+    LOGD("链接成功， 开始推流");
     rtmpPush->callJava->onConnectSuccess();
 
     rtmpPush->startPushing = true;

@@ -90,14 +90,17 @@ public class PushActivity extends AppCompatActivity implements View.OnClickListe
 
                 mBtnStartPush.setText("关闭推流");
                 // 开启nginx之后再开始推流
-                mPushVideo.initLivePush("rtmp://119.27.185.134/live/mystream");
+                mPushVideo.initLivePush("rtmp://192.168.139.128/myapp/mystream");
             } else {
 
                 mBtnStartPush.setText("开始推流");
-                mPushVideo.stopPush();
                 // 关闭流
                 if (mPushEncodec != null) {
                     mPushEncodec.stopRecord();
+
+                    mPushVideo.stopPush();
+
+
                     mPushEncodec = null;
                 }
             }
