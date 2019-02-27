@@ -1,1 +1,1 @@
-include ':app', ':es2_0', ':es2_0_test', ':es2_0_test2'
+include ':app', ':es2_0', ':es2_0_test', ':es2_0_test2', ':es2_0_native'
