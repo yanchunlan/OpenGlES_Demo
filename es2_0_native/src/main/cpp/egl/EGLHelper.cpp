@@ -3,3 +3,27 @@
 //
 
 #include "EGLHelper.h"
+
+EGLHelper::EGLHelper() {
+
+
+}
+
+EGLHelper::~EGLHelper() {
+
+
+}
+
+int EGLHelper::initEgl(EGLNativeWindowType win) {
+
+    return 0;
+}
+
+int EGLHelper::swapBuffer() {
+
+    return 0;
+}
+
+void EGLHelper::destroyEgl() {
+
+}
