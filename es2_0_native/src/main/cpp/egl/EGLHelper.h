@@ -7,15 +7,16 @@
 
 
 #include <EGL/egl.h>
+#include "../log/AndroidLog.h"
 
 class EGLHelper {
 
 public:
 
-    EGLDisplay eglDisplay;
-    EGLSurface eglSurface;
-    EGLConfig eglConfig;
-    EGLContext eglContext;
+    EGLDisplay mEglDisplay;
+    EGLSurface mEglSurface;
+    EGLConfig mEglConfig;
+    EGLContext mEglContext;
 
 
 public:
@@ -26,7 +27,7 @@ public:
 
     int initEgl(EGLNativeWindowType win);
 
-    int swapBuffer();
+    int swapBuffers();
 
     void destroyEgl();
 

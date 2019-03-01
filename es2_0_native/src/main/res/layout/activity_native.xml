@@ -5,5 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NativeActivity">
+    <com.ycl.es2_0_native.opengl.MySurfaceView
+        android:id="@+id/mySurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
+
+        />
 </android.support.constraint.ConstraintLayout>
