@@ -41,7 +41,9 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+        if (mNativeOpengl != null) {
+            mNativeOpengl.surfaceChange(width, height);
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ add_library( # Sets the name of the library.
              SHARED
              src/main/cpp/native-lib.cpp
              src/main/cpp/egl/EGLHelper.cpp
+             src/main/cpp/egl/EGLThread.cpp
 
         )
 
