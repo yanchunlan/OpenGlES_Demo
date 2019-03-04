@@ -95,6 +95,8 @@ void EGLThread::onSurfaceChange(int width, int height) {
     isChange = true;
     surfaceWidth = width;
     surfaceHeight = height;
+
+    notifyRender(); // 设置宽高之后，就需要刷新一次
 }
 
 void EGLThread::callBackOnCreate(EGLThread::OnCreate onCreate, void *ctx) {

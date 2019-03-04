@@ -30,6 +30,7 @@ import com.example.gl.opengles_demo.day03.tex.TexActivity;
 import com.opengles.book.es2_0.ES2_0MainActivity;
 import com.opengles.book.es2_0_test.ES2_0TestMainActivity;
 import com.opengles.book.es2_0_test2.ES2p0_test2_MainActivity;
+import com.ycl.es2_0_native.NativeActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton20;
     private Button mButton21;
     private Button mButton22;
+    private Button mButton23;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton20 = (Button) findViewById(R.id.button20);
         mButton21 = (Button) findViewById(R.id.button21);
         mButton22 = (Button) findViewById(R.id.button22);
+        mButton23 = (Button) findViewById(R.id.button23);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton20.setOnClickListener(this);
         mButton21.setOnClickListener(this);
         mButton22.setOnClickListener(this);
+        mButton23.setOnClickListener(this);
     }
 
     @Override
@@ -188,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button22:
                 startActivity(new Intent(this, ES2p0_test2_MainActivity.class));
+                break;
+         case R.id.button23:
+                startActivity(new Intent(this, NativeActivity.class));
                 break;
         }
     }

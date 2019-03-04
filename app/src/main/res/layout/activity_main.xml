@@ -227,5 +227,18 @@
             android:text="GLES2.0_test2"
             android:textAllCaps="false" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="learn OpenGlES 2.0 native"
+            app:layout_order="1" />
+
+        <Button
+            android:id="@+id/button23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GLES2.0_native"
+            android:textAllCaps="false" />
+
     </com.google.android.flexbox.FlexboxLayout>
 </ScrollView>

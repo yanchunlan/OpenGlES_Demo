@@ -12,6 +12,7 @@
 #include "Queue.h"
 #include "AndroidLog.h"
 #include "CallJava.h"
+#include <cstring>
 
 class RtmpPush {
 public:

@@ -1,29 +1,86 @@
 #include <jni.h>
 #include <string>
+#include <malloc.h>
+#include <cstring>
 
-#include <EGL/egl.h>
-#include <GLES2/gl2.h>
-#include <android/native_window.h>
-
-
-#include "egl/EGLHelper.h"
 #include "android/native_window.h"
 #include "android/native_window_jni.h"
 #include "GLES2/gl2.h"
 #include "egl/EGLThread.h"
+#include "shaderutils/ShaderUtil.h"
+
+
 
 ANativeWindow *nativeWindow = NULL;
 EGLThread *eglThread = NULL;
 
+const char *vertex = "attribute vec4 v_Position;\n"
+                     "attribute vec2 f_Position;\n"
+                     "varying vec2 ft_Position;\n"
+                     "void main() {\n"
+                     "    ft_Position = f_Position;\n"
+                     "    gl_Position = v_Position;\n"
+                     "}";
 
-void callback_SurfaceCrete(void *ctx){
-    LOGD("callback_SurfaceCrete");
-    EGLThread *wlEglThread = static_cast<EGLThread *>(ctx);
+const char *fragment = "precision mediump float;\n"
+                       "varying vec2 ft_Position;\n"
+                       "uniform sampler2D sTexture;\n"
+                       "void main() {\n"
+                       "    gl_FragColor=texture2D(sTexture, ft_Position);\n"
+                       "}";
+int program;
+GLint vPosition;
+GLint fPosition;
+GLint sampler;
+GLuint textureId;
 
+// params
+int w;
+int h;
+void *pixels = NULL;
+
+float vertexs[] = {
+        1, -1,
+        1, 1,
+        -1, -1,
+        -1, 1
+};
+
+float fragments[] = {
+        1, 1,
+        1, 0,
+        0, 1,
+        0, 0
 };
 
 
-void callback_SurfacChange(int w, int h, void *ctx){
+void callback_SurfaceCrete(void *ctx) {
+    LOGD("callback_SurfaceCrete");
+    EGLThread *wlEglThread = static_cast<EGLThread *>(ctx);
+
+
+    program = createProgrm(vertex, fragment);
+    LOGD("opengl program is %d", program);
+    vPosition = glGetAttribLocation(program, "v_position");
+    fPosition = glGetAttribLocation(program, "f_position");
+    sampler = glGetUniformLocation(program, "sTexture");
+    LOGD("opengl vPosition is %d", vPosition);
+
+
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // 环绕效果是 重复
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // 放大缩小效果是 线性
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    if (pixels != NULL) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    }
+    glBindTexture(GL_TEXTURE_2D, 0);
+};
+
+
+void callback_SurfacChange(int w, int h, void *ctx) {
     LOGD("callback_SurfacChange");
     EGLThread *wlEglThread = static_cast<EGLThread *>(ctx);
 
@@ -31,25 +88,60 @@ void callback_SurfacChange(int w, int h, void *ctx){
 };
 
 
-void callback_SurfaceDraw(void *ctx){
+void callback_SurfaceDraw(void *ctx) {
     LOGD("callback_SurfaceDraw");
     EGLThread *wlEglThread = static_cast<EGLThread *>(ctx);
 
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    // 一般需要清屏 之后会加速后面的绘制
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-};
 
+    // 三角形
+//    glUseProgram(program);
+//    glEnableVertexAttribArray(vPosition);
+//    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs); // xy 2维度 ，维度*点的间距=2*8
+//    glDrawArrays(GL_TRIANGLES, 0, 3); // 3个点
+
+
+    // 四边形
+//    glUseProgram(program);
+//    glEnableVertexAttribArray(vPosition);
+//    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
+//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4个点
+
+
+    glUseProgram(program);
+
+    // 激活通道 与 使用通道必须一致
+    glActiveTexture(GL_TEXTURE5);
+    glUniform1i(GL_TEXTURE5, 5);
+
+
+    glBindTexture(GL_TEXTURE_2D, textureId);
+
+    glEnableVertexAttribArray(vPosition);
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
+    glEnableVertexAttribArray(fPosition);
+    glVertexAttribPointer(fPosition, 2, GL_FLOAT, false, 8, vertexs);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+
+//    glDisableVertexAttribArray(vPosition);
+};
 
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceCreate(JNIEnv *env, jobject instance,jobject surface) {
-
+Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceCreate(JNIEnv *env, jobject instance,
+                                                              jobject surface) {
 
     // init
     nativeWindow = ANativeWindow_fromSurface(env, surface); // 获取到jni里面的surface
     eglThread = new EGLThread();
     eglThread->setRenderType(OPENGL_RENDER_HANDLE);
+
     eglThread->callBackOnCreate(callback_SurfaceCrete, eglThread);
     eglThread->callBackOnChange(callback_SurfacChange, eglThread);
     eglThread->callBackOnDraw(callback_SurfaceDraw, eglThread);
@@ -57,6 +149,7 @@ Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceCreate(JNIEnv *env, jobje
     eglThread->onSurfaceCreate(nativeWindow);
 
 }
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobject instance,
@@ -69,4 +162,19 @@ Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobje
         usleep(1000000);
         eglThread->notifyRender();
     }
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_ycl_es2_10_1native_opengl_NativeOpengl_imgData(JNIEnv *env, jobject instance, jint width,
+                                                        jint height, jint length,
+                                                        jbyteArray data_) {
+    jbyte *data = env->GetByteArrayElements(data_, NULL);
+
+    w = width;
+    h = height;
+    pixels = malloc(length);
+    memcpy(pixels, data, length); // 拷贝数据到pixel 里面
+
+    env->ReleaseByteArrayElements(data_, data, 0);
 }

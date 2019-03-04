@@ -28,8 +28,8 @@ public:
     bool isExit = false;
     bool isStart = false;
 
-    bool surfaceWidth = 0;
-    bool surfaceHeight = 0;
+    int surfaceWidth = 0;
+    int surfaceHeight = 0;
 
     typedef void (*OnCreate)(void *);
 
