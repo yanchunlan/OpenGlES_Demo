@@ -54,3 +54,16 @@ OpenGlES 2.0 test2 :
        图片合成视频
        yvu视频数据纹理绘制
        RTMP直播推流
+OpenGlES 2.0 native :
+    1.导库
+    	cmake 中 的 target_link_libraries 导入：
+    		EGL                  EGL环境相关的库
+    		GLESv2             OpenGL ES 2.0的库
+    		android            ANativeWindow 相关库
+    2.EGL环境搭建
+        1.EGLHelper的创建
+        2.EGLThread 线程的搭建
+        3.EGLThread 线程回调的创建
+        4.增加手动，自动rendMode的刷新设置
+    3.OpenGL绘制流程
+        绘制三角形，绘制四边形，绘制纹理
