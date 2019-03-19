@@ -1,8 +1,8 @@
-cMakeÅäÖÃĞèÒªÉ¾³ıapp¼°libraryµÄbuild.gradleÀïÃæµÄ
+cMakeé…ç½®éœ€è¦åˆ é™¤appåŠlibraryçš„build.gradleé‡Œé¢çš„
 
 externalNativeBuild {
         cmake {
             path file('CMakeLists.txt')
         }
     }
-ÇĞ»»Projectµ½AndroidÄ£Ê½£¬ÔÙ·Ö±ğÔÚapp¼°Æälibraryµã»÷ÓÒ¼ü£¬link c project£¬ÖØĞÂÅäÖÃcmake¼´¿É
+åˆ‡æ¢Projectåˆ°Androidæ¨¡å¼ï¼Œå†åˆ†åˆ«åœ¨appåŠå…¶libraryç‚¹å‡»å³é”®ï¼Œlink c projectï¼Œé‡æ–°é…ç½®cmakeå³å¯

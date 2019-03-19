@@ -71,7 +71,7 @@ int EGLHelper::initEgl(EGLNativeWindowType win) {
     }
 
     // 7.
-    if (eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext)) {
+    if (!eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext)) {
         LOGE("eglMakeCurrent  error");
         return -1;
     }

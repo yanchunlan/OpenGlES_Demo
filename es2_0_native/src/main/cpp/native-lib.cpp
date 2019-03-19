@@ -61,10 +61,13 @@ void callback_SurfaceCrete(void *ctx) {
 
     program = createProgrm(vertex, fragment);
     LOGD("opengl program is %d", program);
-    vPosition = glGetAttribLocation(program, "v_position");
-    fPosition = glGetAttribLocation(program, "f_position");
-    sampler = glGetUniformLocation(program, "sTexture");
+    vPosition = glGetAttribLocation(program, "v_Position");//顶点坐标 // 此处差点错误，导致异常程序
+    fPosition = glGetAttribLocation(program, "f_Position");//纹理坐标  // 此处差点错误，导致异常程序
+    sampler = glGetUniformLocation(program, "sTexture");//2D纹理
+
     LOGD("opengl vPosition is %d", vPosition);
+    LOGD("opengl fPosition is %d", fPosition);
+    LOGD("opengl sampler is %d", sampler);
 
 
     glGenTextures(1, &textureId);
@@ -110,11 +113,12 @@ void callback_SurfaceDraw(void *ctx) {
 //    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4个点
 
 
+    // 图片
     glUseProgram(program);
 
     // 激活通道 与 使用通道必须一致
     glActiveTexture(GL_TEXTURE5);
-    glUniform1i(GL_TEXTURE5, 5);
+    glUniform1i(sampler, 5);// 此处差点错误，导致异常程序
 
 
     glBindTexture(GL_TEXTURE_2D, textureId);
@@ -122,7 +126,7 @@ void callback_SurfaceDraw(void *ctx) {
     glEnableVertexAttribArray(vPosition);
     glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
     glEnableVertexAttribArray(fPosition);
-    glVertexAttribPointer(fPosition, 2, GL_FLOAT, false, 8, vertexs);
+    glVertexAttribPointer(fPosition, 2, GL_FLOAT, false, 8, fragments);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -174,7 +178,7 @@ Java_com_ycl_es2_10_1native_opengl_NativeOpengl_imgData(JNIEnv *env, jobject ins
     w = width;
     h = height;
     pixels = malloc(length);
-    memcpy(pixels, data, length); // 拷贝数据到pixel 里面
+    memcpy(pixels, data, length); // 拷贝数据到pixel 里面，因为data在jni里面有释放，所以新建内存重新存储
 
     env->ReleaseByteArrayElements(data_, data, 0);
 }
