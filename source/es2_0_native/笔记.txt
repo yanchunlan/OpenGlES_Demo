@@ -9,4 +9,12 @@
     3.EGLThread 线程回调的创建
     4.增加手动，自动rendMode的刷新设置
 3.OpenGL绘制流程
-    绘制三角形，绘制四边形，绘制纹理
+    绘制三角形，绘制四边形，绘制纹理，矩阵变换
+
+    注：学习路径： https://learnopengl-cn.github.io/01%20Getting%20started/07%20Transformations/
+        正交投影：
+            1、2D图像绘制
+            2、会把图像缩放到一个矩形区域内
+            3、控制图像长宽比不变
+
+            orthoM(float left, float right, float bottom, float top)

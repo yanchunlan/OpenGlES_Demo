@@ -8,7 +8,7 @@
 #include "GLES2/gl2.h"
 #include "egl/EGLThread.h"
 #include "shaderutils/ShaderUtil.h"
-
+#include "matrix/MatrixUtil.h"
 
 
 ANativeWindow *nativeWindow = NULL;
@@ -17,9 +17,10 @@ EGLThread *eglThread = NULL;
 const char *vertex = "attribute vec4 v_Position;\n"
                      "attribute vec2 f_Position;\n"
                      "varying vec2 ft_Position;\n"
+                     "uniform mat4 u_Matrix;\n"
                      "void main() {\n"
                      "    ft_Position = f_Position;\n"
-                     "    gl_Position = v_Position;\n"
+                     "    gl_Position = v_Position * u_Matrix;\n"
                      "}";
 
 const char *fragment = "precision mediump float;\n"
@@ -33,6 +34,7 @@ GLint vPosition;
 GLint fPosition;
 GLint sampler;
 GLuint textureId;
+GLint u_matrix;
 
 // params
 int w;
@@ -53,6 +55,8 @@ float fragments[] = {
         0, 0
 };
 
+float matrix[16];
+
 
 void callback_SurfaceCrete(void *ctx) {
     LOGD("callback_SurfaceCrete");
@@ -64,15 +68,31 @@ void callback_SurfaceCrete(void *ctx) {
     vPosition = glGetAttribLocation(program, "v_Position");//顶点坐标 // 此处差点错误，导致异常程序
     fPosition = glGetAttribLocation(program, "f_Position");//纹理坐标  // 此处差点错误，导致异常程序
     sampler = glGetUniformLocation(program, "sTexture");//2D纹理
+    u_matrix = glGetUniformLocation(program, "u_Matrix");//矩阵设置之后，需要初始化，否则显示不出来
 
     LOGD("opengl vPosition is %d", vPosition);
     LOGD("opengl fPosition is %d", fPosition);
     LOGD("opengl sampler is %d", sampler);
 
+    for (int i = 0; i < 16; i++) {
+        LOGD("%f", matrix[i]);
+    }
+    initMatrix(matrix);
+
+//    rotateMatrix(90,matrix);
+//    scaleMatrix(2, matrix);
+//    transMatrix(0.5, 0,matrix);
+//    orthoM(-1, 1, -1, 1, matrix); // -1，1，-1，1 全部铺满
+
+    // 明显后面成为了单位矩阵
+    for (int i = 0; i < 16; i++) {
+        LOGE("%f", matrix[i]);
+    }
 
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // 环绕效果是 重复 GL_CLAMP_TO_EDGE 代表 单独一个
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                    GL_REPEAT); // 环绕效果是 重复 GL_CLAMP_TO_EDGE 代表 单独一个
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // 放大缩小效果是 线性
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -83,11 +103,28 @@ void callback_SurfaceCrete(void *ctx) {
 };
 
 
-void callback_SurfacChange(int w, int h, void *ctx) {
+void callback_SurfacChange(int width, int height, void *ctx) {
     LOGD("callback_SurfacChange");
     EGLThread *wlEglThread = static_cast<EGLThread *>(ctx);
 
-    glViewport(0, 0, w, h);
+    glViewport(0, 0, width, height);
+
+    // 正交投影
+    float screen_r = 1.0 * width / height;
+    float picture_r = 1.0 * w / h;
+
+    if (screen_r > picture_r) {//图片宽度缩放，则是按照高度最小去适配
+
+        float realWidth = 1.0 * height / h * w;
+        float r = width / realWidth;  // 宽度缩放的值
+        orthoM(-r, r, -1, 1, matrix);
+    } else { // 图片高度缩放，则是按照宽度最小去适配
+
+        float realHeight = 1.0 * width / w * h;
+        float r = height / realHeight;  // 高度缩放的值
+        orthoM(-1, 1, -r, r, matrix);
+    }
+
 };
 
 
@@ -120,6 +157,8 @@ void callback_SurfaceDraw(void *ctx) {
     glActiveTexture(GL_TEXTURE5);
     glUniform1i(sampler, 5);// 此处差点错误，导致异常程序
 
+
+    glUniformMatrix4fv(u_matrix, 1, false, matrix);
 
     glBindTexture(GL_TEXTURE_2D, textureId);
 

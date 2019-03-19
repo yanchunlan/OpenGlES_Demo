@@ -29,7 +29,7 @@ public class NativeActivity extends AppCompatActivity {
         mMySurfaceView.setNativeOpengl(mNativeOpengl);
 
 
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic);
         if (bitmap != null) {
             ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
             bitmap.copyPixelsToBuffer(buffer);
