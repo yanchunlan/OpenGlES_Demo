@@ -61,11 +61,14 @@ void *eglThreadImpl(void *context) {
             } else {
                 // 阻塞
                 pthread_mutex_lock(&eglThread->pthread_mutex);
-                pthread_cond_wait(&eglThread->pthread_cond,&eglThread->pthread_mutex);
+                pthread_cond_wait(&eglThread->pthread_cond, &eglThread->pthread_mutex);
                 pthread_mutex_unlock(&eglThread->pthread_mutex);
             }
 
             if (eglThread->isExit) {
+                eglHelper->destroyEgl();
+                delete eglHelper;
+                eglHelper = NULL;
                 break;
             }
 
@@ -122,4 +125,25 @@ void EGLThread::notifyRender() {
     pthread_mutex_lock(&pthread_mutex);
     pthread_cond_signal(&pthread_cond);
     pthread_mutex_unlock(&pthread_mutex);
+}
+
+void EGLThread::destroy() {
+    isExit = true;
+    notifyRender();
+    pthread_join(eglThread, NULL);
+    nativeWindow = NULL;
+    eglThread = -1;
+
+    if (onCreate != NULL) {
+        onCreate = NULL;
+        onCreateCtx = NULL;
+    }
+    if (onChange != NULL) {
+        onChange = NULL;
+        onChangeCtx = NULL;
+    }
+    if (onDraw != NULL) {
+        onDraw = NULL;
+        onDrawCtx = NULL;
+    }
 }

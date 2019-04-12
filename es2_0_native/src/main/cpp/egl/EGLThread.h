@@ -32,17 +32,14 @@ public:
     int surfaceHeight = 0;
 
     typedef void (*OnCreate)(void *);
-
     OnCreate onCreate;
     void *onCreateCtx;
 
     typedef void (*OnChange)(int width, int height,void *);
-
     OnChange onChange;
     void *onChangeCtx;
 
     typedef void (*OnDraw)(void *);
-
     OnDraw onDraw;
     void *onDrawCtx;
 
@@ -70,6 +67,7 @@ public:
 
     void notifyRender();
 
+    void destroy();
 };
 
 

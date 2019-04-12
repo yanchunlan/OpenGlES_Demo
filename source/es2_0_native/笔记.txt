@@ -1,14 +1,19 @@
-1.导入库
+1.	导入库
+
 	cmake 中 的 target_link_libraries 导入：
 		EGL                  EGL环境相关的库
 		GLESv2             OpenGL ES 2.0的库
 		android            ANativeWindow 相关库
-2.EGL环境搭建
+
+2.	EGL环境搭建
+
     1.EGLHelper的创建
     2.EGLThread 线程的搭建
     3.EGLThread 线程回调的创建
     4.增加手动，自动rendMode的刷新设置
-3.OpenGL绘制流程
+
+3.	OpenGL绘制流程
+
     绘制三角形，绘制四边形，绘制纹理，矩阵变换
 
     注：学习路径： https://learnopengl-cn.github.io/01%20Getting%20started/07%20Transformations/
@@ -18,3 +23,32 @@
             3、控制图像长宽比不变
 
             orthoM(float left, float right, float bottom, float top)
+
+4.	实用
+
+	重构OpneGL模块
+	
+		1、OpenGL基类
+		2、OpenGL操作类
+		3、OpenGL基类实现类（具体的绘制实现）
+		目的：把重心放在绘制层，而不用花太多时间去处理各种生命周期和线程
+
+	动态切换滤镜
+	
+		思路：根据OpenGL绘制原理（必须在EGL线程中），所以我们可以在EGL线程中添加
+		一个新的回调方法用于处理滤镜的切换。
+
+	回收OpenGL资源
+	
+		函数：glDeleteXXX – shader texture program等
+		思路：根据OpenGL绘制原理（必须在EGL线程中），所以我们可以在EGL线程中添加
+		一个新的回调方法用于处理资源回收。
+
+	动态切换纹理
+	
+		onDraw回调中
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	渲染YUV视频数据
+	
+	总结

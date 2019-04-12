@@ -6,6 +6,9 @@ add_library( # Sets the name of the library.
              src/main/cpp/native-lib.cpp
              src/main/cpp/egl/EGLHelper.cpp
              src/main/cpp/egl/EGLThread.cpp
+             src/main/cpp/opengl/BaseOpengl.cpp
+             src/main/cpp/opengl/FilterOne.cpp
+             src/main/cpp/opengl/Opengl.cpp
 
         )
 
