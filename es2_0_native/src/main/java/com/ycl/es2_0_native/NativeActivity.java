@@ -26,16 +26,19 @@ public class NativeActivity extends AppCompatActivity {
         mMySurfaceView = (MySurfaceView) findViewById(R.id.mySurfaceView);
 
         mNativeOpengl = new NativeOpengl();
-        mMySurfaceView.setNativeOpengl(mNativeOpengl);
-
-
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic);
-        if (bitmap != null) {
-            ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
-            bitmap.copyPixelsToBuffer(buffer);
-            buffer.flip();
-            byte[] pixels = buffer.array();
-            mNativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), pixels.length, pixels);
-        }
+        mMySurfaceView.setNativeOpengl(mNativeOpengl)
+        .setSurfaceCreeateListener(new MySurfaceView.OnSurfaceCreeateListener() {
+            @Override
+            public void surfaceCreated() {
+                final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic);
+                if (bitmap != null) {
+                    ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
+                    bitmap.copyPixelsToBuffer(buffer);
+                    buffer.flip();
+                    byte[] pixels = buffer.array();
+                    mNativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), pixels.length, pixels);
+                }
+            }
+        });
     }
 }

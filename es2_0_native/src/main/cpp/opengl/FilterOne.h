@@ -7,6 +7,9 @@
 
 
 #include "BaseOpengl.h"
+#include "../shaderutils/ShaderUtil.h"
+#include "../matrix/MatrixUtil.h"
+
 
 class FilterOne: public  BaseOpengl {
 
@@ -20,6 +23,7 @@ public:
     int w;
     int h;
     void *pixels = NULL;
+
     float matrix[16];
 
 public:
