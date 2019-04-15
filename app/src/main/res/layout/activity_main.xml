@@ -237,7 +237,13 @@
             android:id="@+id/button23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GLES2.0_native"
+            android:text="GLES2.0_native_滤镜纹理动态切换"
+            android:textAllCaps="false" />
+        <Button
+            android:id="@+id/button24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GLES2.0_native_YUV渲染"
             android:textAllCaps="false" />
 
     </com.google.android.flexbox.FlexboxLayout>

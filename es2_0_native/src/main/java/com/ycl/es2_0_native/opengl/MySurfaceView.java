@@ -66,6 +66,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
+    public void setYuvData(byte[] y, byte[] u, byte[] v, int w, int h) {
+
+    }
+
     public interface OnSurfaceCreeateListener {
         void surfaceCreated();
     }

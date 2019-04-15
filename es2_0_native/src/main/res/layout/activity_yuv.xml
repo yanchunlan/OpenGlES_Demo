@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".YUVActivity">
 
     <com.ycl.es2_0_native.opengl.MySurfaceView
-        android:id="@+id/mySurfaceView"
+        android:id="@+id/mysurfaceview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
     <LinearLayout
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-
         <Button
-            android:id="@+id/bt_changeFilter"
-            android:layout_width="0dp"
+            android:id="@+id/btn_play"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="切换滤镜" />
-
+            android:text="播放"/>
         <Button
-            android:id="@+id/bt_changeTexture"
-            android:layout_width="0dp"
+            android:id="@+id/btn_stop"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="切换纹理" />
+            android:text="停止"/>
     </LinearLayout>
 
 </RelativeLayout>

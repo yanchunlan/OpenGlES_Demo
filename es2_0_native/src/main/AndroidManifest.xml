@@ -3,7 +3,8 @@
     package="com.ycl.es2_0_native">
 
     <application>
-        <activity android:name=".NativeActivity"/>
+        <activity android:name=".NativeActivity" />
+        <activity android:name=".YUVActivity"></activity>
     </application>
 
 </manifest>

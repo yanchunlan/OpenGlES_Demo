@@ -50,5 +50,45 @@
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 	渲染YUV视频数据
-	
+
+	    什么是YUV？
+        YUV：
+            1、是一种颜色编码方法。Y表示明亮度，也就是灰度值。U和V则是色度、浓度，作用是描述影像
+            色彩及饱和度，用于指定像素的颜色。
+
+            2、没有UV数据，也是可以显示完整画面的（黑白）。
+
+            3、映射范围：
+
+            Y：（0~1）    U：（-0.5~0.5）   V：（-0.5~0.5）
+
+            4、常见格式：
+
+            YUV420P：YYYYYYYY  UUVV
+            NV21：YYYYYYYY  VUVU
+
+        shadler.glsl:
+            precision mediump float;
+            varying vec2 ft_Position;
+            uniform sampler2D sampler_y;
+            uniform sampler2D sampler_u;
+            uniform sampler2D sampler_v;
+            void main() {
+               float y,u,v;
+               y = texture2D(sampler_y,ft_Position).x;
+               u = texture2D(sampler_u,ft_Position).x - 0.5;
+               v = texture2D(sampler_v,ft_Position).x - 0.5;
+
+               vec3 rgb;
+               rgb.r = y + 1.403 * v;
+               rgb.g = y - 0.344 * u - 0.714 * v;
+               rgb.b = y + 1.770 * u;
+
+               gl_FragColor = vec4(rgb,1);
+            };
+
+        注：OpenGL之所以能渲染YUV，其实是利用了它的并行计算能力来快速将YUV->RGB。
+
+        Ffmpeg获取YUV数据命令： .\ffmpeg.exe -i '.\xxx.mp4' -pix_fmt yuv420p blr.yuv
+
 	总结

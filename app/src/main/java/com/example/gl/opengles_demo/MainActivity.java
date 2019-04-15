@@ -31,6 +31,7 @@ import com.opengles.book.es2_0.ES2_0MainActivity;
 import com.opengles.book.es2_0_test.ES2_0TestMainActivity;
 import com.opengles.book.es2_0_test2.ES2p0_test2_MainActivity;
 import com.ycl.es2_0_native.NativeActivity;
+import com.ycl.es2_0_native.YUVActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButton21;
     private Button mButton22;
     private Button mButton23;
+    private Button mButton24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton21 = (Button) findViewById(R.id.button21);
         mButton22 = (Button) findViewById(R.id.button22);
         mButton23 = (Button) findViewById(R.id.button23);
+        mButton24 = (Button) findViewById(R.id.button24);
 
         mButton0.setOnClickListener(this);
         mButton1.setOnClickListener(this);
@@ -119,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButton21.setOnClickListener(this);
         mButton22.setOnClickListener(this);
         mButton23.setOnClickListener(this);
+        mButton24.setOnClickListener(this);
     }
 
     @Override
@@ -193,8 +197,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button22:
                 startActivity(new Intent(this, ES2p0_test2_MainActivity.class));
                 break;
-         case R.id.button23:
+            case R.id.button23: // 滤镜，纹理动态切换
                 startActivity(new Intent(this, NativeActivity.class));
+                break;
+            case R.id.button24: // YUV渲染
+                startActivity(new Intent(this, YUVActivity.class));
                 break;
         }
     }
