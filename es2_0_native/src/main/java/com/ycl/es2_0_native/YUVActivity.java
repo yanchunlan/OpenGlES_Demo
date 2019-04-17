@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ycl.es2_0_native.opengl.MySurfaceView;
+import com.ycl.es2_0_native.opengl.NativeOpengl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,7 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
     private Button mBtnPlay;
     private Button mBtnStop;
 
+    private NativeOpengl mNativeOpengl;
     private boolean isExit = true;
 
     @Override
@@ -29,6 +31,12 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yuv);
         initView();
+        initData();
+    }
+
+    private void initData() {
+        mNativeOpengl = new NativeOpengl();
+        mMysurfaceview.setNativeOpengl(mNativeOpengl);
     }
 
     private void initView() {
@@ -57,7 +65,7 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
     private void play() {
         final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + "/sintel_640_360.yuv");
-        if (!file.exists()) {
+        if (file==null||!file.exists()) {
             Toast.makeText(this, "yuv文件不存在", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -67,9 +75,9 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
             AsyncTask.SERIAL_EXECUTOR.execute(new Runnable() {
                 @Override
                 public void run() {
-
+                    FileInputStream fis = null;
                     try {
-                        FileInputStream fis = new FileInputStream(file);
+                        fis = new FileInputStream(file);
                         int w = 640;
                         int h = 360;
                         byte[] y = new byte[w * h];
@@ -85,7 +93,7 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
                             int usize = fis.read(u);
                             int vsize = fis.read(v);
                             if (ysize > 0 && usize > 0 && vsize > 0) {
-                                mMysurfaceview.setYuvData(y, u, v, w, h);
+                                mNativeOpengl.setYuvData(y, u, v, w, h);
                                 Thread.sleep(40);
                             } else {
                                 isExit = true;
@@ -95,6 +103,15 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                    }finally {
+                        if (fis != null) {
+                            try {
+                                fis.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            fis = null;
+                        }
                     }
                 }
             });

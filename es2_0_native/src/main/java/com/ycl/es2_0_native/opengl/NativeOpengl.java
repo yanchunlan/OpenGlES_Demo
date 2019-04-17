@@ -17,5 +17,9 @@ public class NativeOpengl {
 
     public native void surfaceDestroy( );
 
+    public native void surfaceChangeFilter( ); // 切換滤镜
+
     public native void imgData(int w, int h, int length, byte[] data);
+
+    public native void setYuvData(byte[] y, byte[] u, byte[] v, int w, int h);
 }

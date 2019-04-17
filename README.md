@@ -67,7 +67,7 @@ OpenGlES for learn<br>
    
        1.导库
        	cmake 中 的 target_link_libraries 导入：
-       		EGL               EGL环境相关的库
+       		EGL                EGL环境相关的库
        		GLESv2             OpenGL ES 2.0的库
        		android            ANativeWindow 相关库
        2.EGL环境搭建

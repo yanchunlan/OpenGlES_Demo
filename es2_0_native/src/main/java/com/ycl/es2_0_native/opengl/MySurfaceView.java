@@ -13,7 +13,7 @@ import android.view.SurfaceView;
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private NativeOpengl mNativeOpengl;
 
-    private OnSurfaceCreeateListener surfaceCreeateListener;
+    private OnSurfaceCreateListener onSurfaceCreateListener;
 
     public MySurfaceView(Context context) {
         this(context, null);
@@ -35,8 +35,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         return this;
     }
 
-    public MySurfaceView setSurfaceCreeateListener(OnSurfaceCreeateListener surfaceCreeateListener) {
-        this.surfaceCreeateListener = surfaceCreeateListener;
+    public MySurfaceView setSurfaceCreateListener(OnSurfaceCreateListener createListener) {
+        this.onSurfaceCreateListener = createListener;
         return this;
     }
 
@@ -46,8 +46,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             mNativeOpengl.surfaceCreate(holder.getSurface());
         }
 
-        if (surfaceCreeateListener != null) {
-            surfaceCreeateListener.surfaceCreated();
+        if (onSurfaceCreateListener != null) {
+            onSurfaceCreateListener.surfaceCreated();
         }
     }
 
@@ -62,15 +62,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder holder) {
         if (mNativeOpengl != null) {
             mNativeOpengl.surfaceDestroy();
-            mNativeOpengl = null;
+//            mNativeOpengl = null;
         }
     }
 
-    public void setYuvData(byte[] y, byte[] u, byte[] v, int w, int h) {
-
-    }
-
-    public interface OnSurfaceCreeateListener {
+    public interface OnSurfaceCreateListener {
         void surfaceCreated();
     }
 

@@ -54,3 +54,28 @@ Java_com_ycl_es2_10_1native_opengl_NativeOpengl_imgData(JNIEnv *env, jobject ins
     }
     env->ReleaseByteArrayElements(data_, data, 0);
 }
+
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceChangeFilter(JNIEnv *env, jobject instance) {
+
+    // TODO
+
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_ycl_es2_10_1native_opengl_NativeOpengl_setYuvData(JNIEnv *env, jobject instance,
+                                                           jbyteArray y_, jbyteArray u_,
+                                                           jbyteArray v_, jint w, jint h) {
+    jbyte *y = env->GetByteArrayElements(y_, NULL);
+    jbyte *u = env->GetByteArrayElements(u_, NULL);
+    jbyte *v = env->GetByteArrayElements(v_, NULL);
+
+    // TODO
+
+    env->ReleaseByteArrayElements(y_, y, 0);
+    env->ReleaseByteArrayElements(u_, u, 0);
+    env->ReleaseByteArrayElements(v_, v, 0);
+}
