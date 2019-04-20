@@ -12,7 +12,6 @@
 #include "opengl/Opengl.h"
 
 
-
 /**
  * 具体流程是：
  *          openGL (包装类，不书写具体的实现，主要书写EGLThread,surface,子类shadler的业务逻辑)->
@@ -38,11 +37,11 @@ Opengl *opengl = NULL;
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceCreate(JNIEnv *env, jobject instance,
-                                                              jobject surface) {
+                                                              jobject surface, jboolean isYuv) {
     if (opengl == NULL) {
         opengl = new Opengl();
     }
-    opengl->onCreateSurface(env, surface);
+    opengl->onCreateSurface(env, surface, isYuv);
 }
 
 extern "C"
@@ -50,7 +49,6 @@ JNIEXPORT void JNICALL
 Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceChange(JNIEnv *env, jobject instance,
                                                               jint width, jint height) {
     if (opengl != NULL) {
-        LOGE("width %d height %d", width, height);
         opengl->onChangeSurface(width, height);
     }
 }
@@ -69,7 +67,7 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_ycl_es2_10_1native_opengl_NativeOpengl_surfaceDestroy(JNIEnv *env, jobject instance) {
     if (opengl != NULL) {
-        opengl->onDestroySurface( );
+        opengl->onDestroySurface();
         delete opengl;
         opengl = NULL;
     }
@@ -98,10 +96,20 @@ Java_com_ycl_es2_10_1native_opengl_NativeOpengl_setYuvData(JNIEnv *env, jobject 
     jbyte *v = env->GetByteArrayElements(v_, NULL);
 
     if (opengl != NULL) {
-        opengl->setYuvData(y,u,v,w,h);
+        opengl->setYuvData(y, u, v, w, h);
     }
 
     env->ReleaseByteArrayElements(y_, y, 0);
     env->ReleaseByteArrayElements(u_, u, 0);
     env->ReleaseByteArrayElements(v_, v, 0);
+
+    if (env->ExceptionCheck()) {
+        env->ExceptionDescribe();
+//        env->ExceptionClear();
+        LOGE("调用异常了");
+
+        jclass cls_exception = env->FindClass("java/lang/Exception");
+        env->ThrowNew(cls_exception,"ndk 99 exception");
+        return;
+    }
 }

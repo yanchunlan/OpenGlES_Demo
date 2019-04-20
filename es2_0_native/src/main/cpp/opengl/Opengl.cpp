@@ -71,9 +71,14 @@ void callback_SurfaceDestroy(void *ctx) {
 // -------------------------- callback end ---------------------
 
 
-void Opengl::onCreateSurface(JNIEnv *env, jobject surface) {
+void Opengl::onCreateSurface(JNIEnv *env, jobject surface, bool isYuv) {
+
     // init
-    baseOpengl = new FilterOne();
+    if (isYuv) {
+        baseOpengl = new FilterYUV();
+    } else {
+        baseOpengl = new FilterOne();
+    }
     nativeWindow = ANativeWindow_fromSurface(env, surface); // 获取到jni里面的surface
 
     // 先设置监听，在执行创建方法
@@ -90,6 +95,7 @@ void Opengl::onCreateSurface(JNIEnv *env, jobject surface) {
 }
 
 void Opengl::onChangeSurface(int width, int height) {
+    LOGE("Opengl::onChangeSurface  width %d height %d", width, height);
     if (eglThread != NULL) {
         if (baseOpengl != NULL) {
             baseOpengl->surface_width = width;
@@ -112,7 +118,7 @@ void Opengl::onDestroySurface() {
         eglThread = NULL;
     }
     if (baseOpengl != NULL) {
-        baseOpengl->destroy();
+//        baseOpengl->destroy(); // 在线程egl.destroy的时候，回调方法里面已经执行了baseOpengl->destroy() 方法，此处不在重复destroy
         baseOpengl->destroySource();
         delete baseOpengl;
         baseOpengl = NULL;

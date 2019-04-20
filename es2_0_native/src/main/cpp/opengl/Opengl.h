@@ -36,7 +36,7 @@ public:
 
     ~Opengl();
 
-    void onCreateSurface(JNIEnv *env, jobject surface); // env 主要是获取surface
+    void onCreateSurface(JNIEnv *env, jobject surface, bool isYuv); // env 主要是获取surface
 
     void onChangeSurface(int width, int height);
 

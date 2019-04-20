@@ -15,6 +15,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     private OnSurfaceCreateListener onSurfaceCreateListener;
 
+    private boolean isYuv;
+
     public MySurfaceView(Context context) {
         this(context, null);
     }
@@ -40,10 +42,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         return this;
     }
 
+    public MySurfaceView setYuv(boolean yuv) {
+        isYuv = yuv;
+        return this;
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (mNativeOpengl != null) {
-            mNativeOpengl.surfaceCreate(holder.getSurface());
+            mNativeOpengl.surfaceCreate(holder.getSurface(),isYuv);
         }
 
         if (onSurfaceCreateListener != null) {

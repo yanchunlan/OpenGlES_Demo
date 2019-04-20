@@ -14,12 +14,11 @@ import com.ycl.es2_0_native.opengl.NativeOpengl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class YUVActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "YUVActivity";
-    private MySurfaceView mMysurfaceview;
+    private MySurfaceView mMySurfaceView;
     private Button mBtnPlay;
     private Button mBtnStop;
 
@@ -29,18 +28,18 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_yuv);
+        setContentView(R.layout.activity_native_yuv);
         initView();
         initData();
     }
 
     private void initData() {
         mNativeOpengl = new NativeOpengl();
-        mMysurfaceview.setNativeOpengl(mNativeOpengl);
+        mMySurfaceView.setNativeOpengl(mNativeOpengl).setYuv(true);
     }
 
     private void initView() {
-        mMysurfaceview = (MySurfaceView) findViewById(R.id.mysurfaceview);
+        mMySurfaceView = (MySurfaceView) findViewById(R.id.mySurfaceView);
         mBtnPlay = (Button) findViewById(R.id.btn_play);
         mBtnStop = (Button) findViewById(R.id.btn_stop);
 
@@ -63,9 +62,10 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void play() {
+        // ffmpeg -i input.mp4 -pix_fmt yuv420p out.yuv
         final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/sintel_640_360.yuv");
-        if (file==null||!file.exists()) {
+                + "/out.yuv");
+        if (file == null || !file.exists()) {
             Toast.makeText(this, "yuv文件不存在", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -103,7 +103,7 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }finally {
+                    } finally {
                         if (fis != null) {
                             try {
                                 fis.close();
@@ -118,6 +118,4 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
 
         }
     }
-
-
 }

@@ -7,22 +7,23 @@
     tools:context=".YUVActivity">
 
     <com.ycl.es2_0_native.opengl.MySurfaceView
-        android:id="@+id/mysurfaceview"
+        android:id="@+id/mySurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/btn_play"
+          android:id="@+id/btn_play"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="播放"/>
         <Button
-            android:id="@+id/btn_stop"
+           android:id="@+id/btn_stop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

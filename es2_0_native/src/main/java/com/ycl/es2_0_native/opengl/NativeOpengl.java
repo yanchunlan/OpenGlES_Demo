@@ -11,7 +11,7 @@ public class NativeOpengl {
     static {
         System.loadLibrary("native-lib");
     }
-    public native void surfaceCreate(Surface surface);
+    public native void surfaceCreate(Surface surface,boolean isYuv);
 
     public native void surfaceChange(int width, int height);
 

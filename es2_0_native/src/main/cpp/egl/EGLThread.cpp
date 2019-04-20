@@ -54,7 +54,7 @@ void *eglThreadImpl(void *context) {
             }
 
 
-            LOGD("draw"); // 绘制流程
+            LOGD("eglthread draw"); // 绘制流程
             if (eglThread->isStart) {
 //                glClearColor(0f, 1f, 1f, 1f);
 //                glClear(GL_COLOR_BUFFER_BIT);
@@ -154,6 +154,7 @@ void EGLThread::notifyRender() {
 }
 
 void EGLThread::destroy() {
+    LOGE("eglthread destroy");
     isExit = true;
     notifyRender();
     pthread_join(eglThread, NULL);

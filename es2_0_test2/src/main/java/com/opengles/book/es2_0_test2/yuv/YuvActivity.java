@@ -38,7 +38,8 @@ public class YuvActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.btn_start) {
-            final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sintel_640_360.yuv");
+            // ffmpeg -i input.mp4 -pix_fmt yuv420p out.yuv
+            final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/out.yuv");
             if (!file.exists()) {
                 Toast.makeText(this, "yuv文件不存在", Toast.LENGTH_SHORT).show();
                 return;
