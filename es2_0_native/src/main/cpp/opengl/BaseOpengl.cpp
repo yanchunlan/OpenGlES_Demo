@@ -44,6 +44,14 @@ void BaseOpengl::destroy() {
 
 }
 
+void BaseOpengl::destroySource() {
+
+}
+
 void BaseOpengl::setPilex(void *data, int width, int height, int length) {
+
+}
+
+void BaseOpengl::setYuvData(void *y, void *u, void *v, int width, int height) {
 
 }

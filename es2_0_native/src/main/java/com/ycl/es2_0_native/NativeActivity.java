@@ -25,7 +25,7 @@ public class NativeActivity extends AppCompatActivity implements View.OnClickLis
     // params
     private List<Integer> imgs = new ArrayList<>();
     private int index = -1;
-    private byte[] pixels;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +36,16 @@ public class NativeActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initData() {
+        imgs.add(R.mipmap.img1);
+        imgs.add(R.mipmap.img2);
+        imgs.add(R.mipmap.img3);
+
         mNativeOpengl = new NativeOpengl();
         mMySurfaceView.setNativeOpengl(mNativeOpengl)
                 .setSurfaceCreateListener(new MySurfaceView.OnSurfaceCreateListener() {
                     @Override
                     public void surfaceCreated() {
-                        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic);
-                        if (bitmap != null) {
-                            ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
-                            bitmap.copyPixelsToBuffer(buffer);
-                            buffer.flip();
-                            byte[] pixels = buffer.array();
-                            mNativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), pixels.length, pixels);
-                        }
+                        changeTexture();
                     }
                 });
     }
@@ -65,9 +62,29 @@ public class NativeActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.bt_changeFilter) {
-
+            if (mNativeOpengl != null) {
+                mNativeOpengl.surfaceChangeFilter();
+            }
         } else if (i == R.id.bt_changeTexture) {
-
+            changeTexture();
         }
+    }
+
+    private void changeTexture() {
+        if (mNativeOpengl != null) {
+            final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), getImgsIds());
+            if (bitmap != null) {
+                ByteBuffer buffer = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getWidth() * 4);
+                bitmap.copyPixelsToBuffer(buffer);
+                buffer.flip();
+                byte[] pixels = buffer.array();
+                mNativeOpengl.imgData(bitmap.getWidth(), bitmap.getHeight(), pixels.length, pixels);
+            }
+        }
+    }
+
+    private int getImgsIds() {
+        index++;
+        return imgs.get(index = index >= imgs.size() ? 0 : index);
     }
 }

@@ -58,7 +58,7 @@ public class KitkatCamera implements ICamera {
             Camera.Size pre = param.getPreviewSize();
 
             // 此处宽高置位，出现一个异常
-//            mPicSize = new Point(pic.width, pic.height);
+//            mPicSize = new Point(img1.width, img1.height);
 //            mPreSize = new Point(pre.width, pre.height);
             mPicSize = new Point(pic.height, pic.width);
             mPreSize = new Point(pre.height, pre.width);

@@ -1,9 +1,9 @@
 //
-// Created by pc on 2019/4/12.
+// Created by Administrator on 2019/4/20 0020.
 //
 
-#ifndef OPENGLES_DEMO_FILTERONE_H
-#define OPENGLES_DEMO_FILTERONE_H
+#ifndef OPENGLES_DEMO_FILTERTWO_H
+#define OPENGLES_DEMO_FILTERTWO_H
 
 
 #include "BaseOpengl.h"
@@ -11,7 +11,7 @@
 #include "../matrix/MatrixUtil.h"
 
 
-class FilterOne: public  BaseOpengl {
+class FilterTwo: public  BaseOpengl {
 
 public:
     GLint vPosition;
@@ -24,12 +24,12 @@ public:
     int h;
     void *pixels = NULL;
 
-    float matrix[16]; // 不能被释放，里面存储的就是单位矩阵
+    float matrix[16];
 
 public:
-    FilterOne();
+    FilterTwo();
 
-    ~FilterOne();
+    ~FilterTwo();
 
     void onCreate();
 
@@ -46,4 +46,7 @@ public:
     void setPilex(void *data, int width, int height, int length);
 
 };
-#endif //OPENGLES_DEMO_FILTERONE_H
+
+
+
+#endif //OPENGLES_DEMO_FILTERTWO_H

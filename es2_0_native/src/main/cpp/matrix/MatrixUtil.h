@@ -7,7 +7,7 @@
 
 #include <math.h>
 
-// 单位矩阵
+// 设置为单位矩阵
 static void initMatrix(float *matrix) {
     for (int i = 0; i < 16; i++) {
         if (i % 5 == 0) {

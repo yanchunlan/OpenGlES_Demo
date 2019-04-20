@@ -8,6 +8,8 @@ add_library( # Sets the name of the library.
              src/main/cpp/egl/EGLThread.cpp
              src/main/cpp/opengl/BaseOpengl.cpp
              src/main/cpp/opengl/FilterOne.cpp
+             src/main/cpp/opengl/FilterTwo.cpp
+             src/main/cpp/opengl/FilterYUV.cpp
              src/main/cpp/opengl/Opengl.cpp
 
         )

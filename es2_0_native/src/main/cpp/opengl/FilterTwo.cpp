@@ -1,86 +1,69 @@
 //
-// Created by pc on 2019/4/12.
+// Created by Administrator on 2019/4/20 0020.
 //
 
-#include "FilterOne.h"
+#include "FilterTwo.h"
 
-
-
-FilterOne::FilterOne() {
+FilterTwo::FilterTwo() {
 
 }
 
-FilterOne::~FilterOne() {
+FilterTwo::~FilterTwo() {
 
 }
 
-void FilterOne::onCreate() {
-
-     vertex = "attribute vec4 v_Position;\n"
-                         "attribute vec2 f_Position;\n"
-                         "varying vec2 ft_Position;\n"
-                         "uniform mat4 u_Matrix;\n"
-                         "void main() {\n"
-                         "    ft_Position = f_Position;\n"
-                         "    gl_Position = v_Position * u_Matrix;\n"
-                         "}";
+void FilterTwo::onCreate() {
+    vertex = "attribute vec4 v_Position;\n"
+             "attribute vec2 f_Position;\n"
+             "varying vec2 ft_Position;\n"
+             "uniform mat4 u_Matrix;\n"
+             "void main() {\n"
+             "    ft_Position = f_Position;\n"
+             "    gl_Position = v_Position * u_Matrix;\n"
+             "}";
 
     fragment = "precision mediump float;\n"
-                           "varying vec2 ft_Position;\n"
-                           "uniform sampler2D sTexture;\n"
-                           "void main() {\n"
-                           "    gl_FragColor=texture2D(sTexture, ft_Position);\n"
-                           "}";
+               "varying vec2 ft_Position;\n"
+               "uniform sampler2D sTexture;\n"
+               "void main() {\n"
+               "    lowp vec4 textureColor = texture2D(sTexture, ft_Position);\n"
+               "    float gray = textureColor.r * 0.2125 + textureColor.g * 0.7154 + textureColor.b * 0.0721;\n"
+               "    gl_FragColor = vec4(gray,gray,gray,textureColor.w);\n"
+               "}";
 
-    program = createProgram(vertex, fragment,&vShader,&fShader);
-    LOGD("FilterOne onCreate program is %d vShader: %d fShader: %d", program,vShader,fShader);
+    program = createProgram(vertex, fragment, &vShader, &fShader);
+    LOGD("FilterTwo onCreate program is %d vShader: %d fShader: %d", program, vShader, fShader);
     vPosition = glGetAttribLocation(program, "v_Position");//顶点坐标 // 此处差点错误，导致异常程序
     fPosition = glGetAttribLocation(program, "f_Position");//纹理坐标  // 此处差点错误，导致异常程序
     sampler = glGetUniformLocation(program, "sTexture");//2D纹理
     u_matrix = glGetUniformLocation(program, "u_Matrix");//矩阵设置之后，需要初始化，否则显示不出来
 
-    LOGD("FilterOne onCreate vPosition is %d", vPosition);
-    LOGD("FilterOne onCreate fPosition is %d", fPosition);
-    LOGD("FilterOne onCreate sampler is %d", sampler);
-    LOGD("FilterOne onCreate u_matrix is %d", u_matrix);
+    LOGD("FilterTwo onCreate vPosition is %d", vPosition);
+    LOGD("FilterTwo onCreate fPosition is %d", fPosition);
+    LOGD("FilterTwo onCreate sampler is %d", sampler);
+    LOGD("FilterTwo onCreate u_matrix is %d", u_matrix);
 
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // 环绕效果是 重复 GL_CLAMP_TO_EDGE 代表 单独一个
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                    GL_REPEAT); // 环绕效果是 重复 GL_CLAMP_TO_EDGE 代表 单独一个
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // 放大缩小效果是 线性
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void FilterOne::onChange(int w, int h) {
+void FilterTwo::onChange(int w, int h) {
 //    this->surface_width = w;
 //    this->surface_height = h;
     glViewport(0, 0, w, h);
     setMatrix(w, h);
 }
 
-void FilterOne::draw() {
-
-    // 一般需要清屏 之后会加速后面的绘制
+void FilterTwo::draw() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // 三角形
-//    glUseProgram(program);
-//    glEnableVertexAttribArray(vPosition);
-//    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs); // xy 2维度 ，维度*点的间距=2*8
-//    glDrawArrays(GL_TRIANGLES, 0, 3); // 3个点
-
-
-    // 四边形
-//    glUseProgram(program);
-//    glEnableVertexAttribArray(vPosition);
-//    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
-//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 4个点
-
-
-    // 图片
     glUseProgram(program);
     glUniformMatrix4fv(u_matrix, 1, false, matrix);
 
@@ -100,13 +83,10 @@ void FilterOne::draw() {
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-
-
-//    glDisableVertexAttribArray(vPosition);
 }
 
-// onchange的时候设置一次，在后面设置数据的时候在刷新一次
-void FilterOne::setMatrix(int width, int height) {
+
+void FilterTwo::setMatrix(int width, int height) {
     initMatrix(matrix);
 
     // 正交投影
@@ -126,12 +106,13 @@ void FilterOne::setMatrix(int width, int height) {
     }
 }
 
-void FilterOne::setPilex(void *data, int width, int height, int length) {
+void FilterTwo::setPilex(void *data, int width, int height, int length) {
     this->w = width;
     this->h = height;
     this->pixels = data;
 
-    LOGE("FilterOne::setPilex  width %d height %d surface_width %d surface_height %d", width, height, surface_width, surface_height)
+    LOGE("FilterTwo::setPilex  width %d height %d surface_width %d surface_height %d", width,
+         height, surface_width, surface_height)
 
     // 当重置图片的时候，如果有矩阵重置
     // 可能存在一种情况是线程还未创建，就执行setPilex,surfaceWH都为0，就不会重置矩阵，即使矩阵的重置也是需要有纹理，控件宽高的
@@ -140,8 +121,9 @@ void FilterOne::setPilex(void *data, int width, int height, int length) {
     }
 }
 
-void FilterOne::destroy() {
-    LOGE("FilterOne::destroy")
+
+void FilterTwo::destroy() {
+    LOGE("FilterTwo::destroy")
     glDeleteTextures(1, &textureId);
     glDetachShader(program, vShader);
     glDetachShader(program, fShader);
@@ -150,8 +132,8 @@ void FilterOne::destroy() {
     glDeleteProgram(program);
 }
 
-void FilterOne::destroySource() {
-    LOGE("FilterOne::destroySource")
+void FilterTwo::destroySource() {
+    LOGE("FilterTwo::destroySource")
     if (pixels != NULL) {
         pixels = NULL;
     }

@@ -23,7 +23,7 @@ public:
 
     EGLHelper();
 
-    virtual ~EGLHelper();
+    ~EGLHelper();
 
     int initEgl(EGLNativeWindowType win);
 

@@ -45,6 +45,15 @@ void *eglThreadImpl(void *context) {
 
             }
 
+            if (eglThread->isChangeFilter) {
+                LOGD("eglthread call onChangeFilter");
+                eglThread->isChangeFilter = false;
+                eglThread->onChangeFilter(eglThread->surfaceWidth,
+                                          eglThread->surfaceHeight,
+                                          eglThread->onChangeFilterCtx);
+            }
+
+
             LOGD("draw"); // 绘制流程
             if (eglThread->isStart) {
 //                glClearColor(0f, 1f, 1f, 1f);
@@ -56,7 +65,6 @@ void *eglThreadImpl(void *context) {
 
 
             if (eglThread->renderType == OPENGL_RENDER_AUTO) {
-
                 usleep(1000000 / 60);
             } else {
                 // 阻塞
@@ -66,6 +74,8 @@ void *eglThreadImpl(void *context) {
             }
 
             if (eglThread->isExit) {
+                eglThread->onDestroy(eglThread->onDestroyCtx);
+
                 eglHelper->destroyEgl();
                 delete eglHelper;
                 eglHelper = NULL;
@@ -102,6 +112,12 @@ void EGLThread::onSurfaceChange(int width, int height) {
     notifyRender(); // 设置宽高之后，就需要刷新一次
 }
 
+void EGLThread::onSurfaceChangeFilter() {
+    isChangeFilter = true;
+    notifyRender();
+}
+
+
 void EGLThread::callBackOnCreate(EGLThread::OnCreate onCreate, void *ctx) {
     this->onCreate = onCreate;
     this->onCreateCtx = ctx;
@@ -115,6 +131,16 @@ void EGLThread::callBackOnChange(EGLThread::OnChange onChange, void *ctx) {
 void EGLThread::callBackOnDraw(EGLThread::OnDraw onDraw, void *ctx) {
     this->onDraw = onDraw;
     this->onDrawCtx = ctx;
+}
+
+void EGLThread::callBackOnChangeFilter(EGLThread::OnChangeFilter onChangeFilter, void *ctx) {
+    this->onChangeFilter = onChangeFilter;
+    this->onChangeFilterCtx = ctx;
+}
+
+void EGLThread::callBackOnDestroy(EGLThread::OnDestroy onDestroy, void *ctx) {
+    this->onDestroy = onDestroy;
+    this->onDestroyCtx = ctx;
 }
 
 void EGLThread::setRenderType(int renderType) {
@@ -146,4 +172,13 @@ void EGLThread::destroy() {
         onDraw = NULL;
         onDrawCtx = NULL;
     }
+    if (onChangeFilter != NULL) {
+        onChangeFilter = NULL;
+        onChangeFilterCtx = NULL;
+    }
+    if (onDestroy != NULL) {
+        onDestroy = NULL;
+        onDestroyCtx = NULL;
+    }
 }
+
