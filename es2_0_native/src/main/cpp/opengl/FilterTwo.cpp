@@ -65,7 +65,7 @@ void FilterTwo::draw() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(program);
-    glUniformMatrix4fv(u_matrix, 1, false, matrix);
+    glUniformMatrix4fv(u_matrix, 1, GL_FALSE, matrix);
 
     // 激活通道 与 使用通道必须一致
     glActiveTexture(GL_TEXTURE5);
@@ -77,9 +77,9 @@ void FilterTwo::draw() {
     }
 
     glEnableVertexAttribArray(vPosition);
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 8, vertexs);
     glEnableVertexAttribArray(fPosition);
-    glVertexAttribPointer(fPosition, 2, GL_FLOAT, false, 8, fragments);
+    glVertexAttribPointer(fPosition, 2, GL_FLOAT, GL_FALSE, 8, fragments);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     glBindTexture(GL_TEXTURE_2D, 0);

@@ -1,8 +1,10 @@
 package com.ycl.es2_0_native;
 
+import android.Manifest;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.ycl.es2_0_native.opengl.MySurfaceView;
 import com.ycl.es2_0_native.opengl.NativeOpengl;
+import com.ycl.es2_0_native.utils.PermissionUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +27,9 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
 
     private NativeOpengl mNativeOpengl;
     private boolean isExit = true;
+
+    private static final int REQUEST_CODE_PERMISSIONS = 1001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +57,35 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.btn_play) {
-            play();
+            PermissionUtils.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSIONS,
+                    okRunnable);
         } else if (i == R.id.btn_stop) {
             stop();
         }
+    }
+
+    private Runnable okRunnable = new Runnable() {
+        @Override
+        public void run() {
+            play();
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionUtils.onRequestPermissionsResult(requestCode == REQUEST_CODE_PERMISSIONS,
+                grantResults,
+                okRunnable,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(YUVActivity.this, "没有获得必要的权限", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
     }
 
     private void stop() {
@@ -86,6 +117,7 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
 
                         while (true) {
                             if (isExit) {
+                                Log.d(TAG, "run: break");
                                 break;
                             }
 
@@ -97,8 +129,6 @@ public class YUVActivity extends AppCompatActivity implements View.OnClickListen
                                 Thread.sleep(40);
                             } else {
                                 isExit = true;
-                                Log.d(TAG, "run: break");
-                                break;
                             }
                         }
                     } catch (Exception e) {

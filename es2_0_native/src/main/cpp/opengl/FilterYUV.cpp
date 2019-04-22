@@ -50,6 +50,14 @@ void FilterYUV::onCreate() {
     sampler_v = glGetUniformLocation(program, "sampler_v");
     u_matrix = glGetUniformLocation(program, "u_Matrix");//矩阵设置之后，需要初始化，否则显示不出来
 
+    // 测试代码
+//    vPosition = glGetAttribLocation(program, "v_Position");//顶点坐标 // 此处差点错误，导致异常程序
+//    fPosition = glGetAttribLocation(program, "f_Position");//纹理坐标  // 此处差点错误，导致异常程序
+//    sampler_y = glGetUniformLocation(program, "sampler_y");
+//    sampler_u = glGetUniformLocation(program, "sampler_u");
+//    sampler_v = glGetUniformLocation(program, "sampler_v");
+//    u_matrix = glGetUniformLocation(program, "u_Matrix");//矩阵设置之后，需要初始化，否则显示不出来
+
     LOGD("FilterYUV onCreate vPosition is %d", vPosition);
     LOGD("FilterYUV onCreate fPosition is %d", fPosition);
     LOGD("FilterYUV onCreate sampler_y is %d", sampler_y);
@@ -81,12 +89,12 @@ void FilterYUV::draw() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(program);
-    glUniformMatrix4fv(u_matrix, 1, false, matrix);
+    glUniformMatrix4fv(u_matrix, 1, GL_FALSE, matrix);
 
     glEnableVertexAttribArray(vPosition);
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, false, 8, vertexs);
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 8, vertexs);
     glEnableVertexAttribArray(fPosition);
-    glVertexAttribPointer(fPosition, 2, GL_FLOAT, false, 8, fragments);
+    glVertexAttribPointer(fPosition, 2, GL_FLOAT, GL_FALSE, 8, fragments);
 
     // 注意yuv ，glTexImage2D 中不是设置GL_RGBA类型了，是 GL_LUMINANCE 类型
     if (yuv_w > 0 && yuv_h > 0) {
@@ -138,10 +146,11 @@ void FilterYUV::setMatrix(int width, int height) {
 
 }
 
-void FilterYUV::setYuvData(void *y, void *u, void *v, int width, int height) {
+// 此处如果没有改名，就需要确定释放的内存，分配的内存都是this.y，this.u，this.v
+void FilterYUV::setYuvData(void *Y, void *U, void *V, int width, int height) {
 
-    LOGE("FilterYUV::setYuvData  width %d height %d surface_width %d surface_height %d", width,
-         height, surface_width, surface_height)
+    LOGE("FilterYUV::setYuvData  width %d height %d surface_width %d surface_height %d",
+            width, height, surface_width, surface_height)
 
     // 先释放，再重置
     if (width > 0 && height > 0) {
@@ -170,9 +179,9 @@ void FilterYUV::setYuvData(void *y, void *u, void *v, int width, int height) {
             }
         }
         // copy数据到内存上面
-        memcpy(this->y, y, yuv_w * yuv_h);
-        memcpy(this->u, u, yuv_w * yuv_h / 4);
-        memcpy(this->v, v, yuv_w * yuv_h / 4);
+        memcpy(y, Y, yuv_w * yuv_h);
+        memcpy(u, U, yuv_w * yuv_h / 4);
+        memcpy(v, V, yuv_w * yuv_h / 4);
     }
 }
 
