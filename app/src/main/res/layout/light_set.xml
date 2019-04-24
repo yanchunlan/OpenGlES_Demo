@@ -20,15 +20,15 @@
             android:text="全局环境光---------------------------------" />
 
         <include
-            android:id="@+id/bar_global$ambient$r"
+            android:id="@+id/bar_global_ambient_r"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_global$ambient$g"
+            android:id="@+id/bar_global_ambient_g"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_global$ambient$b"
+            android:id="@+id/bar_global_ambient_b"
             layout="@layout/bar" />
 
         <TextView
@@ -37,15 +37,15 @@
             android:text="材料散射光和环境光的反射率(相同的值)---------------" />
 
         <include
-            android:id="@+id/bar_material$ambientanddiffuse$r"
+            android:id="@+id/bar_material_ambientanddiffuse_r"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_material$ambientanddiffuse$g"
+            android:id="@+id/bar_material_ambientanddiffuse_g"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_material$ambientanddiffuse$b"
+            android:id="@+id/bar_material_ambientanddiffuse_b"
             layout="@layout/bar" />
 
         <CheckBox
@@ -55,15 +55,15 @@
             android:text="颜色追踪(设置材料反射率)" />
 
         <include
-            android:id="@+id/bar_color$r"
+            android:id="@+id/bar_color_r"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_color$g"
+            android:id="@+id/bar_color_g"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_color$b"
+            android:id="@+id/bar_color_b"
             layout="@layout/bar" />
 
         <CheckBox
@@ -78,15 +78,15 @@
             android:text="光源0--环境光" />
 
         <include
-            android:id="@+id/bar_light0$ambient$r"
+            android:id="@+id/bar_light0_ambient_r"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_light0$ambient$g"
+            android:id="@+id/bar_light0_ambient_g"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_light0$ambient$b"
+            android:id="@+id/bar_light0_ambient_b"
             layout="@layout/bar" />
 
         <TextView
@@ -95,15 +95,15 @@
             android:text="光源0--散射光" />
 
         <include
-            android:id="@+id/bar_light0$diffuse$r"
+            android:id="@+id/bar_light0_diffuse_r"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_light0$diffuse$g"
+            android:id="@+id/bar_light0_diffuse_g"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_light0$diffuse$b"
+            android:id="@+id/bar_light0_diffuse_b"
             layout="@layout/bar" />
 
         <TextView
@@ -112,15 +112,15 @@
             android:text="光源0--位置" />
 
         <include
-            android:id="@+id/bar_light0$pos$x"
+            android:id="@+id/bar_light0_pos_x"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_light0$pos$y"
+            android:id="@+id/bar_light0_pos_y"
             layout="@layout/bar" />
 
         <include
-            android:id="@+id/bar_light0$pos$z"
+            android:id="@+id/bar_light0_pos_z"
             layout="@layout/bar" />
     </LinearLayout>
 </ScrollView>

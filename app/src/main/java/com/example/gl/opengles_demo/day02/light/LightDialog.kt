@@ -36,7 +36,7 @@ class LightDialog(context: Context?,
             try {
                 val id = buttonView.id
                 var name = r.getResourceName(id)
-                name = name.substring(name.lastIndexOf("_") + 1)
+                name = name.substring(name.indexOf("_") + 1)
 
                 // 此处不知是修改哪一个值，所以需要用反射修改最好
                 val clazz = render::class.java
@@ -53,10 +53,10 @@ class LightDialog(context: Context?,
         val sbOnSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 try {
-                    var scale = progress as Float / seekBar?.max as Float
+                    var scale = progress*1.0f / seekBar?.max as Float
                     val id = seekBar.id
                     var name = r.getResourceName(id)
-                    name = name.substring(name.lastIndexOf("_") + 1)
+                    name = name.substring(name.indexOf("_") + 1)
 
                     // 此处不知是修改哪一个值，所以需要用反射修改最好
                     val clazz = render::class.java
